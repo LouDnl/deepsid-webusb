@@ -6,7 +6,7 @@
 /* ------------------------------------------------------ */
 
 /* Update various players with correct or more precise information (be careful with long strings as together with tags they may mess with the layout) */
-UPDATE files SET player = "FC + Martin Galway's Digi player" WHERE id = 619			-- _High Voltage SID Collection/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid
+UPDATE files SET player = "FC + Martin Galway's digi player" WHERE id = 619			-- _High Voltage SID Collection/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid
 UPDATE files SET player = "Galway's player + Hubbard's players" WHERE id = 1249		-- _High Voltage SID Collection/DEMOS/S-Z/Wize_Mixes.sid
 UPDATE files SET player = "JCH IntroPlayer" WHERE id = 24152						-- _High Voltage SID Collection/MUSICIANS/J/JCH/Fooled.sid
 UPDATE files SET player = "a player by JO of Visage Studios" WHERE id = 66100		-- _High Voltage SID Collection/MUSICIANS/J/JCH/JCH_in_Visages_Editor.sid

@@ -9,10 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- PRETTIFYING PLAYER STAGE 1 COMPLETE.
-
-  STAGE 2: Go through 'pretty_player_names.php' and see if all 'x/y' pairs make sense. Some of them
-  may have to be swapped, now that you have the CSS-styled box for the right text.
+- Put the pretty player names in the database.
 
 - A lot of look-ups have broken since the overhaul in the 'pretty_player_names.php' PHP script. I
   need the look-up system to work with the raw names, not the prettified ones.
@@ -21,12 +18,24 @@ SHOULD BE DONE
   That you have to search for the un-prettified name doesn't make any sense. Best solution is to
   put the array in the database. Refer to your assistant for more.
 
+- New and better avatar photo for Aleksi Eeben:
+  https://www.facebook.com/photo/?fbid=10162571845403663&set=a.425596753662
+
+- Move the "Beyond DeepSID" links into the "Links" tab. It makes more sense for them to be in the tab
+  with a related name. In the "Profile" tab, just have the small logo for the time being.  
+
+- In the admin "PHP" section, rename old table names in the one-line script descriptions.
+
 - Change 'n' hotkey to stop play immediately (like "?wait=100") instead of silence SID handler.
   This makes it possible to still use e.g. MEMO view.
 
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
 
 - Add a "seconds" edit box for the new delay-next feature.
+
+- The keyboard lines surrounding a SID row should be slightly darker in bright mode.
+
+- Another one for a front page top 10 list: Most used player.
 
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
@@ -38,6 +47,8 @@ SHOULD BE DONE
 - MEMO browsing needs the same rules as search browsing (shift and MMB).
 
 - Should the developer tags be just a tad darker, in both color schemes?
+
+- Maybe 'Ctrl+Home' could act as clicking 'HOME' in the top menu?
 
 - Magic button in tags dialog box should also handle Game/Game Prev/GTW + developer correctly. Also,
   events currently come after developer tags. Wouldn't it be better the other way around?
@@ -51,6 +62,33 @@ SHOULD BE DONE
 - The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
   goes on in the page area. Calm it down a bit if you can.
 
+- Currently a click on a game with a GB64 entry automatically adds the "Gamebase64" tag. Also make it
+  so if there is a "Gamebase64" tag but no longer any GB64 entry, it automatically removes that tag and
+  instead adds a "Game" tag.
+
+- The "SEUCK" tag should always appear before the developer name tag.
+
+- Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown for
+  releases in forum threads?
+
+- DeepSID and CShellDB "Now" tracking page: Add fixed attribute to top gray bar so it stays put when
+  scrolling down.
+
+- Add title="tooltip" for individual options in the search drop-down box, expanding on what the search
+  options does. Most web browsers should support it (test in Firefox and Chrome).
+
+- Remove "[...]" in CSDb pages, but perhaps make sure the credits wrap around aligning with links above
+  instead of just the far left side.
+  Example: https://deepsid.chordian.net/?file=/MUSICIANS/C/Crowley_Owen/Junkie.sid
+
+- BUG: When opening a pop-up DeepSID, the database setting for SID handler is ignored.
+
+- BUG: When CSDb fails, the ID is erroneously converted into a PLINK.
+  Try this: https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1
+
+- Don't log deletion of labels before adding labels (they're grouped) in the tags log. But make sure
+  that a specific deletion of a label is still logged.
+
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
 
@@ -63,6 +101,7 @@ REALLY CONSIDER THIS
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
 - Make sure all 'sovs' =>   '1' is fixed to 'sovs'    => '1' instead, in all PHP files.
 - Change player lookup to look for raw player strings instead of the prettified ones.
+- The player text lines by the Chartist bars could be filter links.
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.
@@ -83,7 +122,6 @@ MAYBE CONSIDER THIS
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Need an extra URL parameter for file request to set loop on, e.g. "&loop=true".
 - Tilt the years in the activity chart on the composer profiles, so you can have full four digits.
-- The player text lines by the Chartist bars could be filter links.
 - With nothing selected, play should start playing the tune in top of a browser list.
 - Support for 2SID and 3SID in the scope tab as a mosaic of 2 x 3 (4) or 3 x 3 (4) boxes.
 - Statistics for how many times a tune has been played. (But shown where?)
