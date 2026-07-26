@@ -1962,6 +1962,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 26, 2026</h3>
+						<ul>
+							<li>Player names can now be searched using their displayed names instead of the underlying raw names.</li>
+						</ul>
+
 						<h3>July 18, 2026</h3>
 						<ul>
 							<li>Player names have been cleaned up and significantly prettified.</li>

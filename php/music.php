@@ -19,7 +19,6 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("pretty_player_names.php");
 require_once("tags_read.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
@@ -447,44 +446,97 @@ try {
 
 			} else if ($_GET['searchType'] != 'country') {											// All
 
-				// Normal type search (handles any position of words and excluding with "-" prepended)
-				// NOTE: This would have been easier with 'Full-Text' search but I'm not using the MyISAM engine.
+				$join = '';
+
+				// Normally, search the selected column directly
+				$search_field = $_GET['searchType'];
+
+				if ($_GET['searchType'] == 'player') {
+					$join = '
+						LEFT JOIN players_pretty AS pp
+							ON pp.raw_name = files.player
+					';
+
+					$search_field = 'COALESCE(pp.pretty_name, files.player)';
+				}
+
+				// Normal type search (handles words in any position and exclusions prefixed with "-")
 				$exclude = '';
+
 				if ($_GET['searchType'] == 'new') {
-					$include = $_GET['searchType'].' LIKE "%'.str_replace('.', '', $_GET['searchQuery']).'%"';
+
+					$include = $search_field.' LIKE "%'.
+						str_replace('.', '', $_GET['searchQuery']).
+					'%"';
+
 				} else {
+
 					$words = parseQuery($_GET['searchQuery']);
+
 					$include = '(';
 					$i_and = $e_and = '';
-					foreach($words as $word) {
+
+					foreach ($words as $word) {
 						if (substr($word, 0, 1) == '-') {
-							$exclude .= $e_and.$_GET['searchType'].' NOT LIKE "%'.substr($word, 1).'%"';
+							$exclude .=
+								$e_and.
+								$search_field.
+								' NOT LIKE "%'.
+								substr($word, 1).
+								'%"';
+
 							$e_and = ' AND ';
 						} else {
-							$include .= $i_and.$_GET['searchType'].' LIKE "%'.$word.'%"';
+							$include .=
+								$i_and.
+								$search_field.
+								' LIKE "%'.
+								$word.
+								'%"';
+
 							$i_and = ' AND ';
 						}
 					}
-					$include .= ')';
-					if (!empty($exclude)) $exclude = ' AND ('.$exclude.')';
 
+					$include .= ')';
+
+					if (!empty($exclude))
+						$exclude = ' AND ('.$exclude.')';
+
+					// Searching ALL should of course include a range of columns
 					if ($_GET['searchType'] == '#all#') {
-						// Searching ALL should of course include a range of columns
-						$columns = $comma = '';
-						foreach(array('collection_path', 'author', 'copyright', 'player', 'stil') as $column) {
-							$columns .= $comma.$column.', " "';
-							$comma = ', ';
-						}
-						// Treating all columns as one long search entity is MUCH easier
+
+						// Pretty player names should also be searchable under "All"
+						$join = '
+							LEFT JOIN players_pretty AS pp
+								ON pp.raw_name = files.player
+						';
+
+						$columns = implode(', " ", ', [
+							'files.collection_path',
+							'files.author',
+							'files.copyright',
+							'files.player',
+							'COALESCE(pp.pretty_name, "")',
+							'files.stil'
+						]);
+
+						$all_fields = 'CONCAT('.$columns.')';
+
 						$include_folders = $include;
 						$exclude_folders = $exclude;
-						$include = str_replace('#all#', 'CONCAT('.$columns.')', $include);
-						$exclude = str_replace('#all#', 'CONCAT('.$columns.')', $exclude);
+
+						$include = str_replace('#all#', $all_fields, $include);
+						$exclude = str_replace('#all#', $all_fields, $exclude);
 					}
 				}
 
 				$select = $db->query('
-					SELECT collection_path FROM files WHERE '.$search_context_path.' AND '.$include.$exclude
+					SELECT files.collection_path
+					FROM files
+					'.$join.'
+					WHERE '.$search_context_path.'
+						AND '.$include.$exclude
 				);
 			}
 
@@ -1514,14 +1566,23 @@ try {
 
 			if ($sid_model != 'MOS8580') $sid_model = 'MOS6581'; // Always default to 6581 if not specifically 8580
 
-			$pretty_player_name = $pretty_player_name = $pretty_player_names[$player] ?? $player;
+			// Convert the raw player name to a pretty one
+			$select_pretty = $db->prepare('
+				SELECT pretty_name
+				FROM players_pretty
+				WHERE raw_name = :player
+				LIMIT 1
+			');
+			$select_pretty->execute([':player' => $player]);
+
+			$pretty_player_name = $select_pretty->fetchColumn() ?: $player;
+
 			// Put the text after the "/" in a small <DIV> box
 			$pretty_player_name = preg_replace(
 				'~^(.*?)\/(.+)$~',
 				'$1<div class="by">$2</div>',
 				$pretty_player_name
 			);
-			//$pretty_player_name = str_replace("/", " / ", $pretty_player_name);
 
 			// Don't use underscores in key names
 			array_push($files_ext, array(

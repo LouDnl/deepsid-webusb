@@ -9,14 +9,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Put the pretty player names in the database.
-
 - A lot of look-ups have broken since the overhaul in the 'pretty_player_names.php' PHP script. I
   need the look-up system to work with the raw names, not the prettified ones.
-
-- After prettifying a lot of player names, change it so player search accepts the prettified name.
-  That you have to search for the un-prettified name doesn't make any sense. Best solution is to
-  put the array in the database. Refer to your assistant for more.
 
 - New and better avatar photo for Aleksi Eeben:
   https://www.facebook.com/photo/?fbid=10162571845403663&set=a.425596753662
@@ -85,6 +79,8 @@ SHOULD BE DONE
 
 - BUG: When CSDb fails, the ID is erroneously converted into a PLINK.
   Try this: https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1
+
+- Change database table name 'hvsc_lengths' to just 'lengths' instead.
 
 - Don't log deletion of labels before adding labels (they're grouped) in the tags log. But make sure
   that a specific deletion of a label is still logged.

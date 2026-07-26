@@ -24,7 +24,7 @@ PLAYER_RULES = {
 	'Blackbird/LFT': {
 		'comparison_names': ['Blackbird']
 	},
-    # Now handled in 'pretty_player_names.php'
+    # Now handled in the 'players_pretty' database table
     # @todo CHECK THAT IT WORKS IN HVSC UPDATE #86!
     #    
 	#'MoN/FutureComposer': {

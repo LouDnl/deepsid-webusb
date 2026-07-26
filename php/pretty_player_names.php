@@ -4,8 +4,7 @@
  *
  * Prettified player names.
  * 
- * @used-by		music.php
- * @used-by		composer.php
+ * DEPRECATED: Replaced by the 'players_pretty' database table.
  */
 
 $pretty_player_names = array(

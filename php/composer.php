@@ -15,7 +15,6 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("pretty_player_names.php");
 require_once("csdb_compo.php");
 require_once("csdb_comments.php");
 require_once("composer_exotic.php");
@@ -212,35 +211,61 @@ if (isset($collection_path)) {
 				$row = $select->fetch();
 
 			// Get data about players for the charts
-			$select = $db->prepare('SELECT player, count(player) AS count FROM files WHERE collection_path LIKE :collection_path GROUP BY player');
-			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
+			$select = $db->prepare('
+				SELECT
+					f.player,
+					COUNT(f.player) AS count,
+					pp.pretty_name
+				FROM files AS f
+				LEFT JOIN players_pretty AS pp
+					ON pp.raw_name = f.player
+				WHERE f.collection_path LIKE :collection_path
+				GROUP BY f.player, pp.pretty_name
+			');
+			$select->execute([':collection_path' => $escaped_collection_path . '/%']);
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
-			$player_labels = Array();
-			$player_counts = Array();
-			if ($select->rowCount()) {
-				foreach($select as $player_row) {
-					$player_labels[] = empty($player_row->player) ? 'Unidentified player' : $player_row->player;
-					$player_counts[] = $player_row->count;
-				}
-				foreach($player_labels as $key => $label) {
-					if (isset($pretty_player_names[$label]))
-						$player_labels[$key] = str_replace('a Basic Program', 'Basic Program', $pretty_player_names[$label]);
-					else
-						$player_labels[$key] = str_replace('_', ' ', preg_replace('/(V)(\d)/', 'v$2', $player_labels[$key]));
-					$player_labels[$key] = str_replace('/', ' / ', $player_labels[$key]);
-				}
+			$player_labels = [];
+			$player_counts = [];
 
-				$max_allowed = 14; // 9
-				array_multisort($player_counts, $player_labels);
-				if (count($player_counts) > $max_allowed) {
-					$less_counts = array_slice($player_counts, 0, count($player_counts) - $max_allowed);
-					$player_labels = array_slice($player_labels, -$max_allowed);
-					$player_counts = array_slice($player_counts, -$max_allowed);
-					array_unshift($player_labels, 'Other');
-					array_unshift($player_counts, (string)array_sum($less_counts));
+			foreach ($select as $player_row) {
+				if (empty($player_row->player)) {
+					$label = 'Unidentified player';
+				} elseif (!empty($player_row->pretty_name)) {
+					$label = str_replace('a Basic Program', 'Basic Program', $player_row->pretty_name);
+				} else {
+					// Fallback if the raw player has no 'players_pretty' entry
+					$label = str_replace(
+						'_',
+						' ',
+						preg_replace('/V(\d)/', 'v$1', $player_row->player)
+					);
 				}
+				$player_labels[] = str_replace('/', ' / ', $label);
+				$player_counts[] = $player_row->count;
 			}
+
+			$max_allowed = 14; // 9
+
+			array_multisort($player_counts, $player_labels);
+
+			if (count($player_counts) > $max_allowed) {
+				$less_counts = array_slice($player_counts, 0, count($player_counts) - $max_allowed);
+
+				$player_labels = array_slice($player_labels, -$max_allowed);
+				$player_counts = array_slice($player_counts, -$max_allowed);
+
+				array_unshift($player_labels, 'Other');
+				array_unshift($player_counts, (string) array_sum($less_counts));
+			}
+
+
+
+
+
+
+
+
 
 			// Get data about active years
 			$select = $db->prepare('SELECT copyright FROM files WHERE collection_path LIKE :collection_path');

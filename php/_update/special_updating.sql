@@ -13,16 +13,6 @@ UPDATE files SET player = "a player by JO of Visage Studios" WHERE id = 66100		-
 UPDATE files SET player = "Zoolook's player" WHERE id = 24177						-- _High Voltage SID Collection/MUSICIANS/J/JCH/Test_in_Zoolooks_Player.sid
 UPDATE files SET player = "JO's player + THCM" WHERE id = 22304						-- _High Voltage SID Collection/MUSICIANS/H/HJE/Megademo_part_2.sid
 
--- This is handled in 'pretty_player_names.php' instead
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 82082						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/41_Neurons.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 68094						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/VandaliSID.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 68158						-- _High Voltage SID Collection/MUSICIANS/T/Tjelta_Geir/X-Rated_Red_Wine_GT_Remix.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 70163						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Move.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 73226 					-- _High Voltage SID Collection/MUSICIANS/D/Detert_Thomas/Spectrum.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 73560						-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Legacy.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 81091 					-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Harmony.sid
--- UPDATE files SET player = "Compotech-X v2.4" WHERE id = 82083 					-- _High Voltage SID Collection/MUSICIANS/S/Schneider_Markus/Next_Round_tune_1.sid
-
 /* Players not detected by Player-ID */
 UPDATE files SET player = "JammicroV1" WHERE id = 81935								-- _High Voltage SID Collection/MUSICIANS/J/Jammer/Have_Some_Faith.sid (code change?)
 
