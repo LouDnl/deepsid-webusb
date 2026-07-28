@@ -5,7 +5,37 @@ import re
 SOURCE_PREFIX = '_High Voltage SID Collection/'
 
 
+# All these are for 'Soundmonitor'
+PLAYER_PRIORITIES = {
+	'DUSAT/RockMon2':           100,
+	'DUSAT/RockMon3':           100,
+	'DUSAT/RockMon4':           100,
+	'JamMasterV1':              100,
+	'Syndicate/BB':             100,
+	'BeatBox/Karl_XII':         100,
+    'DrumMaker2':               100,
+    'DigiMonitor':              100,
+    'Digitronix':               100,
+    'MusicMaster_TMM':          100,
+    'Cavi_Digi':                100,
+    'ReD_Packed':               100,
+    'Mahoney_Digi':             100,
+    'Novotrade':                100,
+    'MusicMaster_2':            100,
+	'Huelsbeck_Digi_V1':        80,
+	'Huelsbeck_Digi_V2':        80,
+	'MusicMaster_1':            50
+}
+
+
+# Comparisons names:  Prevent repeating the parent name when the child already identifies the player.
+# Replacements:       Rewrite the child identifier before comparison.
+#
+# See below for examples.
 PLAYER_RULES = {
+    # Compare partial name with 'NewPlayer'
+    # If child is e.g. '(JCH_NewPlayer_V17)' it becomes just that instead of 'JCH_NewPlayer/JCH_NewPlayer_V17'
+    # There can be multiple comparison names
 	'JCH_NewPlayer': {
 		'comparison_names': ['NewPlayer']
 	},
@@ -24,18 +54,16 @@ PLAYER_RULES = {
 	'Blackbird/LFT': {
 		'comparison_names': ['Blackbird']
 	},
-    # Now handled in the 'players_pretty' database table
-    # @todo CHECK THAT IT WORKS IN HVSC UPDATE #86!
-    #    
-	#'MoN/FutureComposer': {
-	#	'comparison_names': ['FutureComposer', 'MoN/']
-	#},
+	'MoN/FutureComposer': {
+		'comparison_names': ['FutureComposer', 'MoN/']
+	},
 	'Music_Assembler': {
 		'comparison_names': ['Music_Assembler/MC']
 	},
 	'Rob_Hubbard': {
 		'comparison_names': ['Rob_Hubbard_Digi']
 	},
+    # Before comparison, the child e.g. 'GT_V1.4_2SID' is rewritten to 'GoatTracker_V1.4_2SID'
 	'GoatTracker_V1.x': {
 		'replacements': {
 			'GT_': 'GoatTracker_'
@@ -187,15 +215,11 @@ def extract_parenthesized_name(line):
 def create_csv(specific_filename, sidid_filename, output_filename):
 	player_identifiers = parse_sidid_cfg(sidid_filename)
 
+	best_matches = {}
+	last_sid_line = None
+
 	with open(specific_filename, 'r', encoding='utf-8') as file:
-		content = file.readlines()
-
-	with open(output_filename, 'w', newline='', encoding='utf-8') as csvfile:
-		writer = csv.writer(csvfile)
-
-		last_sid_line = None
-
-		for line in content:
+		for line in file:
 			if '.sid' in line:
 				last_sid_line = line
 
@@ -211,11 +235,25 @@ def create_csv(specific_filename, sidid_filename, output_filename):
 				continue
 
 			sid_path = last_sid_line.partition('.sid')[0] + '.sid'
+			full_sid_path = SOURCE_PREFIX + sid_path
 			player_path = player_identifiers[identifier]
 
+			priority = PLAYER_PRIORITIES.get(identifier, 0)
+			current_match = best_matches.get(full_sid_path)
+
+			if current_match is None or priority >= current_match['priority']:
+				best_matches[full_sid_path] = {
+					'player_path': player_path,
+					'priority': priority
+				}
+
+	with open(output_filename, 'w', newline='', encoding='utf-8') as csvfile:
+		writer = csv.writer(csvfile)
+
+		for sid_path, match in best_matches.items():
 			writer.writerow([
-				SOURCE_PREFIX + sid_path,
-				player_path
+				sid_path,
+				match['player_path']
 			])
 
 

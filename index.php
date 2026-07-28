@@ -1962,6 +1962,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 28, 2026</h3>
+						<ul>
+							<li>Tweaked the player name definitions for Rock Monitor tunes. You can now search specifically for tunes made with Rock Monitor II, which were conspicuously missing before.</li>
+							<li>All player names have been updated to ensure they link to the correct player/editor page when clicked from a SID song. In addition, selecting a player/editor from its list now correctly finds the corresponding songs.</li>
+							<li>Fixed color strips not showing up for the appropriate players.</li>
+							<li>Fixed songs in Compute's Gazette SID Collection not showing the player/editor page for Compute's SidPlayer.</li>
+						</ul>
+
 						<h3>July 26, 2026</h3>
 						<ul>
 							<li>Player names can now be searched using their displayed names instead of the underlying raw names.</li>

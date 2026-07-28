@@ -279,7 +279,7 @@ Controls.prototype = {
 						browser.getComposer(browser.songs[browser.songPos].fullname);
 					browser.getGB64();
 					browser.getRemix();
-					browser.getPlayerInfo({player: browser.songs[browser.songPos].player});
+					browser.getPlayerInfo({player: browser.songs[browser.songPos].playerraw});
 					main.updateURL();
 				}
 

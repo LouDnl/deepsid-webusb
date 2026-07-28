@@ -1341,8 +1341,8 @@ try {
 			if (empty($player) && $extension == '.mus') {
 				// CGSC
 				$player = in_array(str_replace('.mus', '.str', $file), $files)
-					? "Compute's Stereo SidPlayer"	// Uses .mus and .str for 6 voices SID (stereo)
-					: "Compute's SidPlayer";		// Normal 3 voices SID
+					? "Stereo_SidPlayer"	// Uses .mus and .str for 6 voices SID (stereo)
+					: "SidPlayer";			// Normal 3 voices SID
 				$lengths = '5:00';
 				$subtunes = $start_subtune = 1;
 			} else if (empty($player))

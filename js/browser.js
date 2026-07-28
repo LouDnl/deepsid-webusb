@@ -27,10 +27,6 @@ const playerStrips = [
 		class:	"pl-d",
 	},
 	{
-		type:	"SidFactory II",
-		class:	"pl-d",
-	},
-	{
 		type:	"DMC",
 		class:	"pl-e",
 	},
@@ -851,7 +847,7 @@ Browser.prototype = {
 					this.getComposer();
 				this.getGB64();
 				this.getRemix();
-				this.getPlayerInfo({player: this.songs[this.songPos].player});
+				this.getPlayerInfo({player: this.songs[this.songPos].playerraw});
 
 				main.updateURL();
 				this.chips = 1;
@@ -1421,7 +1417,7 @@ Browser.prototype = {
 				var playerType = "",
 					hasStil = file.stil != "" ? '<div></div>' : '';
 				$.each(playerStrips, function(i, strip) {
-					if (file.player.indexOf(strip.type) != -1) {
+					if (file.playerraw.indexOf(strip.type) != -1) {
 						playerType = " "+strip.class;
 						return false;
 					}
@@ -1999,7 +1995,7 @@ Browser.prototype = {
 
 						// Colored player strip
 						$.each(playerStrips, function(i, strip) {
-							if (file.player.indexOf(strip.type) != -1) {
+							if (file.playerraw.indexOf(strip.type) != -1) {
 								playerType = " "+strip.class;
 								return false;
 							}

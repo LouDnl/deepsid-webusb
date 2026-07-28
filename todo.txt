@@ -9,11 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- A lot of look-ups have broken since the overhaul in the 'pretty_player_names.php' PHP script. I
-  need the look-up system to work with the raw names, not the prettified ones.
-
-- New and better avatar photo for Aleksi Eeben:
-  https://www.facebook.com/photo/?fbid=10162571845403663&set=a.425596753662
+- Do the compo tunes for HVSC #85.
 
 - Move the "Beyond DeepSID" links into the "Links" tab. It makes more sense for them to be in the tab
   with a related name. In the "Profile" tab, just have the small logo for the time being.  
