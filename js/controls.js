@@ -151,6 +151,7 @@ Controls.prototype = {
 				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.enableAllPianoVoices();
+				browser.conditionalStopPlay();
 			}.bind(this));
 			this.updateSubtuneText();
 			$(id == "subtune-plus" && !SID.emulatorFlags.offline ? "#subtune-minus" : "#subtune-plus").removeClass("disabled");
@@ -289,6 +290,7 @@ Controls.prototype = {
 				this.resetStereoPanning();
 				viz.initGraph(browser.chips);
 				viz.startBufferEndedEffects();
+				browser.conditionalStopPlay();
 
 				// Mark the next row in the browser list
 				$("#songs tr").removeClass("selected");
@@ -309,7 +311,7 @@ Controls.prototype = {
 
 			}.bind(this));
 		}
-		if (id.substr(0, 7) == "subtune" || id.substr(0, 4) == "skip") {
+		if (!main.noPlay && (id.substr(0, 7) == "subtune" || id.substr(0, 4) == "skip")) {
 			// Update all buttons
 			this.buttonTimer = setTimeout(function() {
 				this.selectButton($("#play-pause"));
@@ -456,6 +458,7 @@ Controls.prototype = {
 						if (this.subtuneCurrent < this.subtuneMax && !SID.emulatorFlags.offline) $("#subtune-plus").removeClass("disabled");
 						if (this.subtuneCurrent > 0 && !SID.emulatorFlags.offline) $("#subtune-minus").removeClass("disabled");
 						this.updateInfo();
+						browser.conditionalStopPlay();
 						if (SID.emulatorFlags.forcePlay) SID.play();
 					}.bind(this));
 				} else if (event.target.className.substr(0, 3) == "tag") {

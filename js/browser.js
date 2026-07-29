@@ -815,7 +815,7 @@ Browser.prototype = {
 						$("#slider-button").show();
 					}
 
-					if (!paramWait) {
+					if (!paramWait && !main.noPlay) {
 						SID.play(true);
 						setTimeout(ctrls.setButtonPlay, 75); // For nice pause-to-play delay animation
 					}
@@ -856,18 +856,7 @@ Browser.prototype = {
 				ctrls.resetStereoPanning();
 				viz.initGraph(this.chips);
 				viz.startBufferEndedEffects();
-
-				// Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
-				// NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties into
-				// playing immediately, the alternative would have cost a lot more code and effort.
-				if (paramWait) {
-					SID.setVolume(0);
-					setTimeout(function() {
-						$("#stop").trigger("mouseup");
-						SID.stop();
-						SID.setVolume(1);
-					}, paramWait);
-				}
+				this.conditionalStopPlay(paramWait);
 
 			}.bind(this));
 
@@ -2640,13 +2629,13 @@ Browser.prototype = {
 			if ($("#tabs .selected").attr("data-topic") === "profile")
 				$("#page").addClass("big-logo");
 
-			// Show the list of useful links in the annex profile tab
+			// Show the list of useful links in the annex links tab
 			$.get("php/annex_help.php", { id: 18 }, function(links) {
-				$("#atopic-profile").empty().append(links);
+				$("#atopic-links").empty().append(links);
 			});
 
-			// Show the DeepSID logo in the tab with composer links
-			$("#atopic-links").empty().append('<div class="annex-big-logo"></div><div class="annex-taller"></div>');
+			// Show the DeepSID logo in the profile tab
+			$("#atopic-profile").empty().append('<div class="annex-big-logo"></div><div class="annex-taller"></div>');
 
 			this.composer = $.get("php/root.php", function(data) {
 				this.validateData(data, function(data) {
@@ -4631,6 +4620,27 @@ Browser.prototype = {
 	 */
 	loadingSpinner: function(id) {
 		return '<div style="height:400px;"><img id="loading-'+id+'" class="loading-spinner" src="images/loading.svg" style="display:none;" alt="" /></div>';
+	},
+
+	/**
+	 * Stop the tune after X milliseconds if a "?wait=X" URL parameter is specified
+	 * or a hotkey has toggled a variable.
+	 * 
+	 * NOTE: A bit of a nasty hack. Because of the way the SID.load() function ties
+	 * into playing immediately, the alternative would have cost a lot more code
+	 * and effort.
+	 * 
+	 * @param {*} paramWait 	Optional; number of milliseconds before stopping
+	 */
+	conditionalStopPlay: function(paramWait) {
+		if (paramWait || main.noPlay) {
+			SID.setVolume(0);
+			setTimeout(function() {
+				$("#stop").trigger("mouseup");
+				SID.stop();
+				SID.setVolume(1);
+			}, paramWait ?? 100);
+		}
 	},
 
 	/**

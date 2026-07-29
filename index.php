@@ -583,6 +583,7 @@
 					<option value="download">Download SID file</option>
 					<option value="silence">No SID handler</option>
 				</select>
+				<div id="no-play"></div>
 				<div id="theme-selector" title="Click here to toggle the color theme"><div></div></div>
 
 				<?php if (!miniPlayer()): ?>
@@ -1840,31 +1841,19 @@
 							everything ready to play, search through and rate no matter if I'm on my desktop, on my iPhone
 							or on my iPad.
 						</p>
-						<p>
+						<!--<p>
 							However, it's possible to use an offline player with DeepSID. Just select the
 							<code>Download</code> option in the top drop-down box and start clicking rows. Make sure you
 							associate your offline player with automatically playing the tunes.
-						</p>
+						</p>-->
 
-						<h3>Where did the audio handlers for SOASC go?</h3>
-						<p>
-							The audio handlers for Stone Oakvalley's Authentic SID Collection were removed in September 2020.
-							The connections to these real-time recordings were always spotty at best and later the reaction
-							times also became painfully slow.
-						</p>
-						<p>
-							I have repeatedly tried to fix the reaction times to no avail. It's a shame having to leave this
-							library behind as it would have been nice with real-time recordings to complement the emulations,
-							but I finally decided that the quality of the SOASC implementation was inadequate for DeepSID.
-						</p>
-
-						<h3>Where did the Disqus tab go?</h3>
+						<!--<h3>Where did the Disqus tab go?</h3>
 						<p>
 							It was removed in late November 2020 together with all of its script code. It affected the performance
 							of DeepSID, especially when triggering new SID tunes. Because this comment system was already rarely
 							used by users, I decided to remove it altogether. The comments are still stored on their side and can
 							be exported.
-						</p>
+						</p>-->
 
 						<h3>How do I make my own playlists?</h3>
 						<p>
@@ -1930,9 +1919,7 @@
 
 						<h3>Why doesn't this work in Internet Explorer?</h3>
 						<p>
-							The audio handlers all use an API called <i>Web Audio</i> which is
-							<a href="https://caniuse.com/#search=web%20audio" target="_top">not supported by Internet Explorer</a>.
-							You need a modern web browser to use this site.
+							You're kidding, right?
 						</p>
 
 						<h3>Why can't I see the load/end addresses and size of the SID tune?</h3>
@@ -1962,12 +1949,21 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 29, 2026</h3>
+						<ul>
+							<li>Fixed REST API methods. All examples should now return proper data again.</li>
+							<li>Added the 4SID tunes <a href="https://deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Example_Tune_4SID.sid">4SID Example-Tune</a> and <a href="//deepsid.chordian.net/?file=/Exotic%20SID%20Tunes%20Collection/Mega_Chase_Theme_4SID.sid">Mega Chase Theme</a> to the Exotic SID Tunes Collection.</li>
+							<li>Changed how the "n" hotkey works. Instead of toggling the silent SID handler, it now toggles a 'No Play' mode, indicated by a small red dot below the top-left logo. When enabled, selecting or skipping songs no longer starts playback automatically. You always have to press the 'Play' button to start playback.</li>
+						</ul>
+
 						<h3>July 28, 2026</h3>
 						<ul>
 							<li>Tweaked the player name definitions for Rock Monitor tunes. You can now search specifically for tunes made with Rock Monitor II, which were conspicuously missing before.</li>
 							<li>All player names have been updated to ensure they link to the correct player/editor page when clicked from a SID song. In addition, selecting a player/editor from its list now correctly finds the corresponding songs.</li>
 							<li>Fixed color strips not showing up for the appropriate players.</li>
 							<li>Fixed songs in Compute's Gazette SID Collection not showing the player/editor page for Compute's SidPlayer.</li>
+							<li>Added the CSDb music competitions related to HVSC #85.</li>
+							<li>The external links have been moved from the 'Profile' tab to the 'Links' tab in the annex box.</li>
 						</ul>
 
 						<h3>July 26, 2026</h3>
@@ -2139,8 +2135,8 @@
 
 						<h3>April 18, 2026</h3>
 						<ul>
-							<li>The "n" hotkey can now be used to toggle between the 'WebSid emulator' and 'No SID handler'. If
-								another SID handler is active, pressing it will first switch to 'No SID handler'.</li>
+							<li><del>The "n" hotkey can now be used to toggle between the 'WebSid emulator' and 'No SID handler'. If
+								another SID handler is active, pressing it will first switch to 'No SID handler'.</del></li>
 							<li>A new tag type for game developers has been introduced. It typically follows a 'GameBase64' tag to
 								indicate the developer of the game. This tag will be added to DeepSID gradually over time.</li>
 						</ul>
@@ -2823,8 +2819,8 @@
 					<div class="annex-topics" style="display:none;" title="Topics"></div>
 				</div>
 				<div id="annex-page">
-					<div id="atopic-profile" class="atopic" style="position:relative;"></div>
-					<div id="atopic-links" class="atopic" style="display:none;"></div>
+					<div id="atopic-profile" class="atopic"></div>
+					<div id="atopic-links" class="atopic" style="position:relative;display:none;"></div>
 					<div id="atopic-help" class="atopic" style="display:none;"></div>
 				</div>
 			</div>

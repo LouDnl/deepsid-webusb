@@ -1175,6 +1175,18 @@ small.u2 { margin-left: 2px; }
 		box-shadow: none;
 	}
 
+/* A red dot below the top left logo to indicate not playing SID rows upon click */
+#no-play {
+	display: none;
+	position: absolute;
+	top: 30px;
+	left: 125px;
+	width: 5.5px;
+	height: 5px;
+	background: var(--color-text-csdb-down);
+	box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);	
+}
+
 #logged-in {
 	position: absolute;
 	bottom: 3px;
@@ -3433,19 +3445,19 @@ input[type=range]::-ms-track {
 	}
 
 :root {
-			--color-border-sid-kb: var(--color-bg-sid-selected); /* or #d5d5c9 and 1.5px border*/
-			--color-border-sid-kb: #e4e4dc;
+	--color-border-sid-kb: var(--color-bg-sid-selected); /* or #d5d5c9 and 1.5px border*/
+	--color-border-sid-kb: #e2e1d9; /* #e4e4dc */
 
-			--color-sid-kb-radius: -7px;
-			--color-sid-kb-opacity: 0.4;
+	--color-sid-kb-radius: -7px;
+	--color-sid-kb-opacity: 0.4;
 }
 
 [data-theme="dark"] {
-			--color-border-sid-kb: var(--color-bg-sid-selected); /* or #393939 and 1.5px border */
-			--color-border-sid-kb: #3b3b3b;
+	--color-border-sid-kb: var(--color-bg-sid-selected); /* or #393939 and 1.5px border */
+	--color-border-sid-kb: #3b3b3b;
 
-			--color-sid-kb-radius: -6px;
-			--color-sid-kb-opacity: 0.9;
+	--color-sid-kb-radius: -6px;
+	--color-sid-kb-opacity: 0.9;
 }
 
 	/* The selection for a keyboard-controlled SID row */

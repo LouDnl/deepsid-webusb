@@ -263,7 +263,7 @@ $help = array(
 		<div class="annex-hotkey">y</div><span class="annex-tiny">Toggle tags on/off</span>
 		<div class="annex-hotkey">i</div><span class="annex-tiny">Cycle top factoids</span>
 		<div class="annex-hotkey">u</div><span class="annex-tiny">Cycle bottom factoids</span>
-		<div class="annex-hotkey">n</div><span class="annex-tiny">Toggle WebSid/Silence</span>
+		<div class="annex-hotkey">n</div><span class="annex-tiny">Toggle no play on click</span>
 		<div class="annex-hotkey">a</div><span class="annex-tiny">Toggle annex on/off</span>
 		<div class="annex-hotkey">+</div><span class="annex-tiny">Search command</span>
 		<p>Testing a SID is temporary and for you only. No one else can hear it.</p>

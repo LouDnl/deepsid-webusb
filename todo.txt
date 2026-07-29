@@ -9,21 +9,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Do the compo tunes for HVSC #85.
-
-- Move the "Beyond DeepSID" links into the "Links" tab. It makes more sense for them to be in the tab
-  with a related name. In the "Profile" tab, just have the small logo for the time being.  
-
-- In the admin "PHP" section, rename old table names in the one-line script descriptions.
-
-- Change 'n' hotkey to stop play immediately (like "?wait=100") instead of silence SID handler.
-  This makes it possible to still use e.g. MEMO view.
-
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
-
-- Add a "seconds" edit box for the new delay-next feature.
-
-- The keyboard lines surrounding a SID row should be slightly darker in bright mode.
 
 - Another one for a front page top 10 list: Most used player.
 
@@ -39,6 +25,10 @@ SHOULD BE DONE
 - Should the developer tags be just a tad darker, in both color schemes?
 
 - Maybe 'Ctrl+Home' could act as clicking 'HOME' in the top menu?
+
+- The CSDb link updating should also work on 'SHOW' pages.
+
+- Maybe a "Toggle no play       n" in three lines menu?
 
 - Magic button in tags dialog box should also handle Game/Game Prev/GTW + developer correctly. Also,
   events currently come after developer tags. Wouldn't it be better the other way around?
@@ -61,11 +51,15 @@ SHOULD BE DONE
 - Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown for
   releases in forum threads?
 
+- Consider putting the array in 'countries.php' in the database instead.
+
 - DeepSID and CShellDB "Now" tracking page: Add fixed attribute to top gray bar so it stays put when
   scrolling down.
 
 - Add title="tooltip" for individual options in the search drop-down box, expanding on what the search
   options does. Most web browsers should support it (test in Firefox and Chrome).
+
+- Idea for 'Profile' annex tab - show tracking statistics there, for example top most visited folders.
 
 - Remove "[...]" in CSDb pages, but perhaps make sure the credits wrap around aligning with links above
   instead of just the far left side.
@@ -76,10 +70,16 @@ SHOULD BE DONE
 - BUG: When CSDb fails, the ID is erroneously converted into a PLINK.
   Try this: https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1
 
-- Change database table name 'hvsc_lengths' to just 'lengths' instead.
+- Change database table name 'hvsc_lengths' to just 'lengths' instead. Remember to update a description
+  in the admin scripts page too.
 
 - Don't log deletion of labels before adding labels (they're grouped) in the tags log. But make sure
   that a specific deletion of a label is still logged.
+
+- Check out this: https://github.com/Chordian/deepsid/issues/43
+  Two new SID players that could be added later - reSIDfp and SIDLite.
+
+- Add a "seconds" edit box for the new delay-next feature.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.

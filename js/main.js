@@ -95,6 +95,7 @@ var main = {
 	miniPlayer:					0,			// TRUE = Display miniplayer with reduced controls
 	players:					null,		// The AJAX object for displaying a list of players/editors
 	prevFile:					'',			// Used for browser history processing
+	noPlay:						false,		// TRUE = Don't play SID row when clicking it
 	recommended:				null,		// The AJAX object for clicking the 'RECOMMENDED' link in top
 	registering:				false,		// TRUE = The user is registering now
 	showTags:					false,		// TRUE = Tags will be shown
@@ -3111,9 +3112,17 @@ main.bindKeyboardEvents = function() {
 						browser.addLabel();
 						break;
 
-					case 78:	// Keyup 'n' - toggle between some SID emulator and 'No SID handler'
+					case 78:	// Keyup 'n' - toggle between playing SID row on click or not
 
-						ctrls.selectEmulator(SID.emulator != "silence" ? "silence" : "websid");
+						main.noPlay = !main.noPlay;
+						localStorage.setItem("noplay", main.noPlay);
+						if (main.noPlay) {
+							$("#no-play").show(); // Red dot in top
+							$("#stop").trigger("mouseup").trigger("click");
+						} else {
+							$("#no-play").hide();
+							$("#play-pause").trigger("mouseup").trigger("click");
+						}
 						break;
 
 					case 65:	// Keyup 'a' - toggle annex on or off
@@ -4040,6 +4049,12 @@ $(function() { // DOM ready
 
 	// Currently only influenced by the "?lemon=1" switch in index.php
 	if (main.isNotips) browser.annexNotWanted = true;
+
+	// Boolean for not play SID songs upon click (great for maintenance work)
+	if (localStorage.getItem("noplay") === "true") {
+		main.noPlay = true;
+		$("#no-play").show();
+	}
 
 	// Get the user's settings
 	$.post("php/settings.php", function(data) {
