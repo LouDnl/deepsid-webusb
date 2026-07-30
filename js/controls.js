@@ -812,11 +812,10 @@ Controls.prototype = {
 				? 'Digi ('+SID.getDigiType()+') <div>'+SID.getDigiRate()+'</div> Hz / '
 				: "";
 			// Now for how the player is actually called
-			if (SID.emulatorFlags.returnCIA) {
-				var pace = SID.getPace();
-				var timer = pace ? (pace == 1 ? "CIA" : '<div style="width:34.5px;">'+pace+'x</div>') : "VBI";
-				$("#info").append('<span id="pace">'+digi+timer+'</span>');
-			}
+			var pace = SID.getPace();
+			if (!pace) return;
+			var speed = pace.multiplier && pace.multiplier != 1 ? '<div style="width:34.5px;">'+pace.multiplier+'x</div> / ' : '';
+			$("#info").append('<span id="pace">'+digi+speed+' '+pace.mode+'</span>');
 		}
 	},
 

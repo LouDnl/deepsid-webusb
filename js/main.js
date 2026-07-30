@@ -473,6 +473,21 @@ var main = {
 	},
 
 	/**
+	 * Toggle no play mode ON or OFF.
+	 */
+	toggleNoPlay: function() {
+		main.noPlay = !main.noPlay;
+		localStorage.setItem("noplay", main.noPlay); // Boolean is stored as a string
+		if (main.noPlay) {
+			$("#no-play").show(); // Red dot in top
+			$("#stop").trigger("mouseup").trigger("click");
+		} else {
+			$("#no-play").hide();
+			$("#play-pause").trigger("mouseup").trigger("click");
+		}
+	},
+
+	/**
 	 * Toggle tags ON or OFF.
 	 */
 	toggleTags: function() {
@@ -1532,6 +1547,7 @@ main.bindEvents = function() {
 			<div class="line main-line" data-action="main-refresh-folder">Refresh folder<span>f</span></div>
 			<div class="line main-line" data-action="main-refresh-rec">Refresh recomm.<span>g</span></div>
 			<div class="line main-line" data-action="main-toggle-annex">Toggle annex<span>a</span></div>
+			<div class="line main-line" data-action="main-toggle-noplay">Toggle no play<span>n</span></div>
 			<div class="line main-line" data-action="main-toggle-sundry">Toggle sundry<span>s</span></div>
 			<div class="line main-line" data-action="main-toggle-tags">Toggle tags<span>y</span></div>
 		`;
@@ -3114,15 +3130,7 @@ main.bindKeyboardEvents = function() {
 
 					case 78:	// Keyup 'n' - toggle between playing SID row on click or not
 
-						main.noPlay = !main.noPlay;
-						localStorage.setItem("noplay", main.noPlay);
-						if (main.noPlay) {
-							$("#no-play").show(); // Red dot in top
-							$("#stop").trigger("mouseup").trigger("click");
-						} else {
-							$("#no-play").hide();
-							$("#play-pause").trigger("mouseup").trigger("click");
-						}
+						main.toggleNoPlay();
 						break;
 
 					case 65:	// Keyup 'a' - toggle annex on or off
@@ -3182,7 +3190,8 @@ main.bindKeyboardEvents = function() {
 
 					case 68:	// Keyup 'd' - test something
 
-						main.browserMessage(main.getUserSetting('sid_handler'));
+						main.browserMessage(SID.subtune);
+						console.log(SID.sidHeader.getSpeedMode());
 						break;
 
 					default:
@@ -3939,11 +3948,6 @@ main.bindTrackingEvents = function() {
 		if (!document.hidden) _PingTracking();
 	});
 
-	// 4. Ping on unload
-	$(window).on("beforeunload", function() {
-		_PingTracking();
-	});
-
 	/**
 	 * Call the visitor tracking.
 	 * 
@@ -3956,18 +3960,29 @@ main.bindTrackingEvents = function() {
 	 */
 	function _PingTracking() {
 
+		const visitorID = window.deepSIDVisitorID;
+
+		// Do not call tracking.php until the localStorage ID is available
+		if (!visitorID)
+			return;
+
 		if (navigator.sendBeacon) {
 			try {
-				navigator.sendBeacon("tracking.php");
-				return;
-			} catch(e) {
+				const data = new URLSearchParams({
+					visitor_id: visitorID
+				});
+
+				if (navigator.sendBeacon("tracking.php", data))
+					return;
+
+			} catch (e) {
 				// Fall through to AJAX fallback
 			}
 		}
 
 		// jQuery fallback
-		$.get("tracking.php");
-	};
+		$.post("tracking.php", { visitor_id: visitorID });
+	}	
 
 }
 
@@ -4050,7 +4065,7 @@ $(function() { // DOM ready
 	// Currently only influenced by the "?lemon=1" switch in index.php
 	if (main.isNotips) browser.annexNotWanted = true;
 
-	// Boolean for not play SID songs upon click (great for maintenance work)
+	// Boolean for not playing SID songs upon click (great for maintenance work)
 	if (localStorage.getItem("noplay") === "true") {
 		main.noPlay = true;
 		$("#no-play").show();

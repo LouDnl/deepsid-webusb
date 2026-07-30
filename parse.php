@@ -2,9 +2,13 @@
 /**
  * DeepSID / Parse Tracking File
  *
- * Loads the 'visitors.txt' produced by the 'tracking.php' script, parses it,
- * and returns pretty HTML for displaying.
- * 
+ * Loads the 'visitors.txt' produced by 'tracking.php', parses it,
+ * and returns formatted HTML for display.
+ *
+ * Expected CSV format:
+ *   visitor_id, ip_address, user_agent, user_name,
+ *   time_created, time_updated
+ *
  * @used-by		(external)
  */
 
@@ -62,6 +66,10 @@ $styling = '
 				padding-right: 6px;
 			}
 		.duplicate { color: #d00; }
+		.visitor-id {
+			color: #999;
+			font-size: 11px;
+		}
 	</style>';
 
 $stacked = array(
@@ -76,43 +84,149 @@ $count = array(
 	'other'		=> 0,
 	'bot'		=> 0,
 	'mobile'	=> 0,
-	'jch' 		=> 0,
-	'user' 		=> 0,
+	'jch'		=> 0,
+	'user'		=> 0,
 );
 
-if (($handle = fopen(TRACKFILE, 'r')) != false) {
-	while (($line = fgetcsv($handle)) != false) {
-		if (!isset($line[1])) break; // Empty file
-		$parser->parseUserAgentString($line[1]);
-		$duration = $minutes = round(($now - $line[3]) / 60);
+if (($handle = fopen(TRACKFILE, 'r')) !== false) {
+
+	while (($line = fgetcsv($handle)) !== false) {
+
+		/*
+		 * Expected columns:
+		 *
+		 * 0: visitor_id
+		 * 1: ip_address
+		 * 2: user_agent
+		 * 3: user_name
+		 * 4: time_created
+		 * 5: time_updated
+		 */
+		if (count($line) < 6) {
+			// Ignore malformed rows and rows using the old five-column format
+			continue;
+		}
+
+		$visitor_id = $line[0];
+		$ip         = $line[1];
+		$user_agent = $line[2];
+		$user_name  = $line[3];
+		$created    = (int)$line[4];
+		$updated    = (int)$line[5];
+
+		$parser->parseUserAgentString($user_agent);
+
+		$duration = $minutes = round(($now - $created) / 60);
 		$hours = 0;
+
 		if ($duration > 60) {
 			$hours = floor($duration / 60);
 			$minutes = $duration % 60;
 		}
-		$last = round(($now - $line[4]) / 60);
+
+		$last = round(($now - $updated) / 60);
+
 		$type = ' other';
-		if ($parser->type == 'bot' || stripos('x'.$line[1], 'python-') || stripos('x'.$line[1], 'googlebot') || stripos('x'.$line[1], 'twitterbot') || stripos('x'.$line[1], 'mediatoolkitbot'))
+
+		if (
+			$parser->type == 'bot' ||
+			stripos('x'.$user_agent, 'python-') ||
+			stripos('x'.$user_agent, 'googlebot') ||
+			stripos('x'.$user_agent, 'twitterbot') ||
+			stripos('x'.$user_agent, 'mediatoolkitbot')
+		) {
 			$type = ' bot';
-		elseif ($parser->type == 'mobile')
+
+		} elseif ($parser->type == 'mobile') {
 			$type = ' mobile';
-		elseif ($line[0] == CHORDIAN)
+
+		} elseif ($ip == CHORDIAN) {
 			$type = ' jch';
-		elseif (!empty($line[2]))
+
+		} elseif ($user_name !== '') {
 			$type = ' user';
+		}
+
 		$count[trim($type)]++;
-		$ip = str_replace('DUPLICATE IP ADDRESS', '<span class="duplicate">DUPLICATE IP ADDRESS</span>', $line[0]);
+
+		/*
+		 * Escape values before placing them in HTML.
+		 */
+		$safe_visitor_id = htmlspecialchars(
+			$visitor_id,
+			ENT_QUOTES | ENT_SUBSTITUTE,
+			'UTF-8'
+		);
+
+		$safe_ip = htmlspecialchars(
+			$ip,
+			ENT_QUOTES | ENT_SUBSTITUTE,
+			'UTF-8'
+		);
+
+		$safe_user_agent = htmlspecialchars(
+			$user_agent,
+			ENT_QUOTES | ENT_SUBSTITUTE,
+			'UTF-8'
+		);
+
+		$safe_user_name = htmlspecialchars(
+			$user_name,
+			ENT_QUOTES | ENT_SUBSTITUTE,
+			'UTF-8'
+		);
+
+		$safe_parser_name = htmlspecialchars(
+			$parser->fullname,
+			ENT_QUOTES | ENT_SUBSTITUTE,
+			'UTF-8'
+		);
+
+		/*
+		 * Retain support for the old duplicate-IP warning text,
+		 * although tracking.php no longer generates it.
+		 */
+		$safe_ip = str_replace(
+			'DUPLICATE IP ADDRESS',
+			'<span class="duplicate">DUPLICATE IP ADDRESS</span>',
+			$safe_ip
+		);
+
+		$browser = $parser->fullname != 'unknown'
+			? $safe_parser_name
+			: $safe_user_agent;
+
 		$box = '
-			<div class="tracking'.$type.'">
-				'.(!empty($line[2]) ? '<b>'.$line[2].'</b> ('.$ip.')' : $ip).'<br />
-				'.date('H:i', $line[3]).' ('.($duration > 2 ? ($hours ? '<b>'.$hours.'</b> hours ' : '').'<b>'.$minutes.'</b> minutes ago' : '<b>just now</b>').')
-				- last updated '.($last > 2 ? '<b>'.$last.'</b> minutes ago' : '<b>just now</b>').'<br />
-				'.($parser->fullname != 'unknown' ? $parser->fullname : $line[1]).'
+			<div class="tracking'.$type.'" title="Visitor ID: '.$safe_visitor_id.'">
+				'.(
+					$user_name !== ''
+						? '<b>'.$safe_user_name.'</b> ('.$safe_ip.')'
+						: $safe_ip
+				).'<br />
+				'.date('H:i', $created).' (
+					'.(
+						$duration > 2
+							? (
+								$hours
+									? '<b>'.$hours.'</b> hours '
+									: ''
+							).'<b>'.$minutes.'</b> minutes ago'
+							: '<b>just now</b>'
+					).'
+				) - last updated
+				'.(
+					$last > 2
+						? '<b>'.$last.'</b> minutes ago'
+						: '<b>just now</b>'
+				).'<br />
+				'.$browser.'
 			</div>';
+
 		$stacked[ltrim($type)] .= $box;
 	}
+
+	fclose($handle);
 }
-fclose($handle);
 
 $counts = '
 	<div class="counts"><b>DeepSID</b>
@@ -120,13 +234,21 @@ $counts = '
 		<span><b>Mobile:</b> '.$count['mobile'].'</span>
 		<span><b>Other:</b> '.$count['other'].'</span>
 		<span><b>Bots:</b> '.$count['bot'].'</span>
-		<span style="color:#000;"><b>Visitors:</b> '.($count['other'] + $count['mobile'] + $count['user']).'</span>
+		<span style="color:#000;"><b>Visitors:</b> '.
+			($count['other'] + $count['mobile'] + $count['user']).
+		'</span>
 	</div>';
 
 echo $styling.$counts.
 	'<table>
 		<tr>
-			<td>'.$stacked['jch'].$stacked['user'].$stacked['mobile'].'</td><td>'.$stacked['other'].'</td><td>'.$stacked['bot'].'</td>
+			<td>'.
+				$stacked['jch'].
+				$stacked['user'].
+				$stacked['mobile'].
+			'</td>
+			<td>'.$stacked['other'].'</td>
+			<td>'.$stacked['bot'].'</td>
 		</tr>
 	</table>';
 ?>

@@ -1590,6 +1590,8 @@ Viz.prototype = {
 	showSIDInfo: function() {
 		if (typeof browser.songPos != "undefined" && browser.songs.length > 0 && browser.songs[browser.songPos].fullname.substr(-4) != ".mus") {
 
+			clearTimeout(this.showPlaybackMode);
+
 			var size = browser.songs[browser.songPos].size - 3,
 				load = browser.songs[browser.songPos].address,
 				init = browser.songs[browser.songPos].init,
@@ -1610,14 +1612,25 @@ Viz.prototype = {
 			$("#visuals-memory .si-enc").empty().append(enc);
 			$("#visuals-memory .si-model").empty().append(chip);
 
-			setTimeout(function() {
-				var timer = NOT_APPLICABLE;
+			$("#visuals-memory .si-pace").empty();
+			this.showPlaybackMode = setTimeout(function() {
+				var mode = NOT_APPLICABLE;
 				if (SID.emulatorFlags.returnCIA) {
 					var pace = SID.getPace();
-					timer = pace ? (pace == 1 ? 'CIA <span class="m">(on a 16-bit interval timer)</span>' : pace+'x <span class="m">(called '+pace+' times per VBI)</span>') : 'VBI <span class="m">(Vertical Blanking Interrupt)</span>';
+					switch (pace.mode) {
+						case "CIA":
+							mode = 'CIA <span class="m">(on a 16-bit interval timer)</span>';
+							break;
+						case "VBI":
+							mode = 'VBI <span class="m">(Vertical Blanking Interrupt)</span>'
+							break;
+						default:
+							mode = 'IRQ <span class="m">(Interrupt Request)</span>'
+							break;
+					}
 				}
-				$("#visuals-memory .si-pace").empty().append(timer);
-			}.bind(this), 0);
+				$("#visuals-memory .si-pace").empty().append(mode);
+			}.bind(this), 200);
 
 			var addr = '$D400';
 			for (var chip = 2; chip <= browser.chips; chip++) {

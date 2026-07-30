@@ -3793,6 +3793,9 @@ Browser.prototype = {
 			case 'main-next-detail-factoid':
 				main.cycleFactoidTypeBottom();
 				break;
+			case 'main-toggle-noplay':
+				main.toggleNoPlay();
+				break;
 			case 'main-toggle-tags':
 				main.toggleTags();
 				break;

@@ -11,7 +11,9 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
 
-- Another one for a front page top 10 list: Most used player.
+- Another one for a front page top 10 list: Most used player. I though about putting that in the annex
+  box (profile) but I think it makes much more sense to put it in an existing top 10-100 page box. It
+  will probably also be much easier to do.
 
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
@@ -24,17 +26,10 @@ SHOULD BE DONE
 
 - Should the developer tags be just a tad darker, in both color schemes?
 
-- Maybe 'Ctrl+Home' could act as clicking 'HOME' in the top menu?
-
 - The CSDb link updating should also work on 'SHOW' pages.
-
-- Maybe a "Toggle no play       n" in three lines menu?
 
 - Magic button in tags dialog box should also handle Game/Game Prev/GTW + developer correctly. Also,
   events currently come after developer tags. Wouldn't it be better the other way around?
-
-- Look into improving activity log to use cookies or session ID instead of IP addresses to distinguish
-  between individual visitors.
 
 - New right-click context menu option for a song: Open in new browser window with hex monitor view of
   the entire player. Fills out the view of the entire window and is scrollable (no pages).
@@ -52,9 +47,6 @@ SHOULD BE DONE
   releases in forum threads?
 
 - Consider putting the array in 'countries.php' in the database instead.
-
-- DeepSID and CShellDB "Now" tracking page: Add fixed attribute to top gray bar so it stays put when
-  scrolling down.
 
 - Add title="tooltip" for individual options in the search drop-down box, expanding on what the search
   options does. Most web browsers should support it (test in Firefox and Chrome).
@@ -133,6 +125,9 @@ MAYBE CONSIDER THIS
 
 - Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
   group data? It's so massive that it always times out, but I only need to get it once...)
+
+- When browsing subtunes, The 'Playback mode' line in MEMO view is not updated. It just stays
+  on the info it got when the song was clicked. It should update for each subtune.
 
 - Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
   the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling

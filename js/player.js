@@ -434,6 +434,152 @@ SIDPlayer.prototype = {
 	setCallbackTrackEnd: 			function(callback) { this.callbackTrackEnd = callback; },
 	setCallbackBufferEnded: 		function(callback) { this.callbackBufferEnded = callback; },
 
+	sidHeader: {
+
+		filename:	"",
+		buffer:		null,
+		bytes:		null,
+		properties:	null,
+		promise:	null,
+
+		/**
+		 * Fetch and parse a SID header.
+		 * Reuses the existing result if the same SID is requested again.
+		 *
+		 * @return {Promise<Object|false>}
+		 */
+		read: function(file) {
+			if (this.file === file && this.properties)
+				return Promise.resolve(this.properties);
+
+			if (this.file === file && this.promise)
+				return this.promise;
+
+			this.file = file;
+			this.bytes = null;
+			this.properties = null;
+
+			var requestedFile = file;
+
+			this.promise = fetch(file)
+				.then(function(response) {
+					if (!response.ok)
+						throw new Error("HTTP error " + response.status);
+
+					return response.arrayBuffer();
+				})
+				.then(function(buffer) {
+					if (this.file !== requestedFile)
+						return false;
+
+					this.bytes = new Uint8Array(buffer);
+					this.properties = this.parse(buffer);
+					this.promise = null;
+
+					return this.properties;
+				}.bind(this))
+				.catch(function(error) {
+					if (this.file === requestedFile) {
+						this.promise = null;
+						this.bytes = null;
+						this.properties = null;
+					}
+
+					//console.error("Could not read SID header:", error);
+					return false;
+				}.bind(this));
+
+			return this.promise;
+		},
+
+		parse: function(buffer) {
+			var bytes = new Uint8Array(buffer);
+			var view = new DataView(buffer);
+
+			if (bytes.length < 0x16)
+				throw new Error("File is too small to contain a SID header.");
+
+			var format = String.fromCharCode(
+				bytes[0],
+				bytes[1],
+				bytes[2],
+				bytes[3]
+			);
+
+			if (format !== "PSID" && format !== "RSID")
+				throw new Error("File is not a PSID or RSID.");
+
+			return {
+				format:			format,
+				version:		view.getUint16(0x04, false),
+				dataOffset:		view.getUint16(0x06, false),
+				loadAddress:	view.getUint16(0x08, false),
+				initAddress:	view.getUint16(0x0A, false),
+				playAddress:	view.getUint16(0x0C, false),
+				songs:			view.getUint16(0x0E, false),
+				startSong:		view.getUint16(0x10, false),
+				speed:			view.getUint32(0x12, false)
+			};
+		},
+
+		/**
+		 * Return one raw byte from the cache.
+		 * 
+		 * NOTE: Returns FALSE until the SID header has been loaded.
+		 *
+		 * @param {number} offset
+		 * @return {*} Returns the byte value, or FALSE if unavailable
+		 */
+		getByte: function(offset) {
+			if (!this.bytes)
+				return false;
+
+			if (offset < 0 || offset >= this.bytes.length)
+				return false;
+
+			return this.bytes[offset];
+		},
+
+		/**
+		 * Return a parsed SID header property from the cache.
+		 *
+		 * NOTE: Returns FALSE until the SID header has been loaded.
+		 * 
+		 * @param {string} property
+		 * @return {*} Returns the property value, or FALSE if unavailable
+		 */
+		getProperty: function(property) {
+			if (!this.properties)
+				return false;
+
+			if (!Object.prototype.hasOwnProperty.call(this.properties, property))
+				return false;
+
+			return this.properties[property];
+		},
+
+		/**
+		 * Return the speed mode for the current subtune.
+		 * 
+		 * @return {string} CIA or VBI if PSID, otherwise IRQ
+		 */
+		getSpeedMode: function() {
+			var speed = this.getProperty("speed");
+
+			if (speed === false)
+				return false;
+
+			// RSID doesn't use the speed bits
+			if (this.getProperty("format") == "RSID")
+				return "IRQ";
+
+			// Bit 31 is reused for all subtunes >= 32
+			var bit = Math.min(SID.subtune, 31);
+
+			return ((speed >>> bit) & 1) ? "CIA" : "VBI";
+		}		
+	},
+
 	/**
 	 * Load a SID file but do not play it yet. Also handles callbacks to when the file
 	 * has loaded, and in some cases also when the music has timed out.
@@ -459,6 +605,9 @@ SIDPlayer.prototype = {
 		$(document).attr("title", "DeepSID | " + this.rawFilename);
 
 		viz.clearStats();
+
+		// Read and cache SID header data independently of the selected emulator
+		void this.sidHeader.read(file);
 
 		switch (this.emulator) {
 
@@ -1880,43 +2029,78 @@ SIDPlayer.prototype = {
 	},
 
 	/**
-	 * Return the speed relative to 50hz. Not all handlers support this. If
-	 * 0 is returned, the tune uses VBI. If > 0, it uses CIA.
+	 * Return the playback mode and speed relative to 50 Hz.
 	 *
-	 * @handlers websid, legacy, hermit, webusb, asid
+	 * @handlers resid, websid, legacy, hermit, webusb, asid
 	 *
-	 * @return {*}		Returns the multiplier value (4 = 4x speed), or FALSE
+	 * @return {Object|false}
+	 *         {
+	 *             mode: "VBI" | "CIA" | "IRQ",
+	 *             multiplier: number | false
+	 *         }
 	 */
 	getPace: function() {
+		var mode = SID.sidHeader.getSpeedMode();
+
+		if (mode === false)
+			return false;
+
+		// Normal VBI playback is always 1x relative to 50 Hz
+		if (mode === "VBI") {
+			return {
+				mode: "VBI",
+				multiplier: 1
+			};
+		}
+
+		// RSID or otherwise self-controlled playback
+		if (mode === "IRQ") {
+			return {
+				mode: "IRQ",
+				multiplier: false
+			};
+		}
+
+		// From here on, the SID header says CIA
+		var cia;
+
 		switch (this.emulator) {
 			case "resid":
-				// @resid Currently just returns 0 - JW may add an API call later
-				var cia = reSIDBackend.getRAM(0xDC04) + reSIDBackend.getRAM(0xDC05) * 256;
-				if (cia == 16421) cia = 0;
-				// 19654 relates to 1x; lower values speed up the tune
-				return cia ? Math.round(19654 / cia) : 0;
-			case "jsidplay2":
-				// @todo Check later if it's supported
-				return false;
+				cia = reSIDBackend.getRAM(0xDC04) +
+					reSIDBackend.getRAM(0xDC05) * 256;
+				break;
+
 			case "websid":
-				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
-				if (cia == 16421) cia = 0;
-				// 19654 relates to 1x; lower values speed up the tune
-				return cia ? Math.round(19654 / cia) : 0;
 			case "legacy":
-				var cia = SIDBackend.getRAM(0xDC04) + SIDBackend.getRAM(0xDC05) * 256;
-				// 19654 relates to 1x; lower values speed up the tune
-				return cia ? Math.round(19654 / cia) : 0;
+				cia = SIDBackend.getRAM(0xDC04) +
+					SIDBackend.getRAM(0xDC05) * 256;
+				break;
+
 			case "hermit":
 			case "webusb":
 			case "asid":
-				var cia = this.hermit.getcia();
-				return cia ? Math.round(19654 / cia) : 0;
+				cia = this.hermit.getcia();
+				break;
+
+			case "jsidplay2":
 			case "youtube":
 			case "download":
 			case "silence":
+				return {
+					mode: "CIA",
+					multiplier: false
+				};
+
+			default:
 				return false;
 		}
+
+		return {
+			mode: "CIA",
+			multiplier: cia
+				? Math.max(1, Math.round(19654 / cia))
+				: false
+		};
 	},
 
 	/**

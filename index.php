@@ -14,8 +14,6 @@
 		die('DeepSID is being updated. Please return again in a few minutes.');
 	}
 
-	require_once("tracking.php"); // Also called periodically by 'main.js'
-
 	$backup_due = false;
 
 	$backup_dir = __DIR__ . '/backups/';
@@ -84,7 +82,8 @@
 
 			var DEEPSID_BACKUP_DUE = <?php echo $backup_due ? 'true' : 'false'; ?>;
 
-		</script>		
+		</script>
+
 		<meta name="description" content="A modern online SID player for the High Voltage and Compute's Gazette SID collections." /> <!-- Max 150 characters -->
 		<meta name="keywords" content="c64,commodore 64,sid,6581,8580,hvsc,high voltage,cgsc,compute's gazette,visualizer,stil,websid,hermit,asid,webusb,usbsid" />
 		<meta name="author" content="Jens-Christian Huus" />
@@ -127,7 +126,55 @@
 				window.stop();
 			}
 			window.WASM_SEARCH_PATH = "js/handlers/"; // Used by all of JW's emulators
+
+			// Visitor tracking
+			const KEY = "deepsid_visitor_id";
+
+			let visitorID = localStorage.getItem(KEY);
+
+			if (!visitorID) {
+				visitorID = generateVisitorID();
+				localStorage.setItem(KEY, visitorID);
+			}
+
+			window.deepSIDVisitorID = visitorID;
+			$.post("tracking.php", { visitor_id: visitorID });
+
+			function generateVisitorID() {
+				if (
+					window.crypto &&
+					typeof window.crypto.randomUUID === "function"
+				) {
+					return window.crypto.randomUUID();
+				}
+
+				const bytes = new Uint8Array(16);
+
+				if (window.crypto && typeof window.crypto.getRandomValues === "function") {
+					window.crypto.getRandomValues(bytes);
+				} else {
+					for (let i = 0; i < bytes.length; i++)
+						bytes[i] = Math.floor(Math.random() * 256);
+				}
+
+				bytes[6] = (bytes[6] & 0x0f) | 0x40;
+				bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+				const hex = Array.from(bytes, byte =>
+					byte.toString(16).padStart(2, "0")
+				).join("");
+
+				return (
+					hex.slice(0, 8) + "-" +
+					hex.slice(8, 12) + "-" +
+					hex.slice(12, 16) + "-" +
+					hex.slice(16, 20) + "-" +
+					hex.slice(20)
+				);
+			}			
+
 		</script>
+
 		<?php if (isset($_GET['websiddebug'])): ?>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/scriptprocessor_player.min.js"></script>
 			<script type="text/javascript" src="http://www.wothke.ch/tmp/backend_websid.js"></script>
@@ -1225,7 +1272,7 @@
 							<div class="edit sid-info sid-info-right">
 								<div class="label">SID file type</div><span class="si si-type"></span><br />
 								<div class="label">Encoding</div><span class="si si-enc"></span><br />
-								<div class="label">Pace (Speed)</div><span class="si si-pace"></span><br />
+								<div class="label">Playback mode</div><span class="si si-pace"></span><br />
 								<div class="label">SID model</div><span class="si si-model"></span><br />
 								<div class="label">SID addresses</div><span class="si si-sid"></span>
 							</div>
@@ -1948,6 +1995,11 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>July 30, 2026</h3>
+						<ul>
+							<li>The playback mode and speed multiplier detection have been completely overhauled. Playback mode is now determined directly from the SID file header instead of being calculated from the CIA timer, resulting in more consistent detection across all SID handlers.</li>
+						</ul>
 
 						<h3>July 29, 2026</h3>
 						<ul>
