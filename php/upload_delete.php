@@ -20,6 +20,9 @@ if (!$account->checkLogin())
 else if (!$account->isAdmin())
 	die("Only a DeepSID administrator may delete files.");
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 $collection_path = $_POST['fullname'];
 
 try {

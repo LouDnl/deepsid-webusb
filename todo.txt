@@ -1,8 +1,5 @@
 ToDo
 ¯¯¯¯
-
-- Yes, I sometimes use ChatGPT.
-
 - Look into the console logging alternatives, like warn, error, table, etc.
   @link https://developer.mozilla.org/en-US/docs/Web/API/console
 
@@ -11,37 +8,20 @@ SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
 
-- Another one for a front page top 10 list: Most used player. I though about putting that in the annex
-  box (profile) but I think it makes much more sense to put it in an existing top 10-100 page box. It
-  will probably also be much easier to do.
-
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
 
-- Snazzy idea: BACKSPACE (without SHIFT) goes back in CSDb or GB64 if the tab is visible and there is
-  a 'BACK' button. If in root of any of these tabs, DeepSID goes back in folder system instead. (This
-  would also render Shift+Backspace unnecessary.)
-
 - MEMO browsing needs the same rules as search browsing (shift and MMB).
 
-- Should the developer tags be just a tad darker, in both color schemes?
-
 - The CSDb link updating should also work on 'SHOW' pages.
-
-- Magic button in tags dialog box should also handle Game/Game Prev/GTW + developer correctly. Also,
-  events currently come after developer tags. Wouldn't it be better the other way around?
 
 - New right-click context menu option for a song: Open in new browser window with hex monitor view of
   the entire player. Fills out the view of the entire window and is scrollable (no pages).
 
+- Get rid of the slow loading "Beyond DeepSID" thumbnails. Just have bullet points and a hyperlink?
+
 - The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
   goes on in the page area. Calm it down a bit if you can.
-
-- Currently a click on a game with a GB64 entry automatically adds the "Gamebase64" tag. Also make it
-  so if there is a "Gamebase64" tag but no longer any GB64 entry, it automatically removes that tag and
-  instead adds a "Game" tag.
-
-- The "SEUCK" tag should always appear before the developer name tag.
 
 - Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown for
   releases in forum threads?
@@ -51,8 +31,6 @@ SHOULD BE DONE
 - Add title="tooltip" for individual options in the search drop-down box, expanding on what the search
   options does. Most web browsers should support it (test in Firefox and Chrome).
 
-- Idea for 'Profile' annex tab - show tracking statistics there, for example top most visited folders.
-
 - Remove "[...]" in CSDb pages, but perhaps make sure the credits wrap around aligning with links above
   instead of just the far left side.
   Example: https://deepsid.chordian.net/?file=/MUSICIANS/C/Crowley_Owen/Junkie.sid
@@ -61,6 +39,7 @@ SHOULD BE DONE
 
 - BUG: When CSDb fails, the ID is erroneously converted into a PLINK.
   Try this: https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1
+  Simply ignore converting when that error message is shown.
 
 - Change database table name 'hvsc_lengths' to just 'lengths' instead. Remember to update a description
   in the admin scripts page too.
@@ -127,7 +106,9 @@ MAYBE CONSIDER THIS
   group data? It's so massive that it always times out, but I only need to get it once...)
 
 - When browsing subtunes, The 'Playback mode' line in MEMO view is not updated. It just stays
-  on the info it got when the song was clicked. It should update for each subtune.
+  on the info it got when the song was clicked. It should update for each subtune. UPDATE: Looks
+  like it updates on each subtune now? Keep checking until you find a song with different speed
+  flags across its subtunes (and good luck with that).
 
 - Consider changing it so the 'Changes' tab calls a separate PHP file that fills it, just like
   the admin sections. It would make the 'index.php' file much smaller. Also, I have a feeling
@@ -136,6 +117,10 @@ MAYBE CONSIDER THIS
 - When enabling "maintenance_mode" make it so visitors already on the site are shown a
   warning ("DeepSID just entered maintenance mode. It's dangerous to browse here at the
   moment" an so on). When to show? Playing? Browsing? Any event at all?
+
+- Refactor the two 'session_write_close()' lines in all PHP files that use them to a new function call
+  in the class account PHP file. It could be called e.g. 'releaseSessionLock()' or something. Then
+  optionally add an admin SET line for toggling it ON or OFF.
 
 - Change all 'bind(this)' stuff to modern JavaScript '=>' handling instead. This is an enourmous
   task as most JS files are completely engulfed in 'bind(this)' stuff, and there are caveats. The

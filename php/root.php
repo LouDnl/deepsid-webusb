@@ -321,7 +321,16 @@ const BOX_PLAYMOD		= 3;
 
 $alt_box = [BOX_DECENT, BOX_PLAYLIST, BOX_CSHELLDB, BOX_PLAYMOD];
 
-$available_lists = ['maxfiles', 'longest', 'mostgames', 'countries', 'startaddr', 'maxtime'];
+$available_lists = [
+	'maxfiles',
+	'longest',
+	'mostgames',
+	'countries',
+	'startaddr',
+	'maxtime',
+	'clickmusicians',
+	'popularplayers',
+];
 $dropdown_options =
 	'<option value="'.$available_lists[0].'">Most SID tunes produced</option>'.
 	'<option value="'.$available_lists[1].'">The longest SID tunes</option>'.
@@ -329,6 +338,8 @@ $dropdown_options =
 	'<option value="'.$available_lists[3].'">Composers in countries</option>'.
 	'<option value="'.$available_lists[4].'">Most popular start address</option>'.
 	'<option value="'.$available_lists[5].'">Total playing time produced</option>'.
+	'<option value="'.$available_lists[6].'">Most visited composer folders</option>'.
+	'<option value="'.$available_lists[7].'">Most used music players</option>'.
 	'';
 
 $row_options =

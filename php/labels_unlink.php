@@ -49,6 +49,9 @@ try {
 		'LABELS:DELETE'.
 	PHP_EOL, FILE_APPEND);
 
+	if (session_status() === PHP_SESSION_ACTIVE)
+		session_write_close();
+
 } catch(PDOException $e) {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));

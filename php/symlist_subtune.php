@@ -20,6 +20,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 $user_id = $account->checkLogin() ? $account->userID() : 0;
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to use playlists.')));
 

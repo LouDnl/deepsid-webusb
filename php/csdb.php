@@ -39,6 +39,9 @@ $sid_entries = array();
 
 $user_id = $account->checkLogin() ? $account->userID() : 0;
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 $fresh_days = $account->getAdminSetting('csdb_cache_fresh_days');	// Cache skip for items < 30 days old
 $ttl_days = $account->getAdminSetting('csdb_cache_ttl_days');		// Fallback TTL for date-less items (7 days)
 $ttl = $ttl_days * 24 * 60 * 60;

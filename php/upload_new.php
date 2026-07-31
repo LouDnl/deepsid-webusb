@@ -26,6 +26,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to upload SID files.')));
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 // Make sure we have a clean upload folder before adding a new file to it
 foreach(glob('../temp/upload/*.sid') as $filename) {
 	$file_age = time() - filectime($filename);

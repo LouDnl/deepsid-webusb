@@ -117,7 +117,12 @@ function songLengthToMilliseconds(?string $length): ?int {
 
 $found = $symlist_folder_id = $number_of_pages = 0;
 $incompatible = $owner = $new_uploads = $message = '';
+
 $user_id = $account->checkLogin() ? $account->userID() : 0;
+
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 $is_searching = isset($_GET['searchQuery']) && !empty($_GET['searchQuery']);
 $is_personal_symlist = substr($_GET['folder'], 0, 2) == '/!';
 $is_public_symlist = substr($_GET['folder'], 0, 2) == '/$';

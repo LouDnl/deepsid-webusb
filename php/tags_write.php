@@ -81,6 +81,9 @@ if (!$account->checkLogin())
 $user_id = $account->userID();
 $user_name = $account->userName();
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 try {
 	$db = $account->getDB();
 

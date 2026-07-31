@@ -78,6 +78,8 @@ if ($account->checkLogin()) {
 		} else
 			die('There were no ratings to be exported.');
 
+		// No 'session_write_close()' needed here
+
 	} catch(PDOException $e) {
 		$account->logActivityError(basename(__FILE__), $e->getMessage());
 		die('A database error occurred.');

@@ -961,11 +961,13 @@ Browser.prototype = {
 
 				// If one of the two types were not present, go second priority types
 				if (startTagValue == 0 || productionId == 0) {
-					// Select EVENT type for the top drop-down
+					// Select primary DEVELOPER type for the top drop-down
+					const primaryDeveloperTags = ["GameBase64", "Game", "Game Prev", "GTW"];
+
 					const gameTag = this.fileTags
 						.map(tagID => this.allTags.find(tag => tag.id == tagID))
-						.filter(tag => tag.name.startsWith("Game"))
-						.shift();
+						.filter(tag => tag && tag.type === "DEVELOPER")
+						.find(tag => primaryDeveloperTags.includes(tag.name));
 
 					startTagValue = gameTag ? gameTag.id : 0;
 					$startTag.val(startTagValue);
@@ -974,8 +976,8 @@ Browser.prototype = {
 					// Select DEVELOPER type for the bottom drop-down
 					const developerTag = this.fileTags
 						.map(tagID => this.allTags.find(tag => tag.id == tagID))
-						.filter(tag => tag && tag.type === "DEVELOPER") // Only DEVELOPER tags
-						.shift();
+						.filter(tag => tag && tag.type === "DEVELOPER")
+						.find(tag => !primaryDeveloperTags.includes(tag.name));
 
 					let endTagValue = developerTag ? developerTag.id : 0;
 					$endTag.val(endTagValue);
@@ -2508,7 +2510,7 @@ Browser.prototype = {
 	 * @return {string}			The HTML string to put into the SID row
 	 */
 	buildTags: function(tags, types, ids) {
-		var list_of_tags = remix64 = gamebase64 = id = "";
+		var list_of_tags = remix64 = id = "";
 		$.each(tags, (i, tag) => {
 			id = ' data-id="'+ids[i]+'"';
 			if (tag == "Remix64") {
@@ -2516,7 +2518,7 @@ Browser.prototype = {
 				remix64 = '<div class="tag tag-remix64"'+id+'>&nbsp;&nbsp;</div>';
 			} else if (tag == "GameBase64") {
 				// A special look for the "GameBase64" tag
-				gamebase64 = '<div class="tag tag-gamebase64"'+id+'>&nbsp;&nbsp;</div>';
+				list_of_tags += '<div class="tag tag-gamebase64"'+id+'>&nbsp;&nbsp;</div>';
 			} else if (tag == "Doubling" || tag == "Hack" || tag == "Mock" || tag == "Bug" || tag == "Recycled") {
 				// A unique color for tags that serves as a warning
 				list_of_tags += '<div class="tag tag-warning"'+id+'>'+tag+'</div>';
@@ -2526,9 +2528,7 @@ Browser.prototype = {
 			} else if (tag == "Collection") {
 				// Change collection tag into a double note icon followed by a list icon
 				list_of_tags += '<div class="tag tag-production tag-notes tag-collection"'+id+'><img src="images/composer_doublenote.svg" /><img style="margin-left:12px;" src="images/visuals_memory.svg" /><span>&nbsp;&nbsp;&nbsp;&nbsp&nbsp</span></div>';
-			/*} else if (tag == "Compo") {
-				// Add a double note to make it clear this is for music competitions only
-				list_of_tags += '<div class="tag tag-event tag-notes tag-compo"'+id+'><img src="images/composer_doublenote.svg" /><span>Compo</span></div>';*/
+			/*} else if (tag == "Compo") {*/
 			} else if (tag == "Winner") {
 				// Add a class that turns the tag into gold
 				list_of_tags += '<div class="tag tag-event tag-winner"'+id+'>Winner</div>';
@@ -2547,7 +2547,7 @@ Browser.prototype = {
 		list_of_tags += '<div class="edit-tags" title="Edit tags">&nbsp;</div>';
 
 		// 2026-04: Remix64 is now first because GB64 can have a developer appended
-		return remix64+gamebase64+list_of_tags;
+		return remix64+list_of_tags;
 	},
 
 	/**
@@ -3494,41 +3494,55 @@ Browser.prototype = {
 				else
 					$("#note-gb64").hide();
 
-				// If there are entries then a "GameBase64" tag is already there or will be added below
-				// which means that the redundant "Game" and "Game Prev" tags should be removed
-				if (data.count > 0) {
-
-					$.post("php/tags_remove_game.php", {
-						fullname: thisFullname,
-					}, (data) => {
-						this.validateData(data, (data) => {
-							this.updateStickyTags(
-								$("#songs tr.selected"),
-								this.buildTags(data.tags, data.tagtypes, data.tagids),
-								thisFullname.split("/").slice(-1)[0]
-							);
-						});
-					});
-
-					// If there is no "GameBase64" tag then add it now
-					if (this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
-
-						$.post("php/tags_write_single.php", {
-							fullname: thisFullname,
-							tag: "GameBase64",
-						}, (data) => {
-							this.validateData(data, (data) => {
-								// Both updates may be called asynchronously but it shouldn't break anything
-								this.updateStickyTags(
-									$("#songs tr.selected"),
-									this.buildTags(data.tags, data.tagtypes, data.tagids),
-									thisFullname.split("/").slice(-1)[0]
-								);
-							});
-						});
-					}
+				// If there are entries then a 'GameBase64' tag is either already there, or it will be added
+				// which means that the redundant 'Game' and 'Game Prev' tags should be removed
+				if (data.count > 0 && this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
+					this._replaceGameTags(thisFullname, true);
+				// If there is a 'GameBase64' tag but no games in the 'GB64' tab then something changed that
+				// removed the connection to its SID tune; remove the tag and add the 'Game' tag instead
+				} else if (!data.count && this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") !== -1) {
+					this._replaceGameTags(thisFullname, false);
 				}
 				if (typeof callback === "function") callback.call(this);
+			});
+		});
+	},
+
+	/**
+	 * Replace game tags according to one of two modes.
+	 * 
+	 * Used by the 'getGB64' function.
+	 * 
+	 * @param {string} fullname			The SID filename including folders
+	 * @param {boolean} gb64			True = Add 'GameBase64' tag; False = Add' Game' tag
+	 */
+	_replaceGameTags: function(fullname, gb64) {
+		// Remove 'game' + 'game prev' - OR - 'GameBase64' tag(s) first
+		$.post("php/tags_remove_game.php", {
+			fullname: fullname,
+			gb64: gb64 ? 1 : 0
+		}, (data) => {
+			this.validateData(data, (data) => {
+				this.updateStickyTags(
+					$("#songs tr.selected"),
+					this.buildTags(data.tags, data.tagtypes, data.tagids),
+					fullname.split("/").slice(-1)[0]
+				);
+			});
+		});
+
+		// Add the opposite substitute tag now
+		$.post("php/tags_write_single.php", {
+			fullname: fullname,
+			tag: gb64 ? "GameBase64" : "Game"
+		}, (data) => {
+			this.validateData(data, (data) => {
+				// Both updates may be called asynchronously but it shouldn't break anything
+				this.updateStickyTags(
+					$("#songs tr.selected"),
+					this.buildTags(data.tags, data.tagtypes, data.tagids),
+					fullname.split("/").slice(-1)[0]
+				);
 			});
 		});
 	},
@@ -4519,16 +4533,16 @@ Browser.prototype = {
 		this.sliderButton = false;
 		if (typeof tags == "undefined" || this.cache.folderTags == "0") {
 			var tagType = {
-				developer:		"",
+				remix64:		"",
 				event:			"",
+				gamebase64:		"",
+				developer:		"",
 				production:		"",
 				origin:			"",
 				suborigin:		"",
 				mixorigin:		"",
 				digi:			"",
 				subdigi:		"",
-				remix64:		"",
-				gamebase64:		"",
 				other:			"",
 				warning:		"",
 				transparent:	"", // The arrow tag icons are not included below
@@ -4545,16 +4559,16 @@ Browser.prototype = {
 				});
 			});
 			allTags =
-				tagType.developer+
+				tagType.remix64+
 				tagType.event+
+				tagType.gamebase64+
+				tagType.developer+
 				tagType.origin+
 				tagType.suborigin+
 				tagType.mixorigin+
 				tagType.production+
 				tagType.digi+
 				tagType.subdigi+
-				tagType.remix64+
-				tagType.gamebase64+
 				tagType.other+
 				tagType.warning;
 		}

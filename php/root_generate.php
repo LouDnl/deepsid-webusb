@@ -63,7 +63,7 @@ function generateList($rows, $type) {
 					foreach($select as $row) {
 						array_push($list, array(
 							'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
-							'value' =>	$row->files,
+							'value' =>	$row->files
 						));
 					}
 				}
@@ -85,7 +85,7 @@ function generateList($rows, $type) {
 						array_push($list, array(
 							'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path.'&subtune='.($row->subtune + 1)),
 							'value' =>	explode('.', $length)[0], // No MS
-							'subtune' => $row->subtune + 1,
+							'subtune' => $row->subtune + 1
 						));
 					}
 				}
@@ -120,7 +120,7 @@ function generateList($rows, $type) {
 						$folder = substr($row->collection_path, 0, strrpos($row->collection_path, '/'));
 						$list[] = array(
 							'entry' => adaptBrowserName($folder, HOST.'?file=/'.$folder),
-							'value' => (int)$row->c,
+							'value' => (int)$row->c
 						);
 					}
 				}
@@ -150,7 +150,7 @@ function generateList($rows, $type) {
 				for ($i = 0; $i < $rows; $i++) {
 					array_push($list, array(
 						'entry' =>	'<a href="'.HOST.'?type=country&search='.$country_counts[$i]['country'].'">'.$country_counts[$i]['country'].'</a>',
-						'value' =>	$country_counts[$i]['count'],
+						'value' =>	$country_counts[$i]['count']
 					));
 				}
 				break;
@@ -176,7 +176,7 @@ function generateList($rows, $type) {
 						}
 						array_push($list, array(
 							'entry' =>	'Memory location: <span style="font:normal 14px/0 monospace"><b>$'.str_pad(strtoupper(dechex($load_addr)), 4, '0', STR_PAD_LEFT).'</b></span>'.$append,
-							'value' =>	$row->c,
+							'value' =>	$row->c
 						));
 					}
 				}
@@ -200,9 +200,99 @@ function generateList($rows, $type) {
 						$minutes = str_pad(floor(($total_seconds / 60) % 60), 2, '0', STR_PAD_LEFT);
 						array_push($list, array(
 							'entry' =>	adaptBrowserName($row->f, HOST.'?file=/'.$row->f),
-							'value' =>	'<span class="slimfont">'.$hours.'h '.$minutes.'m</span>',
+							'value' =>	'<span class="slimfont">'.$hours.'h '.$minutes.'m</span>'
 						));
 					}
+				}
+				break;
+
+			case 'clickmusicians':
+
+				$entry = 'Composer';
+				$value = 'Clicks';
+
+				$select = $db->query("
+					SELECT target AS composer_folder,
+					COUNT(DISTINCT ip) AS visitors
+					FROM tracking
+					WHERE event_type = 'enter:folder'
+					AND target REGEXP '^_High Voltage SID Collection/MUSICIANS/[^/]+/[^/]+$'
+					GROUP BY target
+					ORDER BY visitors DESC
+					LIMIT ".(int)$rows
+				);
+				$select->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select as $row) {
+					array_push($list, array(
+						'entry' =>	adaptBrowserName($row->composer_folder, HOST.'?file=/'.$row->composer_folder),
+						'value' =>	$row->visitors
+					));
+				}
+				break;
+
+			case 'popularplayers':
+
+				$entry = 'Player';
+				$value = 'Tunes';
+
+				$select = $db->query("
+					SELECT
+						COALESCE(pp.pretty_name, f.player) AS player,
+						COUNT(*) AS tunes
+					FROM files f
+					LEFT JOIN players_pretty pp
+						ON pp.raw_name = f.player
+					WHERE f.player IS NOT NULL
+					AND f.player <> ''
+					GROUP BY f.player
+					ORDER BY tunes DESC
+					LIMIT ".$rows
+				);
+				$select->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select as $row) {
+					// Replace "_" with space + "V" with "v" for versions
+					$player = str_replace('_', ' ', $row->player);
+					$player = str_replace('/', ' / ', $player);
+					$player = str_replace('a Basic Program', 'Basic Program', $player);
+					$player = preg_replace('/\bV(\d)/', 'v$1', $player);
+					array_push($list, array(
+						'entry' =>	$player,
+						'value' =>	$row->tunes
+					));
+				}
+				break;
+
+			case 'popularsids':
+
+				// Not used - the SQL query takes too long to compute =(
+
+				$entry = 'SID tune';
+				$value = 'Clicks';
+
+				$select = $db->query("
+					SELECT
+						f.id,
+						f.collection_path,
+						COUNT(DISTINCT t.ip) AS listeners
+					FROM (
+						SELECT
+							ip,
+							CAST(SUBSTRING_INDEX(target, ':', -1) AS UNSIGNED) AS sid_id
+						FROM tracking
+						WHERE event_type = 'start:sid'
+					) t
+					JOIN files f
+						ON f.id = t.sid_id
+					GROUP BY f.id
+					ORDER BY listeners DESC
+					LIMIT ".$rows
+				);
+				$select->setFetchMode(PDO::FETCH_OBJ);
+				foreach($select as $row) {
+					array_push($list, array(
+						'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
+						'value' =>	$row->listeners
+					));
 				}
 				break;
 

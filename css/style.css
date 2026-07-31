@@ -63,7 +63,7 @@
 	--color-bg-tag:					#a8ad95;
 	--color-bg-tag-hover:			#b6b9a5;
 	--color-text-tag-dev:			var(--color-text-tag);
-	--color-bg-tag-dev:				#9b9383;
+	--color-bg-tag-dev:				#958c7b; /* #9b9383 */
 	--color-text-tag-event:			var(--color-text-tag);
 	--color-bg-tag-event:			#8aad85;
 	--color-text-tag-prod:			var(--color-text-tag);
@@ -485,7 +485,7 @@
 	--color-bg-tag:					#b6b9a5;
 	--color-bg-tag-hover:			#c8cbbb;
 	--color-text-tag-dev:			var(--color-text-tag);
-	--color-bg-tag-dev:				#aca396; /* #ad9487 */
+	--color-bg-tag-dev:				#a19789; /* #ad9487 #aca396 */
 	--color-text-tag-event:			var(--color-text-tag);
 	--color-bg-tag-event:			#a9c9a5;
 	--color-text-tag-prod:			var(--color-text-tag);

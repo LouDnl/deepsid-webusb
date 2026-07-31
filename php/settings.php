@@ -38,6 +38,9 @@ $first_time = array(
 );
 
 $user_id = $account->checkLogin() ? $account->userID() : 0;
+
+// Don't add 'session_write_close()' here
+
 if (!$user_id) die(json_encode(array('status' => 'ok', 'settings' => $first_time)));
 
 try {

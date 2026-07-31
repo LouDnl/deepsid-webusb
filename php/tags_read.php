@@ -42,8 +42,8 @@ function getTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 
 	// Define type priorities for sorting
 	$type_order = [
-		'DEVELOPER'		=> 1,
-		'EVENT'			=> 2,
+		'EVENT'			=> 1,
+		'DEVELOPER'		=> 2,
 		'PRODUCTION' 	=> 3,
 		'ORIGIN'     	=> 4,
 		'SUBORIGIN'  	=> 5,
@@ -86,16 +86,22 @@ function getTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 			if ($b->name === 'Collection') return 1;			
 		}
 
-		// Sort special DEVELOPER tag name
+
+		// Sort special DEVELOPER tag names
 		if ($a->type === 'DEVELOPER') {
-			$developer_first = ['Game', 'Game Prev', 'GTW'];
+			$developer_rank = function($name) {
+				if (in_array($name, ['GameBase64', 'Game', 'Game Prev', 'GTW'], true)) return 0;
+				if ($name === 'SEUCK') return 1;
+				return 2; // Company names and other developer tags
+			};
 
-			$a_special = in_array($a->name, $developer_first, true);
-			$b_special = in_array($b->name, $developer_first, true);
+			$a_developer_rank = $developer_rank($a->name);
+			$b_developer_rank = $developer_rank($b->name);
 
-			if ($a_special && !$b_special) return -1;
-			if (!$a_special && $b_special) return 1;
+			if ($a_developer_rank !== $b_developer_rank)
+				return $a_developer_rank - $b_developer_rank;
 		}
+
 		// Fallback to alphabetical
 		return strcasecmp($a->name, $b->name);
 	});
@@ -109,7 +115,7 @@ function getTagsAndTypes($file_id, &$list_of_tags, &$type_of_tags, &$id_of_tags,
 		// Fallback for empty or missing type
 		// NOTE: The 'GENRE' type is treated as 'OTHER' for the time being.
 		$raw_type = strtoupper(trim($tag->type));
-		$allowed_types = ['DEVELOPER', 'EVENT', 'PRODUCTION', 'ORIGIN', 'SUBORIGIN', 'MIXORIGIN', 'DIGI', 'SUBDIGI'];
+		$allowed_types = ['EVENT', 'DEVELOPER', 'PRODUCTION', 'ORIGIN', 'SUBORIGIN', 'MIXORIGIN', 'DIGI', 'SUBDIGI'];
 		$type = in_array($raw_type, $allowed_types) ? strtolower($raw_type) : 'other';
 
 		$list_of_tags[] = $tag->name;

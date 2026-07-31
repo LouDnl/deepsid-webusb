@@ -18,6 +18,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 $user_id = $account->checkLogin() ? $account->userID() : 0;
+
+// Don't add 'session_write_close()' here
+
 $symlist_char = $_POST['publish'] ? '$' : '!';
 
 if (!$user_id)

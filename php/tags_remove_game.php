@@ -3,14 +3,13 @@
  * DeepSID
  *
  * Remove game related tags from a specific file. Used when the 'GameBase64'
- * tag is automatically added. The list of tags removed are:
+ * or 'Game' tag is automatically added.
  * 
- * 		'Game'
- * 		'Game Prev'
- * 
- * The 'GTW' tag will not be removed.
+ * The 'GTW' tag will not be affected.
  * 
  * @uses		$_POST['fullname']
+ * @uses		$_POST['gb64']			1 = remove 'Game' and 'Game Prev'
+ * 										0 = remove 'GameBase64'
  * 
  * @used-by		browser.js
  */
@@ -78,8 +77,12 @@ try {
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find "'.$_POST['fullname'].'" in the database')));
 	$file_id = $select->fetch()->id;
 
-	removeTag($file_id, 'Game');
-	removeTag($file_id, 'Game Prev');
+	if ($_POST['gb64']) {
+		removeTag($file_id, 'Game');
+		removeTag($file_id, 'Game Prev');
+	} else {
+		removeTag($file_id, 'GameBase64');
+	}
 
 	// Now get sorted arrays of the tag names and types used by this file right now
 	$list_of_tags = array();
@@ -93,5 +96,12 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags, 'tagids' => $id_of_tags, 'tagidstart' => $id_tag_start, 'tagidend' => $id_tag_end));
+echo json_encode(array(
+	'status'		=> 'ok',
+	'tags'			=> $list_of_tags,
+	'tagtypes'		=> $type_of_tags,
+	'tagids'		=> $id_of_tags,
+	'tagidstart'	=> $id_tag_start,
+	'tagidend'		=> $id_tag_end
+));
 ?>

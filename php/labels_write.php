@@ -114,6 +114,9 @@ try {
 	]);
 	logTagActivity('LABELS:LINK', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 
+	if (session_status() === PHP_SESSION_ACTIVE)
+		session_write_close();
+
 } catch(PDOException $e) {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));

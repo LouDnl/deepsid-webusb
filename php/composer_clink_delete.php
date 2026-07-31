@@ -44,6 +44,9 @@ if ($account->checkLogin()) {
 		die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 	}
 
+	if (session_status() === PHP_SESSION_ACTIVE)
+		session_write_close();
+
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'User not logged in')));
 

@@ -1613,24 +1613,28 @@ Viz.prototype = {
 			$("#visuals-memory .si-model").empty().append(chip);
 
 			$("#visuals-memory .si-pace").empty();
-			this.showPlaybackMode = setTimeout(function() {
-				var mode = NOT_APPLICABLE;
-				if (SID.emulatorFlags.returnCIA) {
-					var pace = SID.getPace();
-					switch (pace.mode) {
-						case "CIA":
-							mode = 'CIA <span class="m">(on a 16-bit interval timer)</span>';
-							break;
-						case "VBI":
-							mode = 'VBI <span class="m">(Vertical Blanking Interrupt)</span>'
-							break;
-						default:
-							mode = 'IRQ <span class="m">(Interrupt Request)</span>'
-							break;
-					}
+			this.showPlaybackMode = setInterval(function() {
+				// Keep calling until 'getPace()' is ready
+				var pace = SID.getPace();
+				if (!pace) return;
+
+				var mode;
+				switch (pace.mode) {
+					case "CIA":
+						mode = 'CIA <span class="m">(on a 16-bit interval timer)</span>';
+						break;
+
+					case "VBI":
+						mode = 'VBI <span class="m">(Vertical Blanking Interrupt)</span>';
+						break;
+
+					default:
+						mode = 'Unknown';
+						break;
 				}
-				$("#visuals-memory .si-pace").empty().append(mode);
-			}.bind(this), 200);
+				$("#visuals-memory .si-pace").html(mode);
+				clearInterval(this.showPlaybackMode);
+			}.bind(this), 300);
 
 			var addr = '$D400';
 			for (var chip = 2; chip <= browser.chips; chip++) {

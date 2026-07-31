@@ -16,6 +16,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if ($account->checkLogin() && ($account->userName() == 'JCH' || $account->userName() == 'Ratings'))
 	exit();
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 try {
     $db = $account->getDB();
 

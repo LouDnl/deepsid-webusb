@@ -561,7 +561,7 @@ SIDPlayer.prototype = {
 		/**
 		 * Return the speed mode for the current subtune.
 		 * 
-		 * @return {string} CIA or VBI if PSID, otherwise IRQ
+		 * @return {string} CIA or VBI if PSID, otherwise RSID
 		 */
 		getSpeedMode: function() {
 			var speed = this.getProperty("speed");
@@ -571,7 +571,7 @@ SIDPlayer.prototype = {
 
 			// RSID doesn't use the speed bits
 			if (this.getProperty("format") == "RSID")
-				return "IRQ";
+				return "RSID";
 
 			// Bit 31 is reused for all subtunes >= 32
 			var bit = Math.min(SID.subtune, 31);
@@ -2035,7 +2035,7 @@ SIDPlayer.prototype = {
 	 *
 	 * @return {Object|false}
 	 *         {
-	 *             mode: "VBI" | "CIA" | "IRQ",
+	 *             mode: "VBI" | "CIA" | "RSID",
 	 *             multiplier: number | false
 	 *         }
 	 */
@@ -2054,9 +2054,9 @@ SIDPlayer.prototype = {
 		}
 
 		// RSID or otherwise self-controlled playback
-		if (mode === "IRQ") {
+		if (mode === "RSID") {
 			return {
-				mode: "IRQ",
+				mode: "RSID",
 				multiplier: false
 			};
 		}

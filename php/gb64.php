@@ -30,6 +30,9 @@ $primary_back_button = false;
 $primary_csdb_needed = false;
 $user_id = $account->checkLogin() ? $account->userID() : 0;
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 // --------------------------------------------------------------------------
 // FUNCTIONS
 // --------------------------------------------------------------------------

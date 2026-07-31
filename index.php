@@ -1271,7 +1271,7 @@
 							</div>
 							<div class="edit sid-info sid-info-right">
 								<div class="label">SID file type</div><span class="si si-type"></span><br />
-								<div class="label">Encoding</div><span class="si si-enc"></span><br />
+								<div class="label">Target system</div><span class="si si-enc"></span><br />
 								<div class="label">Playback mode</div><span class="si si-pace"></span><br />
 								<div class="label">SID model</div><span class="si si-model"></span><br />
 								<div class="label">SID addresses</div><span class="si si-sid"></span>
@@ -1996,9 +1996,15 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>July 31, 2026</h3>
+						<ul>
+							<li>Added two new 'Top 10' lists to the front page; most visited composer folders and most used music players.</li>
+						</ul>
+
 						<h3>July 30, 2026</h3>
 						<ul>
 							<li>The playback mode and speed multiplier detection have been completely overhauled. Playback mode is now determined directly from the SID file header instead of being calculated from the CIA timer, resulting in more consistent detection across all SID handlers.</li>
+							<li>Changed the order of event and developer tags. Event tags are now always displayed before developer tags, including the special 'GameBase64' tag.</li>
 						</ul>
 
 						<h3>July 29, 2026</h3>

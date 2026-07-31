@@ -131,8 +131,12 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 		if (
 			$parser->type == 'bot' ||
 			stripos('x'.$user_agent, 'python-') ||
+			stripos('x'.$user_agent, 'bingbot') ||
 			stripos('x'.$user_agent, 'googlebot') ||
+			stripos('x'.$user_agent, 'applebot') ||
 			stripos('x'.$user_agent, 'twitterbot') ||
+			stripos('x'.$user_agent, 'facebookexternalhit') ||
+			stripos('x'.$user_agent, 'meta-externalagent') ||
 			stripos('x'.$user_agent, 'mediatoolkitbot')
 		) {
 			$type = ' bot';

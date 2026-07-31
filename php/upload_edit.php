@@ -20,6 +20,9 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 if (!$account->checkLogin())
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit SID files.')));
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 try {
 	$db = $account->getDB();
 	

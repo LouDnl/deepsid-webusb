@@ -23,6 +23,9 @@ $user_id = $account->checkLogin() ? $account->userID() : 0;
 if (!$user_id)
 	die(json_encode(array('status' => 'error', 'message' => 'You must be logged in to edit YouTube video links.')));
 
+if (session_status() === PHP_SESSION_ACTIVE)
+    session_write_close();
+
 try {
 	$db = $account->getDB();
 

@@ -259,14 +259,6 @@ if (isset($collection_path)) {
 				array_unshift($player_counts, (string) array_sum($less_counts));
 			}
 
-
-
-
-
-
-
-
-
 			// Get data about active years
 			$select = $db->prepare('SELECT copyright FROM files WHERE collection_path LIKE :collection_path');
 			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
@@ -391,6 +383,9 @@ if (isset($collection_path)) {
 			die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 		}
 	}
+
+	if (session_status() === PHP_SESSION_ACTIVE)
+    	session_write_close();
 
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
