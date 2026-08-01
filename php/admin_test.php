@@ -37,6 +37,12 @@ $html = '
 				<li><a href="'.$base_url.'?file=/MUSICIANS/C/Chiummo_Aldo/Unreadibility.sid&tab=csdb">'.$home.'/MUSICIANS/C/Chiummo_Aldo/Unreadibility.sid</a></li>
 			</ul>
 
+		<h4>Always returns an "unreachable" error in CSDb tab</h4>
+			<ul>
+				<li><a href="'.$base_url.'?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1&tab=csdb">'.$home.'/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid</a></li>
+				<li><a href="'.$base_url.'?file=/MUSICIANS/T/Tel_Jeroen/Noisy_Pillars_tune_1.sid&tab=csdb">'.$home.'/MUSICIANS/T/Tel_Jeroen/Noisy_Pillars_tune_1.sid</a></li>
+			</ul>
+
 		<h4>Long headers in GB64 tab</h4>
 			<ul>
 				<li><a href="'.$base_url.'?file=/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid&tab=gb64">'.$home.'/MUSICIANS/B/Bogas_Ed/Murder_on_the_Mississippi.sid</a></li>
@@ -109,7 +115,17 @@ $html = '
 
 		<h4>Tons of "released by" in a CSDb release</h4>
 			<ul>
-				<li><a href="'.$base_url.'?file=/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid">'.$home.'/MUSICIANS/O/Ouwehand_Reyn/Falcon_Tn.sid</a> (Mega-Co Demo)</li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=5696">'.$home.'/?tab=csdb&csdbtype=release&csdbid=5696</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=225023">'.$home.'/?tab=csdb&csdbtype=release&csdbid=225023</a></li>
+			</ul>
+
+		<h4>Tons of credits in a CSDb release</h4>
+			<ul>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=8710">'.$home.'/?tab=csdb&csdbtype=release&csdbid=8710</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=212342">'.$home.'/?tab=csdb&csdbtype=release&csdbid=212342</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=94536">'.$home.'/?tab=csdb&csdbtype=release&csdbid=94536</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=83665">'.$home.'/?tab=csdb&csdbtype=release&csdbid=83665</a></li>
+				<li><a href="'.$base_url.'?tab=csdb&csdbtype=release&csdbid=238430">'.$home.'/?tab=csdb&csdbtype=release&csdbid=238430</a></li>
 			</ul>
 
 		<h4>CSDb references to be converted to links with pretty names</h4>

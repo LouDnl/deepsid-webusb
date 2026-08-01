@@ -11,46 +11,23 @@ SHOULD BE DONE
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table.
 
-- MEMO browsing needs the same rules as search browsing (shift and MMB).
-
 - The CSDb link updating should also work on 'SHOW' pages.
 
-- New right-click context menu option for a song: Open in new browser window with hex monitor view of
-  the entire player. Fills out the view of the entire window and is scrollable (no pages).
-
 - Get rid of the slow loading "Beyond DeepSID" thumbnails. Just have bullet points and a hyperlink?
-
-- The blue notification tab icon for CSDb has become a little too eager. It lights up no matter what
-  goes on in the page area. Calm it down a bit if you can.
 
 - Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown for
   releases in forum threads?
 
-- Consider putting the array in 'countries.php' in the database instead.
-
-- Add title="tooltip" for individual options in the search drop-down box, expanding on what the search
-  options does. Most web browsers should support it (test in Firefox and Chrome).
-
-- Remove "[...]" in CSDb pages, but perhaps make sure the credits wrap around aligning with links above
-  instead of just the far left side.
-  Example: https://deepsid.chordian.net/?file=/MUSICIANS/C/Crowley_Owen/Junkie.sid
-
-- BUG: When opening a pop-up DeepSID, the database setting for SID handler is ignored.
-
-- BUG: When CSDb fails, the ID is erroneously converted into a PLINK.
-  Try this: https://deepsid.chordian.net/?file=/MUSICIANS/D/Daglish_Ben/We_M_U_S_I_C_1.sid&subtune=1
-  Simply ignore converting when that error message is shown.
-
 - Change database table name 'hvsc_lengths' to just 'lengths' instead. Remember to update a description
   in the admin scripts page too.
-
-- Don't log deletion of labels before adding labels (they're grouped) in the tags log. But make sure
-  that a specific deletion of a label is still logged.
 
 - Check out this: https://github.com/Chordian/deepsid/issues/43
   Two new SID players that could be added later - reSIDfp and SIDLite.
 
 - Add a "seconds" edit box for the new delay-next feature.
+
+- New right-click context menu option for a song: Open in new browser window with hex monitor view of
+  the entire player. Fills out the view of the entire window and is scrollable (no pages).
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
@@ -65,6 +42,7 @@ REALLY CONSIDER THIS
 - Make sure all 'sovs' =>   '1' is fixed to 'sovs'    => '1' instead, in all PHP files.
 - Change player lookup to look for raw player strings instead of the prettified ones.
 - The player text lines by the Chartist bars could be filter links.
+- Consider putting the array in 'countries.php' in the database instead.
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.

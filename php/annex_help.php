@@ -194,7 +194,7 @@ $help = array(
 		Also known as the <i>released</i> field. Contains year and affiliation.
 
 		<h4>Player</h4>
-		Expects raw <b>SIDId</b> player names, not the prettified ones.
+		Searches in the prettified player names.
 
 		<h4>Location</h4>
 		Searches for a start location, e.g. 16384, 0x4000, or $4000.
@@ -218,6 +218,9 @@ $help = array(
 
 		<h4>Country</h4>
 		Searches for composers from a specific country. Only a list of folders is returned here.
+
+		<h4>Label</h4>
+		Searches in labels, i.e. the name of the primary release.
 
 		<h4>Focus</h4>
 		Searches for focus letters. Use "basic" or "botb" for <b>B</b> types.

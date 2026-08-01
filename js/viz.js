@@ -201,7 +201,9 @@ Viz.prototype = {
 		$("#visuals-piano,#visuals-graph,#topic-settings .dropdown-buffer").on("change", this.onChangeBufferSize.bind(this));
 		$("#topic-settings .settings-advanced").on("change", this.onChangeAdvancedSetting.bind(this));
 		$("#sticky-visuals").on("click", "button", this.onVisualsClick.bind(this));
-		$("#visuals-memory .block-info").on("click", "button", this.onPlayerBrowseClick.bind(this));
+		$("#visuals-memory .block-info")
+			.on("click", "button", this.onPlayerBrowseClick.bind(this))
+			.on("auxclick", "button", this.onPlayerBrowseClick.bind(this));
 		$("#visuals-graph").on("click", ".graph-area", this.onGraphVoiceClick.bind(this));
 	},
 
@@ -543,28 +545,79 @@ Viz.prototype = {
 	 * @param {*} event 
 	 */
 	onPlayerBrowseClick: function(event) {
-		var $this = $(event.target);
+		var $this = $(event.currentTarget);
 		if ($this.hasClass("disabled")) return false;
 
+		// Middle mouse button jumps to the absolute beginning/end
+		var middleClick = event.which === 2 || event.button === 1;
+
+		// Shift browses five pages; otherwise browse one page
+		var pageJump = event.shiftKey ? 5 : 1;
+		var addressJump = PAGESIZE_PLAYER * pageJump;
+
 		this.blockPlayer = [];
-		$player = $("#visuals-memory .block-player");
-		$player.empty();
+
+		var $player = $("#visuals-memory .block-player");
+		var $leftButton = $("#visuals-memory .player-to-left");
+		var $rightButton = $("#visuals-memory .player-to-right");
+
 		if ($this.hasClass("player-to-left")) {
-			this.playerAddrCurrent -= PAGESIZE_PLAYER;
-			if (this.playerAddrCurrent == this.playerAddrStart)
-				$this.addClass("disabled");
-			$("#visuals-memory .player-to-right").removeClass("disabled");
-			$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
+			// <- Left
+			this.playerAddrCurrent = middleClick
+				? this.playerAddrStart
+				: Math.max(
+					this.playerAddrStart,
+					this.playerAddrCurrent - addressJump
+				);
 		} else {
-			this.playerAddrCurrent += PAGESIZE_PLAYER;
-			if (this.playerAddrCurrent + PAGESIZE_PLAYER  > this.playerAddrEnd) {
-				$this.addClass("disabled");
-				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrEnd, this.blockPlayer));
-			} else
-				$player.append(this.showMemoryBlock(this.playerAddrCurrent, this.playerAddrCurrent + PAGESIZE_PLAYER - 1, this.blockPlayer));
-			$("#visuals-memory .player-to-left").removeClass("disabled");
+			// Right ->
+			var lastPageStart =
+				this.playerAddrStart +
+				Math.floor(
+					(this.playerAddrEnd - this.playerAddrStart) /
+					PAGESIZE_PLAYER
+				) * PAGESIZE_PLAYER;
+
+			this.playerAddrCurrent = middleClick
+				? lastPageStart
+				: Math.min(
+					lastPageStart,
+					this.playerAddrCurrent + addressJump
+				);
 		}
-	},
+
+		// Update button states
+		$leftButton.toggleClass(
+			"disabled",
+			this.playerAddrCurrent <= this.playerAddrStart
+		);
+
+		$rightButton.toggleClass(
+			"disabled",
+			this.playerAddrCurrent + PAGESIZE_PLAYER > this.playerAddrEnd
+		);
+
+		// The final page may contain fewer than PAGESIZE_PLAYER bytes
+		var blockEnd = Math.min(
+			this.playerAddrCurrent + PAGESIZE_PLAYER - 1,
+			this.playerAddrEnd
+		);
+
+		$player
+			.empty()
+			.append(
+				this.showMemoryBlock(
+					this.playerAddrCurrent,
+					blockEnd,
+					this.blockPlayer
+				)
+			);
+
+		// Prevent middle-click autoscrolling
+		if (middleClick) event.preventDefault();
+
+		return false;
+	},	
 
 	/**
 	 * Pop all of the emulator radio buttons up for now.

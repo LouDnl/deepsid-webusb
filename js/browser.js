@@ -2888,7 +2888,7 @@ Browser.prototype = {
 				this.releaseListInfo();
 
 				// If this single release is a primary release then show the bow-and-arrow icon
-				if (data.count = -1) {
+				if (data.count == -1) {
 					$.get("php/labels_info.php", { id: browser.songs[browser.songPos]?.id ?? 0 }, function(data) {
 						browser.validateData(data, function(data) {
 							// ID '#topic-csdb' must be here too or it breaks in the compo folders
@@ -2979,10 +2979,15 @@ Browser.prototype = {
 	/**
 	 * Parse the CSDb page and make all references readable and clickable.
 	 * 
-	 * This is a long one because CSDb references can be in a so many syntax
+	 * This is a long one because CSDb references can be in so many syntax
 	 * versions, and their rules are often twisted by CSDb commenters.
 	 */
 	resolveCSDbRefs: function() {
+
+		// Ignore if showing a connection error
+		if ($("#topic-csdb").text().toLowerCase().includes("csdb is currently unreachable")) {
+			return;
+		}
 
 		function _ucFirst(str) {
 			return str.charAt(0).toUpperCase() + str.slice(1);
@@ -3931,6 +3936,7 @@ Browser.prototype = {
 						height: 196,
 					}, function() {
 						$.post("php/labels_unlink.php", {
+							logging: 1,
 							fullname: (this.isSearching || this.isCompoFolder || this.path.substr(1, 1) == "$"
 								? this.contextSID
 								: this.path.substr(1)+"/"+this.contextSID)
@@ -4127,6 +4133,7 @@ Browser.prototype = {
 
 				// First delete all labels that may exist for this file
 				$.post("php/labels_unlink.php", {
+					logging: 0,
 					fullname: thisFullname
 				}, function(data) {
 					this.validateData(data, function() {

@@ -1000,24 +1000,24 @@
 				<div id="search">
 					<div id="search-bar">
 						<select id="dropdown-search" name="search-type">
-							<option value="#all#">All</option>
-							<option value="fullname">Filename</option>
-							<option value="author">Author</option>
-							<option value="copyright">Copyright</option>
-							<option value="player">Player</option>
-							<option value="location">Location</option>
-							<option value="maximum">Maximum</option>
-							<option value="type">Type</option>
-							<option value="tag">Tags</option>
-							<option value="stil">STIL</option>
-							<option value="rating">Rating</option>
-							<option value="country">Country</option>
-							<option value="label">Labels</option>
-							<option value="focus">Focus</option>
-							<option value="new">Version</option>
-							<option value="latest">Latest</option>
+							<option value="#all#" title="Searches in (almost) everything. Filenames, STIL, author, etc.">All</option>
+							<option value="fullname" title="Searches in filenames only.">Filename</option>
+							<option value="author" title="Typically searches names, handles, or both. No year or affiliation.">Author</option>
+							<option value="copyright" title="Also known as the released field. Contains year and affiliation.">Copyright</option>
+							<option value="player" title="Searches in the prettified player names.">Player</option>
+							<option value="location" title="Searches for a start location, e.g. 16384, 0x4000, or $4000.">Location</option>
+							<option value="maximum" title="Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.">Maximum</option>
+							<option value="type" title='Searches for a SID type, e.g. "rsid" for those types only.'>Type</option>
+							<option value="tag" title="Searches for tags. Enclose in quotes to search a tag with spaces between words.">Tags</option>
+							<option value="stil" title= "Searches in STIL texts.">STIL</option>
+							<option value="rating" title="Searches for your ratings. Use 1 to 5, optionally with minus. For example, typing 3- searches for tunes rated 3 stars or more.">Rating</option>
+							<option value="country" title="Searches for composers from a specific country. Only a list of folders is returned here.">Country</option>
+							<option value="label" title="Searches in labels, i.e. the name of the primary release.">Label</option>
+							<option value="focus" title='Searches for focus letters. Use "basic" or "botb" for B types.'>Focus</option>
+							<option value="new" title="Searches for all files and folders included in a specific update version of HVSC or CGSC.">Version</option>
+							<option value="latest" title="Searches for the files added in the latest HVSC update by the specified composer. You can also append a different HVSC version, e.g. danko,72.">Latest</option>
 							<option value="folders" style="display:none;">Folders</option>
-							<option value="gb64">Game</option>
+							<option value="gb64" title="Searches for songs made for the specified game.">Game</option>
 							<option value="special" style="display:none;">Special</option>
 							<option value="composer" style="display:none;">Composer</option>
 						</select>
@@ -1995,6 +1995,15 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 1, 2026</h3>
+						<ul>
+							<li>Fixed the blue notification indicator for the 'CSDb' tab not working correctly.</li>
+							<li>Added tooltips to all options in the search drop-down menu.</li>
+							<li>You can now browse MEMO pages more efficiently. Clicking a page button moves one page, as before.
+								Holding Shift moves five pages. Middle-clicking a page button jumps directly to the first or last page.</li>
+							<li>The credit list on individual 'CSDb' release pages (cache refreshed) is now always shown in full.</li>
+						</ul>
 
 						<h3>July 31, 2026</h3>
 						<ul>

@@ -4,6 +4,7 @@
  *
  * Unlink all labels from a file. (A label is a primary release factoid.)
  * 
+ * @uses		$_POST['logging']		1 = log it, 0 = don't log it
  * @uses		$_POST['fullname']
  * 
  * @used-by		browser.js
@@ -21,7 +22,7 @@ if (!$account->isAdmin()) {
 	die("This is for administrators only."); // At least for now...
 }
 
-if (!isset($_POST['fullname']))
+if (!isset($_POST['logging']) || !isset($_POST['fullname']))
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper POST variable.')));
 
 try {
@@ -38,19 +39,20 @@ try {
 	// Delete all label lookups associated with this SID file
 	$db->query('DELETE FROM labels_lookup WHERE files_id = "'.$file_id.'"');
 
-	// Log the action (the tags log file is used to avoid yet another log file)
-	file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
-		date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
-		$_SERVER['REMOTE_ADDR'].','.
-		$account->userID().','.
-		$account->userName().','.
-		$file_id.','.
-		$_POST['fullname'].','.
-		'LABELS:DELETE'.
-	PHP_EOL, FILE_APPEND);
+	if ($_POST['logging']) {
+		// Log the action (the tags log file is used to avoid yet another log file)
+		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
+			date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).','.
+			$_SERVER['REMOTE_ADDR'].','.
+			$account->userID().','.
+			$account->userName().','.
+			$file_id.','.
+			$_POST['fullname'].','.
+			'LABELS:DELETE'.
+		PHP_EOL, FILE_APPEND);
+	}
 
-	if (session_status() === PHP_SESSION_ACTIVE)
-		session_write_close();
+	// Don't add 'session_write_close()' here
 
 } catch(PDOException $e) {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());

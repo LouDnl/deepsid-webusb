@@ -546,7 +546,7 @@ if ($csdb_type == 'sid') {
 			// Handles or groups that used this SID file
 			$released_by = '';
 			$handles = $release->ReleasedBy->Handle;
-			$amount = 4;
+			//$amount = 4;
 			if (isset($handles)) {
 				foreach($handles as $handle) {
 					$id = $handle->ID;
@@ -562,11 +562,11 @@ if ($csdb_type == 'sid') {
 						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank" class="csdb-scener">'.$scener.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
-					if (!$amount) {
+					/*if (!$amount) {
 						$released_by .= ' [...]';
 						break;
 					}
-					$amount--;
+					$amount--;*/
 				}
 			}
 			$groups = $release->ReleasedBy->Group;
@@ -585,11 +585,11 @@ if ($csdb_type == 'sid') {
 						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank" class="csdb-group">'.$grp.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
-					if (!$amount) {
+					/*if (!$amount) {
 						$released_by .= ' [...]';
 						break;
 					}
-					$amount--;
+					$amount--;*/
 				}
 			}
 			$type_and_released_by = $type.(empty($released_by) ? '' : ' by '.substr($released_by, 2));
@@ -823,7 +823,7 @@ if ($csdb_type == 'sid') {
 		foreach($roles as $role => $members) {
 			$list = '';
 			sort($members);
-			$amount = 5;
+			//$amount = 5;
 			foreach($members as $member) {
 				if (strpos($member, ',')) {
 					$parts = explode(',', $member);
@@ -834,23 +834,27 @@ if ($csdb_type == 'sid') {
 					$m = '[<a href="http://csdb.chordian.net/?type=scener&id='.$member.'" target="_blank">Scener:'.$member.'</a>]';
 				}
 				$list .= ', '.$m;
-				if (!$amount) {
+				/*if (!$amount) {
 					$list .= ' [...]';
 					break;
 				}
-				$amount--;
+				$amount--;*/
 			}
 			$credits .=
 				'<tr>'.
-					'<td style="padding-right:6px;">'.
-						$role.
+					/*'<td style="padding-right:8px;white-space:nowrap;">'.
+						$role.'<span style="margin-left:6px;float:right">:</span>'.
+					'</td>'.*/
+					'<td style="padding-right:8px;white-space:nowrap;display:flex;justify-content:space-between;">'.
+						'<span>'.$role.'</span>'.
+						'<span style="margin-left:6px;">:</span>'.
 					'</td>'.
 					'<td>'.
-						':&nbsp;&nbsp;'.substr($list, 2).
+						substr($list, 2).
 					'</td>'.
 				'</tr>';
 		}
-		$credits = '<p></p><b>Credits:</b><table class="tight">'.$credits.'</table>';
+		$credits = '<p></p><b>Credits:</b><table class="tight credits">'.$credits.'</table>';
 	}
 
 	// SID files used in this release

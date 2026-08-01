@@ -556,7 +556,7 @@ var main = {
 	 */
 	popUpWindow: function() {
 		
-		window.open("//deepsid.chordian.net/?mobile=1&emulator=websid", "_blank",
+		window.open("//deepsid.chordian.net/?mobile=1", "_blank",
 			"'left=0,top=0,width=450,height="+(screen.height-150)+",scrollbars=no'");
 	},
 

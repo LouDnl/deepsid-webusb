@@ -5576,6 +5576,10 @@ input[type=range]::-ms-track {
 				color: var(--color-text-fine);
 			}
 
+			#page table.credits td {
+				vertical-align: top;
+			}
+
 			/* Additional styling for the top list dropdown boxes */
 			.toplist,
 			.toprows {
