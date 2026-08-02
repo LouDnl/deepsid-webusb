@@ -62,8 +62,8 @@ function generateList($rows, $type) {
 				if ($select->rowCount()) {
 					foreach($select as $row) {
 						array_push($list, array(
-							'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
-							'value' =>	$row->files
+							'entry'		=> adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
+							'value'		=> $row->files
 						));
 					}
 				}
@@ -74,18 +74,18 @@ function generateList($rows, $type) {
 				$entry = 'SID tune';
 				$value = 'Time';
 
-				// This query makes use of the 'hvsc_length' table
+				// This query makes use of the 'sid_lengths' table
 				// NOTE: Sebastian Bjørnerud's "Psykolog_end.sid" is exempt because it's just a series of sound effects.
 				// This was actually based on a poll: https://www.facebook.com/groups/deepsid/permalink/207861710163193/
-				$select = $db->query('SELECT collection_path, length, subtune FROM hvsc_lengths WHERE collection_path NOT LIKE "%psykolog_end.sid" ORDER BY TIME_TO_SEC(length) DESC LIMIT '.$rows);
+				$select = $db->query('SELECT collection_path, length, subtune FROM sid_lengths WHERE collection_path NOT LIKE "%psykolog_end.sid" ORDER BY TIME_TO_SEC(length) DESC LIMIT '.$rows);
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				if ($select->rowCount()) {
 					foreach($select as $row) {
 						$length = explode(' ', $row->length)[0];
 						array_push($list, array(
-							'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path.'&subtune='.($row->subtune + 1)),
-							'value' =>	explode('.', $length)[0], // No MS
-							'subtune' => $row->subtune + 1
+							'entry'		=> adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path.'&subtune='.($row->subtune + 1)),
+							'value'		=> explode('.', $length)[0], // No MS
+							'subtune'	=> $row->subtune + 1
 						));
 					}
 				}
@@ -119,8 +119,8 @@ function generateList($rows, $type) {
 					foreach ($select as $row) {
 						$folder = substr($row->collection_path, 0, strrpos($row->collection_path, '/'));
 						$list[] = array(
-							'entry' => adaptBrowserName($folder, HOST.'?file=/'.$folder),
-							'value' => (int)$row->c
+							'entry'		=> adaptBrowserName($folder, HOST.'?file=/'.$folder),
+							'value'		=> (int)$row->c
 						);
 					}
 				}
@@ -137,8 +137,8 @@ function generateList($rows, $type) {
 					$select = $db->query('SELECT count(1) AS c FROM composers WHERE country LIKE "%'.$country.'%"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					array_push($country_counts, array(
-						'country' =>	($country == 'usa' ? 'USA' : ucwords($country)),
-						'count' =>		$select->fetch()->c,
+						'country'	=> ($country == 'usa' ? 'USA' : ucwords($country)),
+						'count'		=> $select->fetch()->c,
 					));
 				}
 
@@ -149,8 +149,8 @@ function generateList($rows, $type) {
 
 				for ($i = 0; $i < $rows; $i++) {
 					array_push($list, array(
-						'entry' =>	'<a href="'.HOST.'?type=country&search='.$country_counts[$i]['country'].'">'.$country_counts[$i]['country'].'</a>',
-						'value' =>	$country_counts[$i]['count']
+						'entry'		=> '<a href="'.HOST.'?type=country&search='.$country_counts[$i]['country'].'">'.$country_counts[$i]['country'].'</a>',
+						'value'		=> $country_counts[$i]['count']
 					));
 				}
 				break;
@@ -175,8 +175,8 @@ function generateList($rows, $type) {
 							default:     $append = '';
 						}
 						array_push($list, array(
-							'entry' =>	'Memory location: <span style="font:normal 14px/0 monospace"><b>$'.str_pad(strtoupper(dechex($load_addr)), 4, '0', STR_PAD_LEFT).'</b></span>'.$append,
-							'value' =>	$row->c
+							'entry'		=> 'Memory location: <span style="font:normal 14px/0 monospace"><b>$'.str_pad(strtoupper(dechex($load_addr)), 4, '0', STR_PAD_LEFT).'</b></span>'.$append,
+							'value'		=> $row->c
 						));
 					}
 				}
@@ -187,8 +187,8 @@ function generateList($rows, $type) {
 				$entry = 'Composer';
 				$value = 'Time';
 
-				// This query makes use of the 'hvsc_length' table
-				$select = $db->query('SELECT SUBSTRING_INDEX(collection_path, "/", 4) AS f, SUM(TIME_TO_SEC(length)) AS s FROM hvsc_lengths '.
+				// This query makes use of the 'sid_lengths' table
+				$select = $db->query('SELECT SUBSTRING_INDEX(collection_path, "/", 4) AS f, SUM(TIME_TO_SEC(length)) AS s FROM sid_lengths '.
 					'WHERE collection_path LIKE "%/MUSICIANS/%" '.
 					'GROUP BY f '.
 					'ORDER BY s DESC LIMIT '.$rows);
@@ -199,8 +199,8 @@ function generateList($rows, $type) {
 						$hours = floor($total_seconds / 3600);
 						$minutes = str_pad(floor(($total_seconds / 60) % 60), 2, '0', STR_PAD_LEFT);
 						array_push($list, array(
-							'entry' =>	adaptBrowserName($row->f, HOST.'?file=/'.$row->f),
-							'value' =>	'<span class="slimfont">'.$hours.'h '.$minutes.'m</span>'
+							'entry'		=> adaptBrowserName($row->f, HOST.'?file=/'.$row->f),
+							'value'		=> '<span class="slimfont">'.$hours.'h '.$minutes.'m</span>'
 						));
 					}
 				}
@@ -224,8 +224,8 @@ function generateList($rows, $type) {
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				foreach($select as $row) {
 					array_push($list, array(
-						'entry' =>	adaptBrowserName($row->composer_folder, HOST.'?file=/'.$row->composer_folder),
-						'value' =>	$row->visitors
+						'entry'		=> adaptBrowserName($row->composer_folder, HOST.'?file=/'.$row->composer_folder),
+						'value'		=> $row->visitors
 					));
 				}
 				break;
@@ -256,8 +256,8 @@ function generateList($rows, $type) {
 					$player = str_replace('a Basic Program', 'Basic Program', $player);
 					$player = preg_replace('/\bV(\d)/', 'v$1', $player);
 					array_push($list, array(
-						'entry' =>	$player,
-						'value' =>	$row->tunes
+						'entry'		=> $player,
+						'value'		=> $row->tunes
 					));
 				}
 				break;
@@ -290,8 +290,8 @@ function generateList($rows, $type) {
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				foreach($select as $row) {
 					array_push($list, array(
-						'entry' =>	adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
-						'value' =>	$row->listeners
+						'entry'		=> adaptBrowserName($row->collection_path, HOST.'?file=/'.$row->collection_path),
+						'value'		=> $row->listeners
 					));
 				}
 				break;

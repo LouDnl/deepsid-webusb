@@ -37,7 +37,7 @@ try {
 
 		// First make sure the new name doesn't already exist
 		$select = $db->prepare('SELECT 1 FROM folders WHERE collection_path = :folder'.$and_user_id);
-		$select->execute(array(':folder'=>$char.$_POST['new']));
+		$select->execute(array(':folder' => $char.$_POST['new']));
 		if ($select->rowCount())
 			die(json_encode(array('status' => 'error', 'message' =>
 				($char == '$'
@@ -46,7 +46,7 @@ try {
 
 		// Now rename it
 		$update = $db->prepare('UPDATE folders SET collection_path = :new WHERE collection_path = :old AND user_id = '.$user_id);
-		$update->execute(array(':old'=>$_POST['symlist'], ':new'=>$char.$_POST['new']));
+		$update->execute(array(':old' => $_POST['symlist'], ':new' => $char.$_POST['new']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not rename folder "'.$_POST['symlist'].'" => "'.$char.$_POST['new'].'"')));
 		$account->logActivity('User "'.$_SESSION['user_name'].'" renamed the "'.$_POST['symlist'].'" playlist to "'.$char.$_POST['new'].'"');
@@ -59,7 +59,7 @@ try {
 
 			// We must reference the symlist ID directly because of multiple ocurrences of the same SID file
 			$update = $db->prepare('UPDATE symlists SET sid_name = :new WHERE id = :symid LIMIT 1');
-			$update->execute(array(':new'=>$_POST['new'], ':symid'=>$_POST['symid']));
+			$update->execute(array(':new' => $_POST['new'], ':symid' => $_POST['symid']));
 			if ($update->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not rename entry "'.$_POST['fullname'].'" => "'.$_POST['new'].'"')));
 
@@ -67,7 +67,7 @@ try {
 
 			// Get ID of symlist folder
 			$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
-			$select->execute(array(':folder'=>$_POST['symlist']));
+			$select->execute(array(':folder' => $_POST['symlist']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			if (!$select->rowCount())
@@ -86,7 +86,7 @@ try {
 			$file_id = $select->fetch()->id;
 
 			$update = $db->prepare('UPDATE symlists SET sid_name = :new WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
-			$update->execute(array(':new'=>$_POST['new']));
+			$update->execute(array(':new' => $_POST['new']));
 			if ($update->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not rename entry "'.$_POST['fullname'].'" => "'.$_POST['new'].'"')));
 		}

@@ -155,8 +155,8 @@ if (isset($_GET['fullname'])) {
 				'</tr>';
 
 			array_push($entries, array(
-				'rank'		=> $remix64_entry->charts_data->position,
-				'html'		=> $entry,
+				'rank'	=> $remix64_entry->charts_data->position,
+				'html'	=> $entry,
 			));
 		}
 		usort($entries, function($a, $b) {
@@ -182,5 +182,10 @@ if (isset($_GET['fullname'])) {
 } else
 	die(json_encode(array('status' => 'error', 'message' => 'You must specify the proper GET variables.')));
 
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using an API for <a href="https://www.remix64.com/" target="_blank">Remix64.com</a></small>', 'count' => $amount));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'sticky'	=> $sticky,
+	'html'		=> $html . '<i><small>Generated using an API for <a href="https://www.remix64.com/" target="_blank">Remix64.com</a></small>',
+	'count'		=> $amount
+));
 ?>

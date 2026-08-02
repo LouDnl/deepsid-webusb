@@ -26,7 +26,7 @@ try {
 
 	// Get ID of symlist folder
 	$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
-	$select->execute(array(':folder'=>$_POST['symlist']));
+	$select->execute(array(':folder' => $_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())

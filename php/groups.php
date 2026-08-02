@@ -404,5 +404,9 @@ $dexter_html =
 				'<td class="topline bottomline leftline rightline" style="padding-left:10px;">'.($count_gb64 ? '<span class="icon-before icon-note" title="Made music for...">'.$count_gb64.' game'.($count_gb64 != 1 ? 's' : '').' according to GameBase64</span>' : '<div class="nocounts">No game statistics</div>').'</td>'.
 			'</tr>';
 
-echo json_encode(array('status' => 'ok', 'dexter_html' => $dexter_html, 'annex_html' => $annex_html));
+echo json_encode(array(
+	'status'		=> 'ok',
+	'dexter_html'	=> $dexter_html,
+	'annex_html'	=> $annex_html
+));
 ?>

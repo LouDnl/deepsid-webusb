@@ -20,14 +20,14 @@ if ((int)$account->getAdminSetting('log_js_errors') !== 1) {
 $log_file = __DIR__ . '/../logs/js_errors.log';
 
 $entry = [
-	'date'    => date('Y-m-d H:i:s'),
-	'ip'      => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-	'type'    => $_POST['type'] ?? '',
-	'message' => $_POST['message'] ?? '',
-	'source'  => $_POST['source'] ?? '',
-	'line'    => $_POST['line'] ?? '',
-	'column'  => $_POST['column'] ?? '',
-	'stack'   => $_POST['stack'] ?? ''
+	'date'		=> date('Y-m-d H:i:s'),
+	'ip'		=> $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+	'type'		=> $_POST['type'] ?? '',
+	'message'	=> $_POST['message'] ?? '',
+	'source'	=> $_POST['source'] ?? '',
+	'line'		=> $_POST['line'] ?? '',
+	'column'	=> $_POST['column'] ?? '',
+	'stack'		=> $_POST['stack'] ?? ''
 ];
 
 // Ignore "Script error." noise

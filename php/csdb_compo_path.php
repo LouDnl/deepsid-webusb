@@ -36,5 +36,8 @@ if (isset($csdb->Release->UsedSIDs)) {
 			? '<a href="#" class="compo-go redirect">'.$csdb->Release->UsedSIDs->SID->HVSCPath.'</a>' : $path;
 }
 
-echo json_encode(array('status' => 'ok', 'path' => $path));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'path'		=> $path
+));
 ?>

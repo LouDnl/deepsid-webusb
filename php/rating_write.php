@@ -20,7 +20,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 	die("Direct access not permitted.");
 
 if (!$account->checkLogin())
-	die(json_encode(['status'=>'error', 'message'=>'User not logged in']));
+	die(json_encode(['status' => 'error', 'message' => 'User not logged in']));
 
 $user_id = $account->userID();
 
@@ -52,7 +52,7 @@ try {
 	if (!$row) {
 		$account->logActivityError(basename(__FILE__),
 			"Name error; collection path '$collection_path' not found in '$table'");
-		die(json_encode(['status'=>'error','message'=>DB_ERROR]));
+		die(json_encode(['status' => 'error','message' => DB_ERROR]));
 	}
 
 	// ---------------------------------------------------------------------
@@ -84,9 +84,9 @@ try {
 			LIMIT 1'
 		);
 		$select->execute([
-			':uid'  => $user_id,
-			':tid'  => $id,
-			':type' => $type
+			':uid'	=> $user_id,
+			':tid'	=> $id,
+			':type'	=> $type
 		]);
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
@@ -111,5 +111,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'rating' => $rating));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'rating'	=> $rating
+));
 ?>

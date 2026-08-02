@@ -43,7 +43,7 @@ if (isset($collection_path)) {
 
 			// Get the event ID of this compo folder
 			$select = $db->prepare('SELECT event_id FROM competitions WHERE competition = :compo LIMIT 1');
-			$select->execute(array(':compo'=>str_replace('CSDb Music Competitions/', '', $collection_path)));
+			$select->execute(array(':compo' => str_replace('CSDb Music Competitions/', '', $collection_path)));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$event_id = $select->rowCount() ? $select->fetch()->event_id : 0;
@@ -777,5 +777,10 @@ if ($collection_path == $exotic_folder) {
 		'</script>';
 }
 
-echo json_encode(array('status' => 'ok', 'html' => $html, 'annex_html' => $annex_html, 'rating' => $rating));
+echo json_encode(array(
+	'status'		=> 'ok',
+	'html'			=> $html,
+	'annex_html'	=> $annex_html,
+	'rating'		=> $rating
+));
 ?>

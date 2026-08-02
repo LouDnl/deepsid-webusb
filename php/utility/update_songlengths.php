@@ -3,7 +3,7 @@
  * DeepSID
  *
  * Take all time length fields in 'files', split them up into subtune parts,
- * then save them as individual rows in the 'hvsc_lengths' table.
+ * then save them as individual rows in the 'sid_lengths' table.
  * 
  * This table is used for displaying a top 20 list of the longest tunes. A
  * table for this is necessary as the SQL required to generate it directly
@@ -32,7 +32,7 @@ try {
 	foreach($select as $row) {
 		$lengths = explode(' ', $row->lengths);
 		foreach($lengths as $key => $length)
-			$db->query('INSERT INTO hvsc_lengths (collection_path, length, subtune) VALUES("'.$row->collection_path.'", "'.$length.'", '.$key.')');
+			$db->query('INSERT INTO sid_lengths (collection_path, length, subtune) VALUES("'.$row->collection_path.'", "'.$length.'", '.$key.')');
 	}
 
 	echo "Script 'update_songlengths.php' has completed.";

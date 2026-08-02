@@ -41,7 +41,7 @@ function publicSymlistOwner() {
 
 	// First get its user ID
 	$select = $db->prepare('SELECT user_id FROM folders WHERE collection_path = :folder LIMIT 1');
-	$select->execute(array(':folder'=>substr($_GET['folder'], 1)));
+	$select->execute(array(':folder' => substr($_GET['folder'], 1)));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	$owner = 'an unknown user';
@@ -340,10 +340,10 @@ try {
 						)
 				');
 				$select->execute([
-					':id'    => $_GET['searchQuery'],
-					':year'  => $year,
-					':start' => "$year-01-01",
-					':end'   => ($year + 1) . "-01-01"
+					':id'		=> $_GET['searchQuery'],
+					':year'		=> $year,
+					':start'	=> "$year-01-01",
+					':end'		=> ($year + 1) . "-01-01"
 				]);
 
 			} else if ($_GET['searchType'] == 'folders') {											// Folders
@@ -755,7 +755,7 @@ try {
 						' INNER JOIN symlists ON files.id = symlists.file_id'.
 						' INNER JOIN ratings ON symlists.file_id = ratings.table_id'.
 						' WHERE ratings.user_id = '.$user_id.' AND ratings.rating '.$operators.' :rating AND ratings.type = "FILE" AND symlists.folder_id = '.$symlist_folder_id);
-					$select_files->execute(array(':rating'=>str_replace('-', '', $_GET['searchQuery'])));
+					$select_files->execute(array(':rating' => str_replace('-', '', $_GET['searchQuery'])));
 
 				} else if ($_GET['searchType'] == 'tag') {
 
@@ -784,7 +784,7 @@ try {
 						$location = hexdec(substr($location, 1));
 					else if (substr($location, 0, 2) == '0x')
 						$location = hexdec(substr($location, 2));
-					$select_files->execute(array(':load_addr'=>$location));
+					$select_files->execute(array(':load_addr' => $location));
 
 				} else if ($_GET['searchType'] == 'maximum') {
 
@@ -796,7 +796,7 @@ try {
 						$data_size = hexdec(substr($data_size, 1));
 					else if (substr($data_size, 0, 2) == '0x')
 						$data_size = hexdec(substr($data_size, 2));
-					$select_files->execute(array(':data_size'=>$data_size));
+					$select_files->execute(array(':data_size' => $data_size));
 
 				} else if ($_GET['searchType'] == 'country') {
 
@@ -937,7 +937,7 @@ try {
 
 			// Get CSDb event ID
 			$select_compo = $db->prepare('SELECT event_id, name FROM competitions WHERE competition = :compo_name LIMIT 1');
-			$select_compo->execute(array(':compo_name'=>$compo_name));
+			$select_compo->execute(array(':compo_name' => $compo_name));
 			$select_compo->setFetchMode(PDO::FETCH_OBJ);
 			$row = $select_compo->fetch();
 
@@ -1144,7 +1144,7 @@ try {
 
 		// Get the incompatibility emulators/handlers for the parent folder
 		$select = $db->prepare('SELECT incompatible FROM folders WHERE collection_path = :folder LIMIT 1');
-		$select->execute(array(':folder'=>ltrim($_GET['folder'], '/')));
+		$select->execute(array(':folder' => ltrim($_GET['folder'], '/')));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		if ($select->rowCount()) $incompatible = $select->fetch()->incompatible;
 	}
@@ -1202,12 +1202,12 @@ try {
 			if ($select->rowCount()) {
 				$row = $select->fetch();								// Example
 
-				$folder_type =		$row->type;							// SINGLE
-				$files_count =		$row->files;						// 42
-				$incompat_row =		$row->incompatible;					// jssid
-				$has_photo =		file_exists('../'.$thumbnail);		// TRUE
-				$flags =			$row->flags;						// 1
-				$hvsc = 			$row->new;							// 70
+				$folder_type	= $row->type;							// SINGLE
+				$files_count	= $row->files;							// 42
+				$incompat_row	= $row->incompatible;					// jssid
+				$has_photo		= file_exists('../'.$thumbnail);		// TRUE
+				$flags			= $row->flags;							// 1
+				$hvsc			= $row->new;							// 70
 
 				if ($user_id) {
 					// Does the user have any rating for this folder?
@@ -1286,7 +1286,7 @@ try {
 			// FILE
 
 			$select = $db->prepare('SELECT * FROM files WHERE collection_path = :collection_path LIMIT 1');
-			$select->execute(array(':collection_path'=>($is_searching || $is_public_symlist || $is_personal_symlist || $is_csdb_compo ? '' : $folder).$file));
+			$select->execute(array(':collection_path' => ($is_searching || $is_public_symlist || $is_personal_symlist || $is_csdb_compo ? '' : $folder).$file));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$player = $lengths = $type = $version = $player_type = $player_compat = $clock_speed = $sid_model = $name = $author = $copyright = $hash = $stil = '';
@@ -1295,31 +1295,31 @@ try {
 			if ($select->rowCount()) {
 				$row = $select->fetch();
 
-				$id = 				$row->id;				// Unique database ID
-				$collection_path =	$row->collection_path;	// _High Voltage SID Collection/MUSICIANS/T/Tel_Jeroen/Alloyrun.sid
-				$player = 			$row->player;			// MoN/FutureComposer
-				$lengths = 			$row->lengths;			// 6:47 0:46 0:04
-				$type = 			$row->type;				// PSID							RSID
-				$version = 			$row->version;			// 2.0							3.0
-				$player_type =		$row->player_type;		// Normal built-in								(only value seen)
-				$player_compat =	$row->player_compat;	// C64 compatible				PlaySID			(typically for BASIC tunes)
-				$clock_speed =		$row->clock_speed;		// PAL 50Hz						NTSC 60Hz, PAL / NTSC, Unknown
-				$sid_model =		$row->sid_model;		// MOS6581						MOS8580, MOS6581 / MOS858, Unknown
-				$data_offset =		$row->data_offset;		// 124							0
-				$data_size =		$row->data_size;		// 4557
-				$load_addr =		$row->load_addr;		// 57344
-				$init_addr =		$row->init_addr;		// 57344
-				$play_addr =		$row->play_addr;		// 57350
-				$subtunes =			$row->subtunes;			// 3
-				$start_subtune =	$row->start_subtune;	// 1
-				$name =				$row->name;				// Alloyrun
-				$author =			$row->author;			// Jeroen Tel
-				$copyright =		$row->copyright;		// 1988 Starlight
-				$hash =				$row->hash;				// 02df65150cbc4fa8fabf563b26c8cac4
-				$stil =				$row->stil;				// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
-				$hvsc =				$row->new;				// 0 (= 49)						50 and up
-				$csdb_type =		$row->csdb_type;		// sid							release
-				$csdb_id =			$row->csdb_id;			// 58172
+				$id					= $row->id;					// Unique database ID
+				$collection_path	= $row->collection_path;	// _High Voltage SID Collection/MUSICIANS/T/Tel_Jeroen/Alloyrun.sid
+				$player				= $row->player;				// MoN/FutureComposer
+				$lengths			= $row->lengths;			// 6:47 0:46 0:04
+				$type				= $row->type;				// PSID							RSID
+				$version			= $row->version;			// 2.0							3.0
+				$player_type		= $row->player_type;		// Normal built-in								(only value seen)
+				$player_compat		= $row->player_compat;		// C64 compatible				PlaySID			(typically for BASIC tunes)
+				$clock_speed		= $row->clock_speed;		// PAL 50Hz						NTSC 60Hz, PAL / NTSC, Unknown
+				$sid_model			= $row->sid_model;			// MOS6581						MOS8580, MOS6581 / MOS858, Unknown
+				$data_offset		= $row->data_offset;		// 124							0
+				$data_size			= $row->data_size;			// 4557
+				$load_addr			= $row->load_addr;			// 57344
+				$init_addr			= $row->init_addr;			// 57344
+				$play_addr			= $row->play_addr;			// 57350
+				$subtunes			= $row->subtunes;			// 3
+				$start_subtune		= $row->start_subtune;		// 1
+				$name				= $row->name;				// Alloyrun
+				$author				= $row->author;				// Jeroen Tel
+				$copyright			= $row->copyright;			// 1988 Starlight
+				$hash				= $row->hash;				// 02df65150cbc4fa8fabf563b26c8cac4
+				$stil				= $row->stil;				// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
+				$hvsc				= $row->new;				// 0 (= 49)						50 and up
+				$csdb_type			= $row->csdb_type;			// sid							release
+				$csdb_id			= $row->csdb_id;			// 58172
 				
 				if ($user_id) {
 					// Does the user have any rating for this SID file?
@@ -1679,5 +1679,6 @@ echo json_encode(array(
 	'owner' 		=> $owner,
 	'compo' 		=> !empty($compo_name),
 	'today' 		=> date('Y-m-d H:i:s', strtotime(TIME_ADJUST)),
-	'uploads' 		=> $new_uploads));
+	'uploads'		=> $new_uploads
+));
 ?>

@@ -501,5 +501,10 @@ $html =
 		$quick_shortcuts.
 	'</table>';
 
-echo json_encode(array('status' => 'ok', 'html' => $html, 'left' => $choice_left, 'right' => $choice_right));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html,
+	'left'		=> $choice_left,
+	'right'		=> $choice_right
+));
 ?>

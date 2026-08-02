@@ -56,7 +56,7 @@ function readGB64DB($id) {
 
 	// Get the general info for the game
 	$select_games = $gb->prepare('SELECT * FROM Games WHERE GA_Id = :id LIMIT 1');
-	$select_games->execute(array(':id'=>$id));
+	$select_games->execute(array(':id' => $id));
 	$select_games->setFetchMode(PDO::FETCH_OBJ);
 	$games = $select_games->fetch();
 

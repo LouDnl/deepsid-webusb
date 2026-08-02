@@ -29,7 +29,7 @@ try {
 
 	// Get ID of symlist folder
 	$select = $db->prepare('SELECT id, files FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
-	$select->execute(array(':folder'=>$_POST['symlist']));
+	$select->execute(array(':folder' => $_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())
@@ -43,7 +43,7 @@ try {
 
 		// We must reference the symlist ID directly because of multiple ocurrences of the same SID file
 		$delete = $db->prepare('DELETE FROM symlists WHERE id = :symid LIMIT 1');
-		$delete->execute(array(':symid'=>$_POST['symid']));
+		$delete->execute(array(':symid' => $_POST['symid']));
 
 	} else {
 

@@ -31,7 +31,7 @@ try {
 
 	// First let's make sure there is no public playlist with the same name
 	$select = $db->prepare('SELECT 1 FROM folders WHERE collection_path = :folder');
-	$select->execute(array(':folder'=>$symlist_char.substr($_POST['symlist'], 1)));
+	$select->execute(array(':folder' => $symlist_char.substr($_POST['symlist'], 1)));
 	if ($select->rowCount() ) {
 		if ($symlist_char == '$')
 			die(json_encode(array('status' => 'error', 'message' => 'There is already a public playlist with that name. Please rename your playlist and try again.')));

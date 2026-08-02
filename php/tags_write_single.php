@@ -34,7 +34,7 @@ try {
 
 	// Get the ID of the tag
 	$select = $db->prepare('SELECT id FROM tags_info WHERE name = :name LIMIT 1');
-	$select->execute(array(':name'=>$_POST['tag']));
+	$select->execute(array(':name' => $_POST['tag']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	if ($select->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find the "'.$_POST['tag'].'" tag in the database')));
@@ -70,5 +70,12 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags, 'tagids' => $id_of_tags, 'tagidstart' => $id_tag_start, 'tagidend' => $id_tag_end));
+echo json_encode(array(
+	'status'		=> 'ok',
+	'tags'			=> $list_of_tags,
+	'tagtypes'		=> $type_of_tags,
+	'tagids'		=> $id_of_tags,
+	'tagidstart'	=> $id_tag_start,
+	'tagidend'		=> $id_tag_end
+));
 ?>

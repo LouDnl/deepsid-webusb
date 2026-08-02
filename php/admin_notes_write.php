@@ -36,5 +36,5 @@ if ($result === false) {
 	die("Failed to write notes file.");
 }
 
-die(json_encode(array('status' => 'ok')));
+echo json_encode(array('status' => 'ok'));
 ?>

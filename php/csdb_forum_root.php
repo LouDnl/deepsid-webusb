@@ -35,5 +35,9 @@ $html = '<h3 style="margin-top:10px;">Forum threads from CSDb</h3>
 
 $sticky = '<h2 style="margin-top:0;">Forums</h2>';
 
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'sticky'	=> $sticky,
+	'html'		=> $html
+));
 ?>

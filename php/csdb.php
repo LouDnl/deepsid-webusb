@@ -112,13 +112,13 @@ function serveCacheOrError($cache_file, $error_message) {
     if (file_exists($cache_file)) {
         $cached = json_decode(gzdecode(file_get_contents($cache_file)), true);
         echo json_encode(array(
-            'status'  => 'ok',
-            'sticky'  => $cached['sticky'],
-            'html'    => $cached['html'] .
-                         '<i><small>Generated from cache (CSDb unreachable)</small></i>',
-            'count'   => $cached['count'],
-            'entries' => $cached['entries'],
-			'primary' => $primary_back_button
+            'status'	=> 'ok',
+            'sticky'	=> $cached['sticky'],
+            'html'		=> $cached['html'] .
+							'<i><small>Generated from cache (CSDb unreachable)</small></i>',
+            'count'		=> $cached['count'],
+            'entries'	=> $cached['entries'],
+			'primary'	=> $primary_back_button
         ));
         exit;
     }
@@ -212,8 +212,8 @@ function getLabelTypeId($id) { // @todo Same function as in 'gb64.php'
 		return null;
 
 	return [
-		'type' => strtolower($row['site']),
-		'id'   => $row['site_id']
+		'type'	=> strtolower($row['site']),
+		'id'	=> $row['site_id']
 	];
 }
 
@@ -398,14 +398,14 @@ if (file_exists($cache_file)) {
 	// Serve cache if not too fresh and not expired
     if (!$too_fresh && (time() - filemtime($cache_file) < $ttl) && !$_GET['override']) {
 		echo json_encode(array(
-			'status'  => 'ok',
-			'sticky'  => $cached_data['sticky'],
-			'html'    => $cached_data['html'] .
-						'<i><small>Generated from cache<span id="cache-age"> (updated ' . $cache_age .
+			'status'	=> 'ok',
+			'sticky'	=> $cached_data['sticky'],
+			'html'		=> $cached_data['html'] .
+							'<i><small>Generated from cache<span id="cache-age"> (updated ' . $cache_age .
 							')</span> - <a id="refresh-cache" href="">Refresh cache</a></small></i>',
-			'count'   => $cached_data['count'],
-			'entries' => $cached_data['entries'],
-			'primary' => $primary_back_button
+			'count'		=> $cached_data['count'],
+			'entries'	=> $cached_data['entries'],
+			'primary'	=> $primary_back_button
 		));
         exit;
     }
@@ -667,11 +667,11 @@ if ($csdb_type == 'sid') {
 
 			// Push HTML and some data to an array for use by the sort drop-down box (in jQuery)
 			array_push($sid_entries, array(
-				'id'		=> (int)$release->ID,
-				'html'		=> $entry,
-				'title'		=> strtolower($release->Name),
-				'type'		=> strtolower($type),
-				'date'		=> (isset($release->ReleaseYear) ? $release->ReleaseYear : '0000').'-'.(isset($release->ReleaseMonth) ? str_pad($release->ReleaseMonth, 2, '0', STR_PAD_LEFT) : '00').'-'.(isset($release->ReleaseDay) ? str_pad($release->ReleaseDay, 2, '0', STR_PAD_LEFT) : '00'),
+				'id'	=> (int)$release->ID,
+				'html'	=> $entry,
+				'title'	=> strtolower($release->Name),
+				'type'	=> strtolower($type),
+				'date'	=> (isset($release->ReleaseYear) ? $release->ReleaseYear : '0000').'-'.(isset($release->ReleaseMonth) ? str_pad($release->ReleaseMonth, 2, '0', STR_PAD_LEFT) : '00').'-'.(isset($release->ReleaseDay) ? str_pad($release->ReleaseDay, 2, '0', STR_PAD_LEFT) : '00'),
 			));
 
 			$amount_releases++;
@@ -985,11 +985,11 @@ if (!empty($sid_entries)) {
 // --------------------------------------------------------------------------
 
 $cache_data = array(
-    'sticky'  => $sticky,
-    'html'    => $html,
-    'count'   => $amount_releases,
-    'entries' => $sid_entries,
-    'time'    => time()
+    'sticky'	=> $sticky,
+    'html'		=> $html,
+    'count'		=> $amount_releases,
+    'entries'	=> $sid_entries,
+    'time'		=> time()
 );
 
 file_put_contents($cache_file, gzencode(json_encode($cache_data), 9));
@@ -1001,8 +1001,9 @@ file_put_contents($cache_file, gzencode(json_encode($cache_data), 9));
 echo json_encode(array(
 	'status'	=> 'ok',
 	'sticky'	=> $sticky,
-	'html'		=> $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
+	'html'		=> $html . '<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>',
 	'count'		=> $amount_releases,
 	'entries'	=> $sid_entries,
-	'primary'	=> $primary_back_button));
+	'primary'	=> $primary_back_button
+));
 ?>

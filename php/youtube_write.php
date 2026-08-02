@@ -37,7 +37,7 @@ try {
 
 	// Start by deleting all data so it can be completely replaced
 	$delete = $db->prepare('DELETE FROM youtube WHERE file_id = :id AND subtune = :subtune LIMIT 5');
-	$delete->execute(array(':id'=>$file_id,':subtune'=>$_POST['subtune']));
+	$delete->execute(array(':id' => $file_id,':subtune' => $_POST['subtune']));
 
 	if ($_POST['videos'] == 0)
 		die(json_encode(array('status' => 'purged'))); // Since the array is empty we're already done

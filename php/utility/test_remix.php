@@ -13,16 +13,16 @@ $url = 'https://remix64.com/services/api/gb/2/' .
 $ch = curl_init();
 
 curl_setopt_array($ch, [
-    CURLOPT_URL            => $url,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HEADER         => true,
-    CURLOPT_HTTPGET        => true,
-    CURLOPT_USERPWD        => $config['remix64_partner_id'] . ':' . $config['remix64_api_password'],
-    CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
-    CURLOPT_USERAGENT      => 'Mozilla/5.0',
+    CURLOPT_URL             => $url,
+    CURLOPT_RETURNTRANSFER  => true,
+    CURLOPT_HEADER          => true,
+    CURLOPT_HTTPGET         => true,
+    CURLOPT_USERPWD         => $config['remix64_partner_id'] . ':' . $config['remix64_api_password'],
+    CURLOPT_HTTPAUTH        => CURLAUTH_BASIC,
+    CURLOPT_USERAGENT       => 'Mozilla/5.0',
 
-    CURLOPT_SSL_VERIFYPEER => !$isLocal,
-    CURLOPT_SSL_VERIFYHOST => !$isLocal
+    CURLOPT_SSL_VERIFYPEER  => !$isLocal,
+    CURLOPT_SSL_VERIFYHOST  => !$isLocal
 ]);
 
 $response = curl_exec($ch);

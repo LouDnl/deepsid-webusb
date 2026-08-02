@@ -21,7 +21,7 @@ try {
 	$db = $account->getDB();
 
 	$select = $db->prepare('SELECT id, collection_path FROM folders WHERE collection_path LIKE :folder');
-	$select->execute(array(':folder'=>ltrim($_GET['folder'], '/').'/%'));
+	$select->execute(array(':folder' => ltrim($_GET['folder'], '/').'/%'));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	$results = array();
@@ -45,5 +45,9 @@ try {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-echo json_encode(array('status' => 'ok', 'ready' => $ready, 'results' => $results));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'ready'		=> $ready,
+	'results'	=> $results
+));
 ?>

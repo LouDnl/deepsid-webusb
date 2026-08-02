@@ -89,7 +89,7 @@ try {
 
 	// Get full name of this file ID
 	$select = $db->prepare('SELECT collection_path FROM files WHERE id = :id');
-	$select->execute(array(':id'=>$_POST['fileID']));
+	$select->execute(array(':id' => $_POST['fileID']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$collection_path = $select->fetch()->collection_path;
 
@@ -98,7 +98,7 @@ try {
 	foreach($_POST['allTags'] as $tag) {
 		if ($tag['id'] >= 60000) {
 			$insert = $db->prepare('INSERT INTO tags_info (name) VALUES(:name)');
-			$insert->execute(array(':name'=>$tag['name']));
+			$insert->execute(array(':name' => $tag['name']));
 			if ($insert->rowCount() == 0)
 				die(json_encode(array('status' => 'error', 'message' => 'Could not create the new tag "'.$tag['name'].'"')));
 			logTagActivity('NEW', $db->lastInsertId(), $tag['name']);
@@ -112,7 +112,7 @@ try {
 
 	// Get current list of tag ID's used by the file ID
 	$select = $db->prepare('SELECT tags_id FROM tags_lookup WHERE files_id = :id');
-	$select->execute(array(':id'=>$_POST['fileID']));
+	$select->execute(array(':id' => $_POST['fileID']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	foreach($select as $row) {
@@ -120,7 +120,7 @@ try {
 		if (!in_array($row->tags_id, $file_tags)) {
 			// Delete database entry if not in the revised list (i.e. tag was removed in the dialog box)
 			$delete = $db->prepare('DELETE FROM tags_lookup WHERE files_id = :id AND tags_id = '.$row->tags_id.' LIMIT 1');
-			$delete->execute(array(':id'=>$_POST['fileID']));
+			$delete->execute(array(':id' => $_POST['fileID']));
 			// Get its name
 			$select = $db->query('SELECT name FROM tags_info WHERE id = '.$row->tags_id);
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -133,7 +133,7 @@ try {
 		if (!in_array($tag_id, $current_tags)) {
 			// Add database entry if the ID is not already there (i.e. new or existing pool tag was added)
 			$insert = $db->prepare('INSERT INTO tags_lookup (files_id, tags_id) VALUES(:id, '.$tag_id.')');
-			$insert->execute(array(':id'=>$_POST['fileID']));
+			$insert->execute(array(':id' => $_POST['fileID']));
 			// Get its name
 			$select = $db->query('SELECT name FROM tags_info WHERE id = '.$tag_id);
 			$select->setFetchMode(PDO::FETCH_OBJ);
@@ -145,7 +145,7 @@ try {
 	if (isset($_POST['startTag']) && isset($_POST['endTag'])) {
 		// What was stored prior to this change?
 		$select = $db->prepare('SELECT tags_id, end_id FROM tags_lookup WHERE files_id = :files_id');
-		$select->execute(array(':files_id'=>$_POST['fileID']));
+		$select->execute(array(':files_id' => $_POST['fileID']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 		
 		// Assume no connection line to begin with
@@ -163,22 +163,22 @@ try {
 
 			// What are the names of the tags uses as start and end?
 			$select = $db->prepare('SELECT name FROM tags_info WHERE id = :id');
-			$select->execute(array(':id'=>$_POST['startTag']));
+			$select->execute(array(':id' => $_POST['startTag']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$start_tag_name = $_POST['startTag'] ? $select->fetch()->name : '[Not selected]';
 
 			$select = $db->prepare('SELECT name FROM tags_info WHERE id = :id');
-			$select->execute(array(':id'=>$_POST['endTag']));
+			$select->execute(array(':id' => $_POST['endTag']));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 			$end_tag_name = $_POST['endTag'] ? $select->fetch()->name : '[Not selected]';
 
 			// First reset all end tag ID just to be sure
 			$update = $db->prepare('UPDATE tags_lookup SET end_id = 0 WHERE files_id = :files_id');
-			$update->execute(array(':files_id'=>$_POST['fileID']));
+			$update->execute(array(':files_id' => $_POST['fileID']));
 
 			// The standard tags ID field also serves as the start tag ID
 			$update = $db->prepare('UPDATE tags_lookup SET end_id = :end_id WHERE files_id = :files_id AND tags_id = :tags_id LIMIT 1');
-			$update->execute(array(':end_id'=>$_POST['endTag'],':files_id'=>$_POST['fileID'],':tags_id'=>$_POST['startTag']));
+			$update->execute(array(':end_id' => $_POST['endTag'],':files_id' => $_POST['fileID'],':tags_id' => $_POST['startTag']));
 
 			// More information is logged in this version
 			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/tags.txt',
@@ -209,5 +209,12 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'tags' => $list_of_tags, 'tagtypes' => $type_of_tags, 'tagids' => $id_of_tags, 'tagidstart' => $id_tag_start, 'tagidend' => $id_tag_end));
+echo json_encode(array(
+	'status'		=> 'ok',
+	'tags'			=> $list_of_tags,
+	'tagtypes'		=> $type_of_tags,
+	'tagids'		=> $id_of_tags,
+	'tagidstart'	=> $id_tag_start,
+	'tagidend'		=> $id_tag_end
+));
 ?>

@@ -55,5 +55,9 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status'	=> 'ok', 'count' => $count, 'videos' => $videos));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'count'		=> $count,
+	'videos'	=> $videos
+));
 ?>

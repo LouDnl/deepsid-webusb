@@ -6,23 +6,27 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Any of these links adding the database? I think they had thumbnails problems before, but now that
+  I'm using favicons instead, it may not be an issue anymore. Other problems?
+
+    ('https://8bitlegends.com', '8BitLegends', 'Tribute')
+    ('http://www.attitude.c64.org', 'Attitude', 'Diskmag')
+    ('http://c64.sk', 'C64.SK', 'Info')
+    ('http://www.fairlight.to', 'Fairlight', 'Group')
+    ('https://www.forum64.de', 'Forum64.de', 'Forum')
+    ('http://recollection.c64.org', 'Recollection', 'Tribute')
+    ('http://sid.oth4.com', 'SID.OTH4.COM', '')
+    ('https://vandalism.news', 'Vandalism', 'Diskmag')
+
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
-
-- The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
-  in source codes and public text. Consider even renaming the DB field in the 'Files' table.
-
-- The CSDb link updating should also work on 'SHOW' pages.
-
-- Change database table name 'hvsc_lengths' to just 'lengths' instead. Remember to update a description
-  in the admin scripts page too.
 
 - Add a "seconds" edit box for the new delay-next feature.
 
-- Check out this: https://github.com/Chordian/deepsid/issues/43
-  Two new SID players that could be added later - reSIDfp and SIDLite.
+- Collect all PHP files only containing functions and put them in a 'lib' folder (inside 'php').
 
-- New right-click context menu option for a song: Open in new browser window with hex monitor view of
-  the entire player. Fills out the view of the entire window and is scrollable (no pages).
+- The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
+  in source codes and public text. Consider even renaming the DB field in the 'Files' table. A caveat
+  is that there is a LOT of use of the word "copyright" in the souce codes!
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
@@ -34,10 +38,12 @@ REALLY CONSIDER THIS
 - Maybe place "Misc" in CGSC in top, above a divider line?
 - For redirect links, add a BACK button in both STIL tabs (to complement the 'b' hotkey).
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
-- Make sure all 'sovs' =>   '1' is fixed to 'sovs'    => '1' instead, in all PHP files.
-- Change player lookup to look for raw player strings instead of the prettified ones.
 - The player text lines by the Chartist bars could be filter links.
-- Consider putting the array in 'countries.php' in the database instead.
+- Consider moving the array in 'countries.php' to a table in the database instead.
+
+- Check out this: https://github.com/Chordian/deepsid/issues/43
+  Two new SID players that could be added later - reSIDfp and SIDLite.
+  https://github.com/chrisgleissner/libsidplayfp-wasm
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.
@@ -140,6 +146,9 @@ MAYBE CONSIDER THIS
 
 - In a profile page, make the small handles in group table into links and remove the corner
   external link icon. Then users can choose what handle to open in CSDb themselves.
+
+- New right-click context menu option for a song: Open in new browser window with hex monitor view
+  of the entire player. Fills out the view of the entire window and is scrollable (no pages).
 
 - Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown
   for releases in forum threads? UPDATE: I tried searching in SVG sites and Google. 99% of floppy

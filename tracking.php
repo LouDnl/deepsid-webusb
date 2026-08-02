@@ -102,12 +102,12 @@ try {
 			continue;
 		}
 
-		$line_visitor_id = trim($line[0]);
-		$line_ip         = $line[1];
-		$line_ua         = $line[2];
-		$line_user       = $line[3];
-		$time_created    = (int)$line[4];
-		$time_updated    = (int)$line[5];
+		$line_visitor_id	= trim($line[0]);
+		$line_ip			= $line[1];
+		$line_ua			= $line[2];
+		$line_user			= $line[3];
+		$time_created		= (int)$line[4];
+		$time_updated		= (int)$line[5];
 
 		// Ignore invalid visitor IDs
 		if (
@@ -127,12 +127,12 @@ try {
 		}
 
 		$visitors[] = array(
-			'visitor_id'  => $line_visitor_id,
-			'ip_address'  => $line_ip,
-			'user_agent'  => $line_ua,
-			'user_name'   => $line_user,
-			'time_created' => $time_created,
-			'time_updated' => $time_updated,
+			'visitor_id'	=> $line_visitor_id,
+			'ip_address'	=> $line_ip,
+			'user_agent'	=> $line_ua,
+			'user_name'		=> $line_user,
+			'time_created'	=> $time_created,
+			'time_updated'	=> $time_updated,
 		);
 	}
 
@@ -181,12 +181,12 @@ try {
 
 		// Add a new browser visitor
 		$visitors[] = array(
-			'visitor_id'  => $visitor_id,
-			'ip_address'  => $ip,
-			'user_agent'  => $user_agent,
-			'user_name'   => $user_name,
-			'time_created' => $now,
-			'time_updated' => $now,
+			'visitor_id'	=> $visitor_id,
+			'ip_address'	=> $ip,
+			'user_agent'	=> $user_agent,
+			'user_name'		=> $user_name,
+			'time_created'	=> $now,
+			'time_updated'	=> $now,
 		);
 	}
 

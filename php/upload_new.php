@@ -119,26 +119,26 @@ try {
 
 	// Key names should be without underscores
 	$info = array(
-		'fullname'			=> $path.$sid['name'],
-		'filename'			=> $sid['name'],
-		'player'			=> identifyPlayer($sid['tmp_name']),
-		'lengths'			=> rtrim(str_repeat('20:00 ', $subtunes)),
-		'type'				=> $file[0].'SID',
-		'version'			=> $version,
-		'playertype'		=> 'Normal built-in',
-		'playercompat'		=> $compatible,
-		'clockspeed'		=> $clock_speed,
-		'sidmodel'			=> $sid_model,
-		'dataoffset'		=> $data_offset,
-		'datasize'			=> strlen($file) - $data_offset,
-		'loadaddr'			=> $load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
-		'initaddr'			=> $byte[0xA] * 256 + $byte[0xB],
-		'playaddr'			=> $byte[0xC] * 256 + $byte[0xD],
-		'subtunes'			=> $subtunes,
-		'startsubtune'		=> $byte[0x10] * 256 + $byte[0x11],
-		'name'				=> $name,
-		'author'			=> $author,
-		'copyright'			=> $copyright,
+		'fullname'		=> $path.$sid['name'],
+		'filename'		=> $sid['name'],
+		'player'		=> identifyPlayer($sid['tmp_name']),
+		'lengths'		=> rtrim(str_repeat('20:00 ', $subtunes)),
+		'type'			=> $file[0].'SID',
+		'version'		=> $version,
+		'playertype'	=> 'Normal built-in',
+		'playercompat'	=> $compatible,
+		'clockspeed'	=> $clock_speed,
+		'sidmodel'		=> $sid_model,
+		'dataoffset'	=> $data_offset,
+		'datasize'		=> strlen($file) - $data_offset,
+		'loadaddr'		=> $load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
+		'initaddr'		=> $byte[0xA] * 256 + $byte[0xB],
+		'playaddr'		=> $byte[0xC] * 256 + $byte[0xD],
+		'subtunes'		=> $subtunes,
+		'startsubtune'	=> $byte[0x10] * 256 + $byte[0x11],
+		'name'			=> $name,
+		'author'		=> $author,
+		'copyright'		=> $copyright,
 	);
 
 } catch(PDOException $e) {
@@ -146,5 +146,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'info' => $info));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'info'		=> $info
+));
 ?>

@@ -59,30 +59,30 @@ try {
 
 	$info = array(
 		// No "_" in keys
-		'fullname' =>		$general->collection_path,
-		'player' =>			$general->player,
-		'lengths' => 		$general->lengths,
-		'type' => 			$general->type,
-		'version' => 		$general->version,
-		'playertype' =>		$general->player_type,
-		'playercompat' =>	$general->player_compat,
-		'clockspeed' =>		$general->clock_speed,
-		'sidmodel' =>		$general->sid_model,
-		'dataoffset' =>		$general->data_offset,
-		'datasize' => 		$general->data_size,
-		'loadaddr' => 		$general->load_addr,
-		'initaddr' => 		$general->init_addr,
-		'playaddr' => 		$general->play_addr,
-		'subtunes' => 		$general->subtunes,
-		'startsubtune' => 	$general->start_subtune,
-		'name' => 			$general->name,
-		'author' => 		$general->author,
-		'copyright' => 		$general->copyright,
-		'stil' =>			$general->stil,
-		'csdbtype' =>		$general->csdb_type,
-		'csdbid' =>			$general->csdb_id,
-		'profile' =>		$profile,
-		'uploaded' =>		$special->uploaded,
+		'fullname'		=> $general->collection_path,
+		'player'		=> $general->player,
+		'lengths'		=> $general->lengths,
+		'type'			=> $general->type,
+		'version'		=> $general->version,
+		'playertype'	=> $general->player_type,
+		'playercompat'	=> $general->player_compat,
+		'clockspeed'	=> $general->clock_speed,
+		'sidmodel'		=> $general->sid_model,
+		'dataoffset'	=> $general->data_offset,
+		'datasize'		=> $general->data_size,
+		'loadaddr'		=> $general->load_addr,
+		'initaddr'		=> $general->init_addr,
+		'playaddr'		=> $general->play_addr,
+		'subtunes'		=> $general->subtunes,
+		'startsubtune'	=> $general->start_subtune,
+		'name'			=> $general->name,
+		'author'		=> $general->author,
+		'copyright'		=> $general->copyright,
+		'stil'			=> $general->stil,
+		'csdbtype'		=> $general->csdb_type,
+		'csdbid'		=> $general->csdb_id,
+		'profile'		=> $profile,
+		'uploaded'		=> $special->uploaded,
 	);
 
 } catch(PDOException $e) {
@@ -90,5 +90,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'info' => $info));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'info'		=> $info
+));
 ?>

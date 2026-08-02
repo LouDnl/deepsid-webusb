@@ -31,6 +31,6 @@ $csdb = json_decode(json_encode($csdb), true);
 
 echo json_encode(array(
 		'status'	=> 'ok',
-		'csdb'		=> $csdb,
+		'csdb'		=> $csdb
 ));
 ?>

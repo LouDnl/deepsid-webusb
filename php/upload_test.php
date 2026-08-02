@@ -43,23 +43,26 @@ foreach($_FILES as $sid) {
 	$version = $byte[0x5] * 1 == 0x4E ? '4E (WebSid only)' : $byte[0x5].'.'.$byte[0x4];
 
 	array_push($files_ext, array(
-		'filename' =>		$sid['name'],
-		'player' =>			'an undetermined player',
-		'lengths' => 		rtrim(str_repeat('20:00 ', $subtunes)),
-		'type' => 			$file[0].'SID',
-		'version' => 		$version,
-		'datasize' => 		strlen($file) - $data_offset,
-		'loadaddr' => 		$load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
-		'initaddr' => 		$byte[0xA] * 256 + $byte[0xB],
-		'playaddr' => 		$byte[0xC] * 256 + $byte[0xD],
-		'subtunes' => 		$subtunes,
-		'startsubtune' => 	$byte[0x10] * 256 + $byte[0x11],
-		'name' => 			$name,
-		'author' => 		$author,
-		'copyright' => 		$copyright,
-		'stil' => 			'<i>This is a temporary SID file for emulator testing.</i>',
+		'filename'		=> $sid['name'],
+		'player'		=> 'an undetermined player',
+		'lengths'		=> rtrim(str_repeat('20:00 ', $subtunes)),
+		'type'			=> $file[0].'SID',
+		'version'		=> $version,
+		'datasize'		=> strlen($file) - $data_offset,
+		'loadaddr'		=> $load_addr ? $load_addr : $byte[$data_offset + 1] * 256 + $byte[$data_offset],
+		'initaddr'		=> $byte[0xA] * 256 + $byte[0xB],
+		'playaddr'		=> $byte[0xC] * 256 + $byte[0xD],
+		'subtunes'		=> $subtunes,
+		'startsubtune'	=> $byte[0x10] * 256 + $byte[0x11],
+		'name'			=> $name,
+		'author'		=> $author,
+		'copyright'		=> $copyright,
+		'stil'			=> '<i>This is a temporary SID file for emulator testing.</i>',
 	));
 }
 
-echo json_encode(array('status' => 'ok', 'files' => $files_ext));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'files'		=> $files_ext
+));
 ?>

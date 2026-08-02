@@ -33,7 +33,7 @@ try {
 
 		// We must reference the symlist ID directly because of multiple ocurrences of the same SID file
 		$update = $db->prepare('UPDATE symlists SET subtune = :subtune WHERE id = :symid LIMIT 1');
-		$update->execute(array(':subtune'=>$_POST['subtune'], ':symid'=>$_POST['symid']));
+		$update->execute(array(':subtune' => $_POST['subtune'], ':symid' => $_POST['symid']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'It was already set to that sub tune value.')));
 	
@@ -41,7 +41,7 @@ try {
 
 		// Get ID of symlist folder
 		$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder AND user_id = '.$user_id.' LIMIT 1');
-		$select->execute(array(':folder'=>$_POST['symlist']));
+		$select->execute(array(':folder' => $_POST['symlist']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if (!$select->rowCount())
@@ -61,7 +61,7 @@ try {
 
 		// Set the new sub tunes value
 		$update = $db->prepare('UPDATE symlists SET subtune = :subtune WHERE folder_id = '.$folder_id.' AND file_id = '.$file_id.' LIMIT 1');
-		$update->execute(array(':subtune'=>$_POST['subtune']));
+		$update->execute(array(':subtune' => $_POST['subtune']));
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'It was already set to that sub tune value.')));
 	}

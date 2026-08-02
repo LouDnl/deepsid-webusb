@@ -27,19 +27,19 @@ $url = 'https://csdb.dk/webservice/?type=' . urlencode($csdb_type) .
 $ch = curl_init($url);
 
 curl_setopt_array($ch, [
-	CURLOPT_RETURNTRANSFER => true,
-	CURLOPT_FOLLOWLOCATION => true,
-	CURLOPT_MAXREDIRS      => 5,
-	CURLOPT_CONNECTTIMEOUT => 10,
-	CURLOPT_TIMEOUT        => 20,
-	CURLOPT_USERAGENT      => 'DeepSID test_csdb.php',
+	CURLOPT_RETURNTRANSFER	=> true,
+	CURLOPT_FOLLOWLOCATION	=> true,
+	CURLOPT_MAXREDIRS      	=> 5,
+	CURLOPT_CONNECTTIMEOUT 	=> 10,
+	CURLOPT_TIMEOUT        	=> 20,
+	CURLOPT_USERAGENT      	=> 'DeepSID test_csdb.php',
 
 	// THIS IS THE IMPORTANT PART
-	CURLOPT_REFERER        => 'https://csdb.dk/',
+	CURLOPT_REFERER        	=> 'https://csdb.dk/',
 
 	// Uncomment next two only for temporary debugging if SSL causes trouble
-	// CURLOPT_SSL_VERIFYPEER => false,
-	// CURLOPT_SSL_VERIFYHOST => false,
+	// CURLOPT_SSL_VERIFYPEER	=> false,
+	// CURLOPT_SSL_VERIFYHOST	=> false,
 ]);
 
 $xml = curl_exec($ch);

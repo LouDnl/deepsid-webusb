@@ -169,14 +169,14 @@ function downloadUrl(string $url, array $allowed_types): ?array
     $ch = curl_init($url);
 
     curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_MAXREDIRS      => 5,
-        CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT        => 8,
-        CURLOPT_USERAGENT      => 'DeepSID favicon cache/1.0',
-        CURLOPT_HEADER         => false,
-        CURLOPT_ENCODING       => '',
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_FOLLOWLOCATION  => true,
+        CURLOPT_MAXREDIRS       => 5,
+        CURLOPT_CONNECTTIMEOUT  => 4,
+        CURLOPT_TIMEOUT         => 8,
+        CURLOPT_USERAGENT       => 'DeepSID favicon cache/1.0',
+        CURLOPT_HEADER          => false,
+        CURLOPT_ENCODING        => '',
     ]);
 
     $body         = curl_exec($ch);
@@ -203,9 +203,9 @@ function downloadUrl(string $url, array $allowed_types): ?array
     }
 
     return [
-        'body'         => $body,
-        'content_type' => $content_type,
-        'final_url'    => $final_url
+        'body'          => $body,
+        'content_type'  => $content_type,
+        'final_url'     => $final_url
     ];
 }
 
@@ -282,14 +282,14 @@ function resolveUrl(string $base_url, string $relative_url): string
 function extensionFromMimeType(string $content_type): string
 {
     return match ($content_type) {
-        'image/png'                => 'png',
-        'image/jpeg'               => 'jpg',
-        'image/gif'                => 'gif',
-        'image/webp'               => 'webp',
-        'image/svg+xml'            => 'svg',
+        'image/png'                 => 'png',
+        'image/jpeg'                => 'jpg',
+        'image/gif'                 => 'gif',
+        'image/webp'                => 'webp',
+        'image/svg+xml'             => 'svg',
         'image/x-icon',
-        'image/vnd.microsoft.icon' => 'ico',
-        default                    => 'ico'
+        'image/vnd.microsoft.icon'  => 'ico',
+        default                     => 'ico'
     };
 }
 

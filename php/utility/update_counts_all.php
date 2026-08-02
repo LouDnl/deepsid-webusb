@@ -33,10 +33,10 @@ $IGNORE_FOLDERS = [
 
 // File extensions to count in each collection
 $ALLOWED_EXT = [
-    '_SID Happens'                            => 'sid',
-    '_High Voltage SID Collection'            => 'sid',
-    '_Compute\'s Gazette SID Collection'      => 'mus',
-    '_Exotic SID Tunes Collection'            => 'sid',
+    '_SID Happens'                          => 'sid',
+    '_High Voltage SID Collection'          => 'sid',
+    '_Compute\'s Gazette SID Collection'    => 'mus',
+    '_Exotic SID Tunes Collection'          => 'sid',
 ];
 
 // --------------------------------------------------------------------------
@@ -135,8 +135,8 @@ try {
 
 		$u = $db->prepare("UPDATE folders SET files = :c WHERE id = :id");
 		$u->execute([
-			':c'  => $count,
-			':id' => $row->id
+			':c'    => $count,
+			':id'   => $row->id
 		]);
 	}
 

@@ -17,7 +17,7 @@ try {
 
 	// Get the list of links for this composer
 	$select = $db->prepare('SELECT id, name, url FROM composers_links WHERE composers_id = :id ORDER BY name');
-	$select->execute(array(':id'=>$_GET['id']));
+	$select->execute(array(':id' => $_GET['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	// Build the HTML block with the entire list
@@ -43,5 +43,10 @@ try {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-die(json_encode(array('status' => 'ok', 'html' => $html, 'clinks' => $content)));
+
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html,
+	'clinks'	=> $content
+));
 ?>

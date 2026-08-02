@@ -57,5 +57,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'profiles' => $all_profiles));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'profiles'	=> $all_profiles
+));
 ?>

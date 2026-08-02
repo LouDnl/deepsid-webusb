@@ -20,13 +20,16 @@ if (!isset($_POST['column']))
 
 if (!isset($_POST['value'])) {
 	// Read the current value
-	echo json_encode(array('status' => 'ok', 'value' => $account->getUserSetting($_POST['column'])));
+	echo json_encode([
+		'status'	=> 'ok',
+		'value'		=> $account->getUserSetting($_POST['column'])
+	]);
 } else {
 	// Write the new value
 	$message = $account->setUserSetting($_POST['column'], $_POST['value']);
 	echo json_encode([
-		'status' => empty($message) ? 'ok' : 'error',
-		'message' => $message
+		'status'	=> empty($message) ? 'ok' : 'error',
+		'message'	=> $message
 	]);
 }
 ?>

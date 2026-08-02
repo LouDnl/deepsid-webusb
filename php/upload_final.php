@@ -77,7 +77,7 @@ try {
 				author 			= :author,
 				copyright		= :copyright,
 				csdb_type 		= :csdb_type,
-				csdb_id 		= :csdb_id
+				csdb_id			= :csdb_id
 			WHERE id = '.$files_id.' LIMIT 1');
 		$update->execute(array(
 				':newername'	=> $new_name,
@@ -165,26 +165,26 @@ try {
 			)');
 
 		$insert->execute(array(			// No "_" in these
-				':collection_path'		=> $path.$info['newname'],				// Renamed by upload wizard
-				':player'				=> $info['player'],						// Modified by upload wizard
-				':lengths'				=> $info['lengths'],					// Modified by upload wizard
-				':type'					=> $info['type'],
-				':version'				=> $info['version'],
-				':player_compat'		=> $info['playercompat'],
-				':clock_speed'			=> $info['clockspeed'],
-				':sid_model'			=> $info['sidmodel'],
-				':data_offset'			=> $info['dataoffset'],
-				':data_size'			=> $info['datasize'],
-				':load_addr'			=> $info['loadaddr'],
-				':init_addr'			=> $info['initaddr'],
-				':play_addr'			=> $info['playaddr'],
-				':subtunes'				=> $info['subtunes'],
-				':start_subtune'		=> $info['startsubtune'],
-				':name'					=> $info['name'],
-				':author'				=> $info['author'],						// Modified by upload wizard
-				':copyright'			=> $info['copyright'],					// Modified by upload wizard
-				':stil'					=> $info['stil'],						// Created by upload wizard
-				':csdb_id'				=> $info['csdbid']						// Created by upload wizard
+				':collection_path'	=> $path.$info['newname'],			// Renamed by upload wizard
+				':player'			=> $info['player'],					// Modified by upload wizard
+				':lengths'			=> $info['lengths'],				// Modified by upload wizard
+				':type'				=> $info['type'],
+				':version'			=> $info['version'],
+				':player_compat'	=> $info['playercompat'],
+				':clock_speed'		=> $info['clockspeed'],
+				':sid_model'		=> $info['sidmodel'],
+				':data_offset'		=> $info['dataoffset'],
+				':data_size'		=> $info['datasize'],
+				':load_addr'		=> $info['loadaddr'],
+				':init_addr'		=> $info['initaddr'],
+				':play_addr'		=> $info['playaddr'],
+				':subtunes'			=> $info['subtunes'],
+				':start_subtune'	=> $info['startsubtune'],
+				':name'				=> $info['name'],
+				':author'			=> $info['author'],					// Modified by upload wizard
+				':copyright'		=> $info['copyright'],				// Modified by upload wizard
+				':stil'				=> $info['stil'],					// Created by upload wizard
+				':csdb_id'			=> $info['csdbid']					// Created by upload wizard
 			));
 
 		$files_id = $db->lastInsertId();

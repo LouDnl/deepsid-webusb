@@ -108,5 +108,9 @@ $html = '<p style="position:relative;top:-20px;margin-top:16px;">'.$type_date_co
 	$participants.
 	$user_comments;
 
-echo json_encode(array('status' => 'ok', 'sticky' => $sticky, 'html' => $html.'<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>'));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'sticky'	=> $sticky,
+	'html'		=> $html . '<i><small>Generated using the <a href="https://csdb.dk/webservice/" target="_blank">CSDb web service</a></small></i>'
+));
 ?>

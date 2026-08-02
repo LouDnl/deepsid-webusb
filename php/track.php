@@ -27,9 +27,9 @@ try {
         VALUES (:type, :target, :ip, NOW())
     ');
     $insert->execute([
-        ':type'   => $_POST['type'] ?? 'unknown',
-        ':target' => $_POST['target'] ?? null,
-        ':ip'     => $_SERVER['REMOTE_ADDR'],
+        ':type'     => $_POST['type'] ?? 'unknown',
+        ':target'   => $_POST['target'] ?? null,
+        ':ip'       => $_SERVER['REMOTE_ADDR'],
     ]);
 } catch (Exception $e) {
     // Silently fail, don't echo to user

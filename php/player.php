@@ -27,7 +27,7 @@ try {
 	// If a player string was specified then first look it up in the many-to-one table
 	if (isset($_GET['player'])) {
 		$select = $db->prepare('SELECT player_id FROM players_lookup WHERE player = :player LIMIT 1');
-		$select->execute(array(':player'=>$_GET['player']));
+		$select->execute(array(':player' => $_GET['player']));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		if ($select->rowCount()) {
@@ -42,7 +42,7 @@ try {
 
 	// Get all information available
 	$select = $db->prepare('SELECT * FROM players_info WHERE id = :playerid LIMIT 1');
-	$select->execute(array(':playerid'=>$id));
+	$select->execute(array(':playerid' => $id));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())
@@ -194,5 +194,10 @@ try {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-echo json_encode(array('status' => 'ok', 'info' => true, 'sticky' => $sticky, 'html' => $html));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'info'		=> true,
+	'sticky'	=> $sticky,
+	'html'		=> $html
+));
 ?>

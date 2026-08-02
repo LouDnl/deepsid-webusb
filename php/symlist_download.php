@@ -36,7 +36,7 @@ try {
 
 	// Get the ID of this symlist
 	$select = $db->prepare('SELECT id FROM folders WHERE collection_path = :folder LIMIT 1');
-	$select->execute(array(':folder'=>$_POST['symlist']));
+	$select->execute(array(':folder' => $_POST['symlist']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 
 	if (!$select->rowCount())
@@ -93,5 +93,8 @@ $time_ip = date('Y-m-d H:i:s', strtotime(TIME_ADJUST)).' - '.$_SERVER['REMOTE_AD
 $message = 'The playlist "'.$_POST['symlist'].'" was downloaded as a ZIP file';
 file_put_contents($_SERVER['DOCUMENT_ROOT'].'/deepsid/logs/activity.txt', '<span style="color:#999;">'.$time_ip.$message.'</span>'.PHP_EOL, FILE_APPEND);
 
-echo json_encode(array('status' => 'ok', 'file' => HOST.'/temp/'.basename($filename)));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'file'		=> HOST . '/temp/' . basename($filename)
+));
 ?>

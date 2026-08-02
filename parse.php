@@ -107,12 +107,12 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 			continue;
 		}
 
-		$visitor_id = $line[0];
-		$ip         = $line[1];
-		$user_agent = $line[2];
-		$user_name  = $line[3];
-		$created    = (int)$line[4];
-		$updated    = (int)$line[5];
+		$visitor_id	= $line[0];
+		$ip			= $line[1];
+		$user_agent	= $line[2];
+		$user_name	= $line[3];
+		$created	= (int)$line[4];
+		$updated	= (int)$line[5];
 
 		$parser->parseUserAgentString($user_agent);
 

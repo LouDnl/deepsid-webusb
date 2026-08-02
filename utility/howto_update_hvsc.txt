@@ -406,13 +406,13 @@ Update count of files in folders:
   Just run: http://chordian/deepsid/php/utility/update_counts_all.php (just run it from the 'Admin' tab)
   Remember to do this online too when the time comes.
 
-TABLE: hvsc_lengths
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+TABLE: sid_lengths
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 This table is used by the top lists on the front page of DeepSID.
 
 After a HVSC update, do this:
 
-  1. Go to the "hvsc_lengths" table in LOCALHOST.
+  1. Go to the "sid_lengths" table in LOCALHOST.
   2. Empty (truncate) it.
   3. Edit PHP.ini through the WampServer context menu.
   4. Set 'max_execution_time' to 800 and restart the WampServer services.
@@ -425,8 +425,8 @@ After a HVSC update, do this:
 Don't try to run the PHP script ONLINE as the One.com server won't allow it to finish. Besides, the
 following alternative method is easy enough to do instead:
 
-  1. Enter the "hvsc_lengths" table in LOCALHOST and export it to an SQL file.
-  2. Empty (truncate) the ONLINE "hvsc_lengths" table.
+  1. Enter the "sid_lengths" table in LOCALHOST and export it to an SQL file.
+  2. Empty (truncate) the ONLINE "sid_lengths" table.
   3. Import the SQL file into the table.
 
 When done, compare the top 20 table with the longest tunes across LOCALHOST and ONLINE. They should

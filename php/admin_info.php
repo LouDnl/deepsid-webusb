@@ -196,5 +196,8 @@ $html .= '<h4>PHP info</h4>
 		</tr>
 	</table>';*/
 
-die(json_encode(array('status' => 'ok', 'html' => $html)));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html
+));
 ?>

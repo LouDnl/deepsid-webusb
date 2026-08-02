@@ -33,5 +33,8 @@ if (file_exists(NOTESFILE)) {
 		die("Failed to read notes file.");
 	}
 }
-die(json_encode(array('status' => 'ok', 'text' => $text)));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'text'		=> $text
+));
 ?>

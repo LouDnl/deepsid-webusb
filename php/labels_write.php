@@ -49,7 +49,7 @@ function logTagActivity($action, $labels_id, $labels_site, $labels_name, $labels
 
 	// Get the collection path of this ID
 	$select = $db->prepare('SELECT collection_path FROM files WHERE id = :id LIMIT 1');
-	$select->execute(array(':id'=>$_POST['id']));
+	$select->execute(array(':id' => $_POST['id']));
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	if ($select->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not find ID '.$_POST['id'].' in the database')));
@@ -109,8 +109,8 @@ try {
 	$link = $db->prepare('INSERT INTO labels_lookup (files_id, labels_id)
 		VALUES(:files_id, :labels_id)');
 	$link->execute([
-		':files_id'  => $_POST['id'],
-		':labels_id' => $labels_id
+		':files_id'		=> $_POST['id'],
+		':labels_id'	=> $labels_id
 	]);
 	logTagActivity('LABELS:LINK', $labels_id, $_POST['site'], $_POST['name'], $_POST['type']);
 
@@ -121,5 +121,8 @@ try {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-echo json_encode(array('status' => 'ok', 'created' => $created));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'created'	=> $created
+));
 ?>

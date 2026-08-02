@@ -25,5 +25,8 @@ $html = '<h3>Notes</h3>
 			<button id="admin-notes-save">Save</button><span id="admin-notes-info"></span>
 	';
 
-die(json_encode(array('status' => 'ok', 'html' => $html)));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html
+));
 ?>

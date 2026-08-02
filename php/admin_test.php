@@ -159,5 +159,8 @@ $html = '
 			</ul>
 ';
 
-die(json_encode(array('status' => 'ok', 'html' => $html)));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html
+));
 ?>

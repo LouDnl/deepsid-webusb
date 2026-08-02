@@ -118,5 +118,8 @@ $html =
 	'<div style="height:149px;"></div>'.
 	'<table class="root rec rec-all">'.$boxes.'</table>';
 
-echo json_encode(array('status' => 'ok', 'html' => $html));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html
+));
 ?>

@@ -84,8 +84,8 @@ try {
 				$response['load_addr'] 			= $row->load_addr;
 				$response['init_addr'] 			= $row->init_addr;
 				$response['play_addr'] 			= $row->play_addr;
-				$response['subtunes'] 			= $row->subtunes;
-				$response['start_subtune'] 		= $row->start_subtune;
+				$response['subtunes']			= $row->subtunes;
+				$response['start_subtune']		= $row->start_subtune;
 				$response['name'] 				= $row->name;
 				$response['author'] 			= $row->author;
 				$response['copyright'] 			= $row->copyright;
@@ -113,7 +113,7 @@ try {
 				$response['folder'] 		= $row_folder->collection_path;
 				$response['type'] 			= $row_folder->type;
 				$response['files'] 			= $row_folder->files;
-				//$response['user_id'] 			= $row->user_id;
+				//$response['user_id'] 		= $row->user_id;
 				$response['hash'] 			= $row_folder->hash;
 				$response['incompatible'] 	= $row_folder->incompatible;
 				$response['new'] 			= $row_folder->new;
@@ -216,9 +216,9 @@ try {
 				$response['folder'] 		= $row_folder->collection_path;
 				$response['type'] 			= $row_folder->type;
 				$response['files'] 			= $row_folder->files;
-				//$response['user_id'] 			= $row_folder->user_id;
+				//$response['user_id'] 		= $row_folder->user_id;
 				$response['hash'] 			= $row_folder->hash;
-				$response['incompatible'] 	= $row_folder->incompatible;
+				$response['incompatible']	= $row_folder->incompatible;
 				$response['new'] 			= $row_folder->new;
 				$response['flags'] 			= $row_folder->flags;
 
@@ -234,9 +234,9 @@ try {
 					$response[$i]['folder'] 		= $row_subfolder->collection_path;
 					$response[$i]['type'] 			= $row_subfolder->type;
 					$response[$i]['files'] 			= $row_subfolder->files;
-					//$response[$i]['user_id'] 			= $row_subfolder->user_id;
+					//$response[$i]['user_id'] 		= $row_subfolder->user_id;
 					$response[$i]['hash'] 			= $row_subfolder->hash;
-					$response[$i]['incompatible'] 	= $row_subfolder->incompatible;
+					$response[$i]['incompatible']	= $row_subfolder->incompatible;
 					$response[$i]['new'] 			= $row_subfolder->new;
 					$response[$i]['flags'] 			= $row_subfolder->flags;
 				}

@@ -61,8 +61,8 @@ function getLabelTypeId($id) { // @todo Same function as in 'csdb.php'
 		return null;
 
 	return [
-		'type' => strtolower($row['site']),
-		'id'   => $row['site_id']
+		'type'	=> strtolower($row['site']),
+		'id'	=> $row['site_id']
 	];
 }
 

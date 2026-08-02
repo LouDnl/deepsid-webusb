@@ -714,7 +714,7 @@ class Account {
 	private function storePassword($profile, $new_pwd) {
 		try {
 			$update = $this->database->prepare('UPDATE users SET password = :password WHERE id = :user_id LIMIT 1');
-			$update->execute(array(':password'=>md5($new_pwd),':user_id'=>$profile->id));
+			$update->execute(array(':password' => md5($new_pwd),':user_id' => $profile->id));
 			if ($update->rowCount() == 0) {
 				$this->logError('No rows found after updating the password for the user "'.$profile->user_name.'"');
 				return false;

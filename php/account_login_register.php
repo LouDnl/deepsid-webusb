@@ -22,9 +22,15 @@ if (isset($_POST['submitted'])) {
 
 	// Always login regardless of having registered first or not
 	if ($account->login()) {
-		echo json_encode(array('result' => true, 'error' => ''));
+		echo json_encode(array(
+			'result'	=> true,
+			'error'		=> ''
+		));
 	} else {
-		echo json_encode(array('result' => false, 'error' => $account->getErrorMessage()));
+		echo json_encode(array(
+			'result'	=> false,
+			'error'		=> $account->getErrorMessage()
+		));
 	}
 }
 ?>

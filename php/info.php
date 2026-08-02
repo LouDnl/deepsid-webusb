@@ -89,5 +89,8 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 	}
 }
 
-echo json_encode(array('status' => 'ok', 'info' => $info));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'info'		=> $info
+));
 ?>

@@ -44,7 +44,7 @@ if ($account->checkLogin()) {
 			' LEFT JOIN files on r.table_id = files.id AND r.type = "FILE"'.
 			' LEFT JOIN folders on r.table_id = folders.id AND r.type = "FOLDER"'.
 			' WHERE r.user_id = :userid');
-		$select->execute(array(':userid'=>$account->userID()));
+		$select->execute(array(':userid' => $account->userID()));
 		$select->setFetchMode(PDO::FETCH_OBJ);
 
 		$i = 0;

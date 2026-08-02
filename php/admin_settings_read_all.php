@@ -49,5 +49,9 @@ try {
 	$account->logActivityError(basename(__FILE__), $e->getMessage());
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
-die(json_encode(array('status' => 'ok', 'html' => $html)));
+
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html
+));
 ?>

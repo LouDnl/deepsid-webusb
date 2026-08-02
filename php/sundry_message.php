@@ -218,5 +218,10 @@ switch ($account->getAdminSetting('sundry_message')) {
 		$type = 'news';
 		break;
 }
-echo json_encode(array('status' => 'ok', 'html' => $html, 'type' => $type));
+
+echo json_encode(array(
+	'status'	=> 'ok',
+	'html'		=> $html,
+	'type'		=> $type
+));
 ?>

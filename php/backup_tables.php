@@ -18,19 +18,25 @@ $max_days = (int)$account->getAdminSetting('db_backup_retention_days');
 if ($max_days < 1) $max_days = 7;
 
 $tables = [
+    'admin_scripts',
     'admin_settings',
     'competitions',
     'composers',
     'composers_links',
     'csdb',
-    'folders_map',
-    'groups',
+    'external_links',
     'files',
     'folders',
-    'hvsc_lengths',
+    'folders_map',
+    'groups',
+    'labels_info',
+    'labels_lookup',
     'players_info',
     'players_lookup',
+    'players_pretty',
     'ratings',
+    'roles',
+    'sid_lengths',
     'sid_release_map',
     'symlists',
     'tags_info',
@@ -38,6 +44,7 @@ $tables = [
     'tracking',
     'uploads',
     'users',
+    'user_roles',
     'youtube'
 ];
 

@@ -28,10 +28,10 @@ try {
 	if ($select->rowCount()) {
 		foreach ($select as $row) {
 			array_push($symlists, array(
-				'id' =>				$row->id,
-				'fullname' =>		$row->collection_path,
-				'files' =>			$row->files,
-				'public' =>			substr($row->collection_path, 0, 1) == '$',
+				'id'		=> $row->id,
+				'fullname'	=> $row->collection_path,
+				'files'		=> $row->files,
+				'public'	=> substr($row->collection_path, 0, 1) == '$',
 			));
 		}
 	}
@@ -41,5 +41,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'symlists' => $symlists));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'symlists'	=> $symlists
+));
 ?>

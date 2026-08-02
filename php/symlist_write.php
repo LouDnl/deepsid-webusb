@@ -103,7 +103,7 @@ try {
 
 	// Now create the symlist entry (different SID name via renaming is done in a different PHP file)
 	$insert = $db->prepare('INSERT INTO symlists (folder_id, file_id, subtune) VALUES('.$folder_id.', '.$file_id.', :subtune)');
-	$insert->execute(array(':subtune'=>$_POST['subtune']));
+	$insert->execute(array(':subtune' => $_POST['subtune']));
 	if ($insert->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not create the entry in '.$symlist_folder)));
 
@@ -117,5 +117,8 @@ try {
 	die(json_encode(array('status' => 'error', 'message' => DB_ERROR)));
 }
 
-echo json_encode(array('status' => 'ok', 'name' => $symlist_folder));
+echo json_encode(array(
+	'status'	=> 'ok',
+	'name'		=> $symlist_folder
+));
 ?>
