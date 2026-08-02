@@ -217,4 +217,18 @@ function clog(string $key, $value) {
 
     header("X-DeepSID-Debug-$key: " . $json);
 }
+
+/**
+ * Log to a text file.
+ */
+function logDebug($text) {
+
+    $file = __DIR__ . '/../logs/debug.txt';
+
+    file_put_contents(
+        $file,
+        '[' . date('Y-m-d H:i:s') . '] ' . $text . PHP_EOL,
+        FILE_APPEND | LOCK_EX
+    );
+}
 ?>

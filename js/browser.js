@@ -3501,11 +3501,11 @@ Browser.prototype = {
 
 				// If there are entries then a 'GameBase64' tag is either already there, or it will be added
 				// which means that the redundant 'Game' and 'Game Prev' tags should be removed
-				if (data.count > 0 && this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") === -1) {
+				if (data.count > 0 && !this.songs[this.songPos]?.tags?.includes("tag-gamebase64")) {
 					this._replaceGameTags(thisFullname, true);
 				// If there is a 'GameBase64' tag but no games in the 'GB64' tab then something changed that
 				// removed the connection to its SID tune; remove the tag and add the 'Game' tag instead
-				} else if (!data.count && this.songs[this.songPos]?.tags.indexOf("tag-gamebase64") !== -1) {
+				} else if (data.count === 0 && this.songs[this.songPos]?.tags?.includes("tag-gamebase64")) {
 					this._replaceGameTags(thisFullname, false);
 				}
 				if (typeof callback === "function") callback.call(this);

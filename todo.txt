@@ -13,18 +13,13 @@ SHOULD BE DONE
 
 - The CSDb link updating should also work on 'SHOW' pages.
 
-- Get rid of the slow loading "Beyond DeepSID" thumbnails. Just have bullet points and a hyperlink?
-
-- Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown for
-  releases in forum threads?
-
 - Change database table name 'hvsc_lengths' to just 'lengths' instead. Remember to update a description
   in the admin scripts page too.
 
+- Add a "seconds" edit box for the new delay-next feature.
+
 - Check out this: https://github.com/Chordian/deepsid/issues/43
   Two new SID players that could be added later - reSIDfp and SIDLite.
-
-- Add a "seconds" edit box for the new delay-next feature.
 
 - New right-click context menu option for a song: Open in new browser window with hex monitor view of
   the entire player. Fills out the view of the entire window and is scrollable (no pages).
@@ -145,6 +140,11 @@ MAYBE CONSIDER THIS
 
 - In a profile page, make the small handles in group table into links and remove the corner
   external link icon. Then users can choose what handle to open in CSDb themselves.
+
+- Is it possible to find a small 5,25" floppy diskette icon instead of the 3,5" one currently shown
+  for releases in forum threads? UPDATE: I tried searching in SVG sites and Google. 99% of floppy
+  icons are 3.5", and the few that are 5,25" are either multi-color or plain ugly. I'm leaving the
+  icon as is for the time being. The most important thing is that users understand its purpose.
 
 - SID rows with several subtunes could open up a list with the subtunes below the row. The subtunes
   could be given names that are stored in the database, and they could each show song length. This

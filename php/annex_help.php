@@ -9,31 +9,53 @@
  * @used-by		main.js
  */
 
-function makeSiteLink($url, $header, $type = '') {
+require_once("class.account.php"); // Includes setup
 
-	// Ensure proper escaping
-    $esc_url    = htmlspecialchars($url,    ENT_QUOTES, 'UTF-8');
-    $esc_header = htmlspecialchars($header, ENT_QUOTES, 'UTF-8');
-    $esc_type   = htmlspecialchars($type,   ENT_QUOTES, 'UTF-8');
+function externalLinks() {
 
-	// $esc_type = !empty($esc_type) ? '[' . $esc_type . ']' : '';
+	global $db;
 
-    // Pre-encode URL for Microlink
-    $encoded_url = rawurlencode($url);
+    $select = $db->query('
+        SELECT id, name, url, type
+        FROM external_links
+        WHERE enabled = 1
+        ORDER BY sort_order, name
+    ');
 
-    return '
-        <li class="site-card">
-            <a class="site-link"
-                href="' . $esc_url . '"
-                target="_blank" rel="noopener"
-                data-url="' . $esc_url . '">
-                <img class="thumb"
-                    src="https://api.microlink.io/?url=' . $encoded_url . '&screenshot=true&meta=false&embed=screenshot.url"
-                    alt="' . $esc_header . '" loading="lazy">
-                <h3 class="site-header">' . $esc_header . '</h3>
-            </a><span class="site-type">' . $esc_type . '</span>
-        </li>';
+    $html = '';
+
+    while ($row = $select->fetch(PDO::FETCH_ASSOC)) {
+
+        $html .= '
+            <li class="site-card">
+                <a class="site-link"
+                    href="' . htmlspecialchars($row['url'], ENT_QUOTES, 'UTF-8') . '"
+                    target="_blank"
+                    rel="noopener">
+                    <img class="site-favicon"
+                        src="php/favicon.php?id=' . (int)$row['id'] . '"
+                        alt=""
+                        loading="lazy">
+                    <h3 class="site-header">'
+                        . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') .
+                    '</h3>
+                </a>';
+
+        if ($row['type'] !== '') {
+            $html .= '
+                <span class="site-type">'
+                    . htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8') .
+                '</span>';
+        }
+
+        $html .= '
+            </li>';
+    }
+
+    return $html;
 }
+
+$db = $account->getDB();
 
 $help = array(
 
@@ -790,8 +812,12 @@ $help = array(
 
     '   <h3 style="margin-bottom:20px;">Beyond DeepSID</h3>
 
-		<ul class="site-list">'
-        . makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Tribute')
+		<ul class="site-list">'.externalLinks().'</ul>
+	',
+);
+
+
+        /*. makeSiteLink('https://8bitlegends.com', '8BitLegends', 'Tribute')
         . makeSiteLink('https://arok.intro.hu', 'Arok Party', 'Event')
         // . makeSiteLink('http://www.attitude.c64.org', 'Attitude', 'Diskmag')
         . makeSiteLink('https://c64.ch', 'C64.CH', 'Info')
@@ -844,10 +870,8 @@ $help = array(
         . makeSiteLink('https://ultimatesid.dk', 'USC', 'Collection')
         // . makeSiteLink('https://vandalism.news', 'Vandalism', 'Diskmag')
         . makeSiteLink('https://vice-emu.sourceforge.io', 'VICE', 'Emulator')
-        . makeSiteLink('https://wbochar.com', 'wbochar', 'PETSCII')
-    	. '</ul>
-	',
-);
+s        . makeSiteLink('https://wbochar.com', 'wbochar', 'PETSCII')*/
+
 
 $id = isset($_GET['id']) ? $_GET['id'] : mt_rand(0, count($help) - 1);
 
@@ -859,7 +883,6 @@ else
 	echo
 	'	<h3>Select a topic:</h3>
 		<ul style="margin-bottom:16px;">'.
-			//<li><a href="18" class="topic">Beyond DeepSID</a></li>
 			'<li><a href="6" class="topic">Color strips</a></li>
 			<li><a href="12" class="topic">Digi tags</a></li>
 			<li><a href="17" class="topic">Event tags</a></li>

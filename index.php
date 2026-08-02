@@ -1996,6 +1996,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 2, 2026</h3>
+						<ul>
+							<li>External links now use favicons instead of thumbnail images.</li>
+						</ul>
+
 						<h3>August 1, 2026</h3>
 						<ul>
 							<li>Fixed the blue notification indicator for the 'CSDb' tab not working correctly.</li>

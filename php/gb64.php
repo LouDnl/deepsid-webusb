@@ -114,6 +114,7 @@ try {
 				'status'	=> 'warning',
 				'sticky'	=> $sticky,
 				'html'		=> $primary_corner.'<h3>0 entries found</h3><div style="border-top:1px solid var(--color-border-csdb);">'.$footnote.'</div>',
+				'count'		=> 0,
 				'needcsdb'	=> $primary_csdb_needed,
 				'primary'	=> $primary_back_button
 			)));
