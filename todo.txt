@@ -6,18 +6,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Any of these links adding the database? I think they had thumbnails problems before, but now that
-  I'm using favicons instead, it may not be an issue anymore. Other problems?
-
-    ('https://8bitlegends.com', '8BitLegends', 'Tribute')
-    ('http://www.attitude.c64.org', 'Attitude', 'Diskmag')
-    ('http://c64.sk', 'C64.SK', 'Info')
-    ('http://www.fairlight.to', 'Fairlight', 'Group')
-    ('https://www.forum64.de', 'Forum64.de', 'Forum')
-    ('http://recollection.c64.org', 'Recollection', 'Tribute')
-    ('http://sid.oth4.com', 'SID.OTH4.COM', '')
-    ('https://vandalism.news', 'Vandalism', 'Diskmag')
-
 - Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
 
 - Add a "seconds" edit box for the new delay-next feature.

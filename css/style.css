@@ -4489,7 +4489,7 @@ input[type=range]::-ms-track {
 
 .site-type {
 	position: relative;
-	top: -2px;
+	top: 1px;
 	font: normal 13px "Asap Condensed", sans-serif;
 	white-space: nowrap;
 	opacity: .4;

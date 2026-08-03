@@ -249,18 +249,6 @@ try {
 		}
 	}
 
-	/**
-	 * After running the script, the following CSV and SQL updating should be
-	 * accomplished as well:
-	 * 
-	 * Parse songlengths
-	 * Parse STIL
-	 * Add players
-	 * Add SIDId stuff
-	 * 
-	 * Refer to 'howto_update_hvsc.txt' for details.
-	 */
-
 } catch(PDOException $e) {
 	echo 'ERROR: '.$e->getMessage();
 }
