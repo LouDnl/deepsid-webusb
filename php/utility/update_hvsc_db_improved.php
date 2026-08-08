@@ -12,11 +12,11 @@ require_once dirname(__DIR__).'/class.account.php'; // php/class.account.php
 
 const TEST_MODE = true; // Remember to set this to FALSE for real HVSC updates
 
-const HVSC_FULL_PATH = 'C:\\Wamp\\www\\chordian\\deepsid\\music\\_High Voltage SID Collection';
+const HVSC_FULL_PATH = __DIR__.'/../../music/_High Voltage SID Collection';
 const HVSC_PATH = '_High Voltage SID Collection/';
 const HVSC_MAX_UPDATE_AGE_DAYS = 183;
-const DB_TABLE_FILES = 'files_backup';
-const DB_TABLE_FOLDERS = 'folders_backup';
+const DB_TABLE_FILES = 'files_84';
+const DB_TABLE_FOLDERS = 'folders_84';
 
 const IGNORED_COMMANDS = [
     'REPLACE', 'CREDITS', 'TITLE', 'AUTHOR', 'RELEASED', 'SONGS', 'SPEED',
@@ -73,17 +73,31 @@ function extractSidNames(string $comment): array
     return array_keys($names);
 }
 
-function ensureFolder(PDO $db, string $folder): void
+function ensureFolder(PDO $db, string $folder, int $hvscVersion): void
 {
     $folder = rtrim($folder, '/');
     $collectionPath = HVSC_PATH.$folder;
 
-    $select = $db->prepare('SELECT id FROM '.DB_TABLE_FOLDERS.' WHERE collection_path = ? LIMIT 1');
+    $select = $db->prepare(
+        'SELECT id
+         FROM '.DB_TABLE_FOLDERS.'
+         WHERE collection_path = ?
+         LIMIT 1'
+    );
     $select->execute([$collectionPath]);
 
-    if (!$select->fetchColumn()) {
-        $insert = $db->prepare('INSERT INTO '.DB_TABLE_FOLDERS.' (collection_path) VALUES (?)');
-        $insert->execute([$collectionPath]);
+    $id = $select->fetchColumn();
+    if ($id === false) {
+        $insert = $db->prepare(
+            'INSERT INTO '.DB_TABLE_FOLDERS.' (collection_path, new, type)
+             VALUES (?, ?, ?)'
+        );
+        $insert->execute([
+            $collectionPath,
+            $hvscVersion,
+            "SINGLE"
+        ]);
+
         output('    Created folder row: '.$collectionPath);
     }
 }
@@ -379,7 +393,7 @@ try {
 
             if ($sourceIsUpdate && !$destinationIsSid) {
                 output('New entries:');
-                ensureFolder($db, $destination);
+                ensureFolder($db, $destination, $hvscVersion);
 
                 foreach ($sidFiles as $sid) {
                     $expectedPath = $destination.$sid;
@@ -463,7 +477,7 @@ try {
                     );
                 }
             } elseif ($sourceIsSid && !$destinationIsSid) {
-                ensureFolder($db, $destination);
+                ensureFolder($db, $destination, $hvscVersion);
 
                 $filename = basename($source);
                 $target = $destination.$filename;

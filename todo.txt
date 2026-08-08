@@ -6,15 +6,19 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Expand upon the new HVSC update procedure in the 'hvsc_update' folder.
+- Script improve 'STIL entries' step in 'How To' HVSC update text file.
 
 - Add a "seconds" edit box for the new delay-next feature.
 
 - Collect all PHP files only containing functions and put them in a 'lib' folder (inside 'php').
 
+- Remove the tips message about stars in front of folders. That feature has been removed.
+
+- Mobile: Try to make a "long press" on a SID row, to show the context menu.
+
 - The term "Copyright" (referring to the third line) should be replaced with "Released" instead, both
   in source codes and public text. Consider even renaming the DB field in the 'Files' table. A caveat
-  is that there is a LOT of use of the word "copyright" in the souce codes!
+  is that there is a LOT of use of the word "copyright" in the souce codes! ><
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.

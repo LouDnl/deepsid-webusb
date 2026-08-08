@@ -1,0 +1,513 @@
+REVISION 5: How to build/update a MySQL database with all HVSC/SID information.
+
+Requirements
+¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Access to MySQL databases (LOCALHOST and ONLINE) through phpMyAdmin.
+  o  Access to the DeepSID files (LOCALHOST and ONLINE via FTP).
+  o  Being able to run PHP scripts from ADMIN PHP in DeepSID.
+  o  Notepad++ for its macro recording and playback feature.
+  o  Python 3 scripts ready in the 'utility/python' sub folder.
+  o  Various small tools ready in the 'utility' sub folder.
+
+
+$$\       $$$$$$\   $$$$$$\   $$$$$$\  $$\       $$\   $$\  $$$$$$\   $$$$$$\ $$$$$$$$\ 
+$$ |     $$  __$$\ $$  __$$\ $$  __$$\ $$ |      $$ |  $$ |$$  __$$\ $$  __$$\\__$$  __|
+$$ |     $$ /  $$ |$$ /  \__|$$ /  $$ |$$ |      $$ |  $$ |$$ /  $$ |$$ /  \__|  $$ |   
+$$ |     $$ |  $$ |$$ |      $$$$$$$$ |$$ |      $$$$$$$$ |$$ |  $$ |\$$$$$$\    $$ |   
+$$ |     $$ |  $$ |$$ |      $$  __$$ |$$ |      $$  __$$ |$$ |  $$ | \____$$\   $$ |   
+$$ |     $$ |  $$ |$$ |  $$\ $$ |  $$ |$$ |      $$ |  $$ |$$ |  $$ |$$\   $$ |  $$ |   
+$$$$$$$$\ $$$$$$  |\$$$$$$  |$$ |  $$ |$$$$$$$$\ $$ |  $$ | $$$$$$  |\$$$$$$  |  $$ |   
+\________|\______/  \______/ \__|  \__|\________|\__|  \__| \______/  \______/   \__|   
+
+Note that LOCALHOST means the 'http://chordian/deepsid/' URL. In my setup it was handled
+by WampServer, but it probably doesn't matter what you're using for LOCALHOST.
+
+
+LOCALHOST: Backup 
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Open phpMyAdmin for LOCALHOST.
+  2. Delete any leftover backup tables.
+  3. Truncate the 'files_import' and 'folders_import' tables.
+  4. Backup the entire DeepSID database to an SQL file.
+  5. Duplicate to 'files_backup' and 'folders_backup' tables.
+
+
+BOTH: Download
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ LOCALHOST: 
+
+  1. Download the full HVSC update.
+  2. Rename the old HVSC folder to '*_OLD' instead.
+  3. Extract and move in the new folder.
+
+  4. Copy the 'GROUPS' sub folder from '*_OLD' to the new folder.
+  5. Compress the new folder (including 'GROUPS') to a 'C64Music.zip' archive.
+
+  6. Delete the '*_OLD' folder. THIS IS USUALLY FAST BUT CAN SOMETIMES ACT UP.
+
+ ONLINE right now:
+
+  1. Delete any previous '*_OLD' folders if you forgot to delete them last time.
+
+  2. Run the FTP client.
+  3. Upload 'C64Music.zip' archive to the 'php/_update/' folder.
+  4. File Explorer: Delete the local 'C64Music.zip' file.
+
+  5. ADMIN PHP: Run 'Unzip HVSC update' script. THIS TAKES A FEW MINUTES.
+
+
+LOCALHOST: Prepare
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Update the HVSC_VERSION constant in the 'setup.php' script.
+  2. Update HVSC_VERSION in the 'browser.js' script.
+
+  3. Update the version number in the 'About' tab ('index.php').
+  4. Update the 'notable' (yellow line) link in the profile page for HVSC (composer table).
+  5. Update the top corner link in the profile page to point at the latest CSDb page (same table).
+
+
+LOCALHOST: Update database
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ Run update script:
+
+  1. Edit 'php/utility/update_hvsc_db_improved.php' in LOCALHOST.
+  2. Set the 'TEST_MODE' constant to false.
+  3. Make sure 'DB_TABLE_FILES' and 'DB_TABLE_FOLDERS' are set to 'files' and 'folders'.
+  4. Save and exit.
+
+  5. ADMIN PHP: Run 'Update database (improved)' script.
+
+  6. Look through the output for any errors.
+
+ Fixing update discrepancies:
+
+  @todo I HOPE BELOW IS NO LONGER AN ISSUE WITH THE NEW IMPROVED SCRIPT ABOVE!
+
+  A problem that can occur is when the HVSC editors haven't been careful enough when adding
+  comments in the 'Update##.hvc' file. This can lead to orphan rows in the database with all
+  empty or zero values.
+
+  1. To see if you have any of these, go to the SQL box for the 'files' table and execute:
+
+       SELECT * FROM files WHERE collection_path LIKE "%high voltage%" AND data_size = 0
+
+     This will list the problem rows.
+
+  2. Find the problem area in the 'Update##.hvs' file and determine how to rename the collection
+     path field to match the SID file correctly. (Is there e.g. a '_' character missing?)
+  3. Populate the fields of the SID row by finding the SID file in the various CSV files that
+     you have set aside so far. @todo HOPEFULLY BELOW SCRIPTS FILLS THE REMAINING FIELDS.
+  4. Repeat step 2 to 3 for the other problem rows.
+
+  5. Export the rows to a '01_Patch.sql' file.
+  6. Edit the SQL file and remove the ID column and THE DROP LINE!
+
+
+LOCALHOST: Simple players
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Go to this folder: 'utility/hvsc_update/02_players_simple'
+  2. Double-click the '_simple.bat' file. (Assuming no errors after this step.)
+
+  3. Export 'files_import' to '02_Players_Simple.sql' file in phpMyAdmin.
+
+  4. Enter the 'files' table and click 'SQL' (empty the box).
+  5. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.player = files_import.player
+
+  6. Enter the 'files_import' table and click 'Operations'.
+  7. Truncate the table.
+
+
+LOCALHOST: Multiple players
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Go to this folder: 'utility/hvsc_update/03_players_multiple'
+  2. Double-click the '_multiple.bat' file. (Assuming no errors after this step.)
+
+  3. Export 'files_import' to '03_Players_Multiple.sql' file.
+
+  4. Enter the 'files' table and click 'SQL' (empty the box).
+  5. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.player = files_import.player
+
+  6. Enter the 'files_import' table and click 'Operations'.
+  7. Truncate the table.
+
+
+LOCALHOST: Song lengths
+-----------------------
+  1. ADMIN PHP: Run 'Update lengths' script. THIS TAKE A FEW MINUTES.
+
+  2. Export 'files_import' to '04_Song_Lengths.sql' file.
+
+ 17. Enter the 'files' table and click 'SQL' (empty the box).
+ 18. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.lengths = files_import.lengths
+
+ 19. Enter the 'files_import' table and click 'Operations'.
+ 20. Truncate the table.
+
+
+LOCALHOST: SID info
+-------------------
+  1. Edit 'php/utility/update_sidinfo.php' in LOCALHOST.
+  2. Make sure the 'TEST_LIMIT' constant is set to 0.
+  4. Save and exit.
+
+  5. ADMIN PHP: Run 'Update with SIDInfo' script. THIS TAKES A FEW MINUTES.
+
+  6. Export 'files_import' to '05_SIDInfo.sql' file.
+
+  7. Enter the 'files' table and click 'SQL' (empty the box).
+  8. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.type = files_import.type,
+           files.version = files_import.version,
+           files.player_type = files_import.player_type,
+           files.player_compat = files_import.player_compat,
+           files.clock_speed = files_import.clock_speed,
+           files.sid_model = files_import.sid_model,
+           files.data_offset = files_import.data_offset,
+           files.data_size = files_import.data_size,
+           files.load_addr = files_import.load_addr,
+           files.init_addr = files_import.init_addr,
+           files.play_addr = files_import.play_addr,
+           files.subtunes = files_import.subtunes,
+           files.start_subtune = files_import.start_subtune,
+           files.name = files_import.name,
+           files.author = files_import.author,
+           files.copyright = files_import.copyright,
+           files.hash = files_import.hash
+
+  9. Enter the 'files_import' table and click 'Operations'.
+ 10. Truncate the table.
+
+
+LOCALHOST: STIL entries
+-----------------------
+@todo MAKE IT AUTOMATICALLY FILL THE 'FILES_IMPORT' TABLE LIKE FOR PLAYERS.
+
+  1. Copy the latest STIL.txt file from 'HVSC/DOCUMENTS' to the folder with the 'stil.py' script.
+  2. Edit STIL.txt in Notepad++
+  3. Choose menu 'Encoding' > 'Convert to UTF8'
+  4. Save and exit.
+
+  5. Open a command box there and run: python stil.py
+
+  6. Enter a truncated 'files_import' table again and click 'Import'.
+  7. Click 'Browse' and select the CSV file.
+  8. Change 'Format' to 'CSV'.
+  9. Paste in 'Column names' edit box: collection_path,stil
+ 10. Click 'Go'.
+
+ 11. Export 'files_import' to '06_STIL.sql' file.
+
+ 12. Enter the 'files' table and click 'SQL' (empty the box).
+ 13. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.stil = files_import.stil
+
+ 14. Enter the 'files_import' table and click 'Operations'.
+ 15. Truncate the table.
+
+
+LOCALHOST: CSDb entries
+-----------------------
+  Always postponed - see separate 'howto' file.
+
+
+LOCALHOST: Folders
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  @todo I HOPE BELOW IS NO LONGER AN ISSUE WITH THE NEW IMPROVED UPDATE SCRIPT!
+
+  HVSC allows for folders to be renamed which is something you should check up on. For example,
+  in update #74, 'Deazipan' was renamed to 'Dex-D' instead. If you spot this again, do this:
+
+  1. Go to the 'composers' table and edit the 'collection_path' field to use the new name.
+  2. Enter the folder with composer images and rename the avatar file there.
+
+
+LOCALHOST: Number of files
+--------------------------
+  1. ADMIN PHP: Run 'Count all files' script.
+
+
+LOCALHOST: Lengths for 'Top 10'
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Truncate the 'sid_lengths' table.
+  2. ADMIN PHP: Run 'Update top 10 lengths' script. THIS TAKES A FEW MINUTES.
+
+  3. Export 'sid_lengths' to '07_Lengths_Top_10.sql' file.
+
+
+LOCALHOST: Special patching
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update special patching' script.
+
+  Ignore any errors produced in LOCALHOST. It should work properly in ONLINE later.
+
+
+LOCALHOST: File counts for groups
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update groups' script.
+
+
+LOCALHOST: Update activity
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update activity' script. THIS TAKES A FEW MINUTES.
+
+
+LOCALHOST: Check missing info
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Check missing database info' script.
+  2. Fix whatever if finds to be wrong.
+
+
+LOCALHOST: Finalizing
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
+  2. If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
+  3. In the admin 'SET' section, set 'sundry_message' to 'hvsc' setting.
+  4. Write about the new update in the 'Changes' tab.
+
+
+ $$$$$$\  $$\   $$\ $$\       $$$$$$\ $$\   $$\ $$$$$$$$\ 
+$$  __$$\ $$$\  $$ |$$ |      \_$$  _|$$$\  $$ |$$  _____|
+$$ /  $$ |$$$$\ $$ |$$ |        $$ |  $$$$\ $$ |$$ |      
+$$ |  $$ |$$ $$\$$ |$$ |        $$ |  $$ $$\$$ |$$$$$\    
+$$ |  $$ |$$ \$$$$ |$$ |        $$ |  $$ \$$$$ |$$  __|   
+$$ |  $$ |$$ |\$$$ |$$ |        $$ |  $$ |\$$$ |$$ |      
+ $$$$$$  |$$ | \$$ |$$$$$$$$\ $$$$$$\ $$ | \$$ |$$$$$$$$\ 
+ \______/ \__|  \__|\________|\______|\__|  \__|\________|
+
+
+ONLINE: Backup 
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Open phpMyAdmin for ONLINE.
+  2. Delete any leftover backup tables.
+  3. Truncate the 'files_import' and 'folders_import' tables.
+  4. Backup the entire DeepSID database to an SQL file.
+  5. Duplicate to 'files_backup' and 'folders_backup' tables.
+
+
+ONLINE: Prepare
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN SET: Put DeepSID in maintenance mode now.
+
+  2. Update the HVSC_VERSION constant in the 'setup.php' script.
+  3. Update HVSC_VERSION in the 'browser.js' script.
+
+  4. Update the version number in the 'About' tab ('index.php').
+  5. Update the 'notable' (yellow line) link in the profile page for HVSC (composer table).
+  6. Update the top corner link in the profile page to point at the latest CSDb page (same table).
+
+
+ONLINE: Handling folders
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Run the FTP client.
+  2. Move the old HVSC folder in 'music' to the root, renamed as '*_OLD' instead.
+  3. Move the new HVSC folder from 'php/_update' to 'music' folder.
+
+  4. Later delete the '*_OLD' folder in root. THIS TAKES QUITE A WHILE AND CAN BE POSTPONED.
+
+
+ONLINE: Update database
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+ Run update script:
+
+  1. Edit 'php/utility/update_hvsc_db_improved.php' in ONLINE.
+  2. Set the 'TEST_MODE' constant to false.
+  3. Make sure 'DB_TABLE_FILES' and 'DB_TABLE_FOLDERS' are set to 'files' and 'folders'.
+  4. Save and exit.
+
+  5. ADMIN PHP: Run 'Update database (improved)' script.
+
+  6. Look through the output for any errors.
+
+ Fixing update discrepancies:
+
+  THIS CAN BE SKIPPED IF THIS WAS NOT A PROBLEM IN LOCALHOST.
+
+  1. Import the '01_Patch.sql' file directly into 'files' table.
+  2. Find and delete the old problem rows here too.
+
+
+ONLINE: Simple players
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Import '02_Players_Simple.sql' file into 'files_import' table.
+
+  2. Enter the 'files' table and click 'SQL' (empty the box).
+  3. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.player = files_import.player
+
+  4. Enter the 'files_import' table and click 'Operations'.
+  5. Truncate the table.
+
+
+ONLINE: Multiple players
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Import '03_Players_Multiple.sql' file into 'files_import' table.
+
+  2. Enter the 'files' table and click 'SQL' (empty the box).
+  3. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.player = files_import.player
+
+  4. Enter the 'files_import' table and click 'Operations'.
+  5. Truncate the table.
+
+
+ONLINE: Song lengths
+--------------------
+  1. Import '04_Song_Lengths.sql' file into 'files_import' table.
+
+  2. Enter the 'files' table and click 'SQL' (empty the box).
+  3. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.lengths = files_import.lengths
+
+  4. Enter the 'files_import' table and click 'Operations'.
+  5. Truncate the table.
+
+
+ONLINE: SID info
+----------------
+  1. Import '05_SIDInfo.sql' file into 'files_import' table.
+
+  2. Enter the 'files' table and click 'SQL' (empty the box).
+  3. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.type = files_import.type,
+           files.version = files_import.version,
+           files.player_type = files_import.player_type,
+           files.player_compat = files_import.player_compat,
+           files.clock_speed = files_import.clock_speed,
+           files.sid_model = files_import.sid_model,
+           files.data_offset = files_import.data_offset,
+           files.data_size = files_import.data_size,
+           files.load_addr = files_import.load_addr,
+           files.init_addr = files_import.init_addr,
+           files.play_addr = files_import.play_addr,
+           files.subtunes = files_import.subtunes,
+           files.start_subtune = files_import.start_subtune,
+           files.name = files_import.name,
+           files.author = files_import.author,
+           files.copyright = files_import.copyright,
+           files.hash = files_import.hash
+
+  4. Enter the 'files_import' table and click 'Operations'.
+  5. Truncate the table.
+
+
+ONLINE: STIL entries
+--------------------
+  1. Import '06_STIL.sql' file into 'files_import' table.
+
+  2. Enter the 'files' table and click 'SQL' (empty the box).
+  3. Run the following:
+
+       UPDATE files
+       INNER JOIN files_import on files_import.collection_path = files.collection_path
+       SET files.stil = files_import.stil
+
+  4. Enter the 'files_import' table and click 'Operations'.
+  5. Truncate the table.
+
+
+ONLINE: CSDb entries
+--------------------
+  Always postponed - see separate 'howto' file.
+
+
+ONLINE: Folders
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  @todo I HOPE BELOW IS NO LONGER AN ISSUE WITH THE NEW IMPROVED UPDATE SCRIPT!
+
+  THIS CAN BE SKIPPED IF THIS WAS NOT A PROBLEM IN LOCALHOST.
+
+  HVSC allows for folders to be renamed which is something you should check up on. For example,
+  in update #74, 'Deazipan' was renamed to 'Dex-D' instead. If you spot this again, do this:
+
+  1. Go to the 'composers' table and edit the 'collection_path' field to use the new name.
+  2. Enter the folder with composer images and rename the avatar file there.
+
+
+ONLINE: Number of files
+-----------------------
+  1. ADMIN PHP: Run 'Count all files' script.
+
+
+ONLINE: Lengths for 'Top 10'
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Truncate the ONLINE 'sid_lengths' table.
+  2. Import '07_Lengths_Top_10.sql' file directly into 'sid_lengths' table.
+
+
+ONLINE: Special patching
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update special patching' script.
+
+  To test that things went well, here are some links you can check out:
+
+  https://deepsid.chordian.net/?file=/DEMOS/G-L/Kinetix_Blasting_Power_Mix.sid (player)
+  https://deepsid.chordian.net/?file=/DEMOS/S-Z/Wize_Mixes.sid (player)
+  https://deepsid.chordian.net/?file=/MUSICIANS/N/Nebula&here=1&search=mixer&type=player (8 rows found)
+
+  Special for update #86: Check that the following SID files does not have a FAME player detection.
+  It should have an empty (unidentified) field: High Voltage SID Collection/GAMES/M-R/River_Chase.sid
+
+
+ONLINE: File counts for groups
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update groups' script.
+
+
+ONLINE: Update activity
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Update activity' script. THIS TAKES A FEW MINUTES.
+
+
+ONLINE: Check missing info
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. ADMIN PHP: Run 'Check missing database info' script.
+  2. Fix whatever if finds to be wrong.
+
+
+ONLINE: Finalizing
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  1. Check new folders for setting the 'focus' column in 'composers' to PRO, SCENER or BOTH.
+  2. If you set a 'focus' column to PRO or BOTH, also update the 'affiliation' column in that row.
+  3. ADMIN SET: Set 'sundry_message' to 'hvsc' setting.
+  4. Write about the new update in the 'Changes' tab.
+
+  5. ADMIN SET: Clear maintenance mode for DEEPSID.
+
+
+ONLINE: EXTRA FOR HVSC UPDATE #86
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+  o  Search player 'future' and make sure all Future Composer names look good.
+  o  Search player 'compotech' and make sure 'Compotech-X v2.4' is there.
+  o  Search player 'Tjelta' and make sure 'Geir_Tjelta/Comptech-X' is NOT there.
+
+--------------------------------

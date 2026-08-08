@@ -88,6 +88,32 @@ $count = array(
 	'user'		=> 0,
 );
 
+function getBotName(string $user_agent, string $parser_name): string {
+
+	$bots = array(
+		'meta-externalagent'	=> 'Meta External Agent',
+		'meta-externalfetcher'	=> 'Meta External Fetcher',
+		'meta-webindexer'		=> 'Meta Web Indexer',
+		'facebookexternalhit'	=> 'Facebook',
+		'googlebot'				=> 'Googlebot',
+		'bingbot'				=> 'Bingbot',
+		'applebot'				=> 'Applebot',
+		'twitterbot'			=> 'Twitterbot',
+		'mediatoolkitbot'		=> 'MediaToolkitBot',
+		'python-'				=> 'Python',
+	);
+
+	foreach ($bots as $needle => $name) {
+		if (stripos($user_agent, $needle) !== false)
+			return $name;
+	}
+
+	if ($parser_name !== '' && strtolower($parser_name) !== 'unknown')
+		return $parser_name;
+
+	return 'Bot';
+}
+
 if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 
 	while (($line = fgetcsv($handle)) !== false) {
@@ -137,6 +163,8 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 			stripos('x'.$user_agent, 'twitterbot') ||
 			stripos('x'.$user_agent, 'facebookexternalhit') ||
 			stripos('x'.$user_agent, 'meta-externalagent') ||
+			stripos('x'.$user_agent, 'meta-externalfetcher') ||
+			stripos('x'.$user_agent, 'meta-webindexer') ||
 			stripos('x'.$user_agent, 'mediatoolkitbot')
 		) {
 			$type = ' bot';
@@ -200,13 +228,26 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 			? $safe_parser_name
 			: $safe_user_agent;
 
+		$bot_name = '';
+
+		if (trim($type) === 'bot') {
+			$bot_name = htmlspecialchars(
+				getBotName($user_agent, $parser->fullname),
+				ENT_QUOTES | ENT_SUBSTITUTE,
+				'UTF-8'
+			);
+		}
+
+		if ($user_name !== '')
+			$text = '<b>'.$safe_user_name.'</b> ('.$safe_ip.')';
+		else if ($bot_name !== '')
+			$text = $bot_name.' ('.$safe_ip.')';
+		else
+			$text = $safe_ip;
+
 		$box = '
 			<div class="tracking'.$type.'" title="Visitor ID: '.$safe_visitor_id.'">
-				'.(
-					$user_name !== ''
-						? '<b>'.$safe_user_name.'</b> ('.$safe_ip.')'
-						: $safe_ip
-				).'<br />
+				'.$text.'<br />
 				'.date('H:i', $created).' (
 					'.(
 						$duration > 2
