@@ -1,12 +1,10 @@
-REVISION 5: How to build/update a MySQL database with all HVSC/SID information.
+REVISION 6: How to build/update a MySQL database with all HVSC/SID information.
 
 Requirements
 ¯¯¯¯¯¯¯¯¯¯¯¯
   o  Access to MySQL databases (LOCALHOST and ONLINE) through phpMyAdmin.
   o  Access to the DeepSID files (LOCALHOST and ONLINE via FTP).
   o  Being able to run PHP scripts from ADMIN PHP in DeepSID.
-  o  Notepad++ for its macro recording and playback feature.
-  o  Python 3 scripts ready in the 'utility/python' sub folder.
   o  Various small tools ready in the 'utility' sub folder.
 
 
@@ -20,7 +18,7 @@ $$$$$$$$\ $$$$$$  |\$$$$$$  |$$ |  $$ |$$$$$$$$\ $$ |  $$ | $$$$$$  |\$$$$$$  | 
 \________|\______/  \______/ \__|  \__|\________|\__|  \__| \______/  \______/   \__|   
 
 Note that LOCALHOST means the 'http://chordian/deepsid/' URL. In my setup it was handled
-by WampServer, but it probably doesn't matter what you're using for LOCALHOST.
+by WampServer, but it doesn't really matter what you're using for LOCALHOST.
 
 
 LOCALHOST: Backup 
@@ -43,7 +41,7 @@ BOTH: Download
   4. Copy the 'GROUPS' sub folder from '*_OLD' to the new folder.
   5. Compress the new folder (including 'GROUPS') to a 'C64Music.zip' archive.
 
-  6. Delete the '*_OLD' folder. THIS IS USUALLY FAST BUT CAN SOMETIMES ACT UP.
+  6. Delete the '*_OLD' folder.
 
  ONLINE right now:
 
@@ -58,7 +56,7 @@ BOTH: Download
 
 LOCALHOST: Prepare
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-  1. Update the HVSC_VERSION constant in the 'setup.php' script.
+  1. Update HVSC_VERSION in the 'setup.php' script.
   2. Update HVSC_VERSION in the 'browser.js' script.
 
   3. Update the version number in the 'About' tab ('index.php').
@@ -96,11 +94,11 @@ LOCALHOST: Update database
   2. Find the problem area in the 'Update##.hvs' file and determine how to rename the collection
      path field to match the SID file correctly. (Is there e.g. a '_' character missing?)
   3. Populate the fields of the SID row by finding the SID file in the various CSV files that
-     you have set aside so far. @todo HOPEFULLY BELOW SCRIPTS FILLS THE REMAINING FIELDS.
+     you have set aside so far. @todo BELOW SCRIPTS SHOULD FILL THE REMAINING FIELDS.
   4. Repeat step 2 to 3 for the other problem rows.
 
   5. Export the rows to a '01_Patch.sql' file.
-  6. Edit the SQL file and remove the ID column and THE DROP LINE!
+  6. Edit the SQL file; remove the ID column and THE DROP LINE!
 
 
 LOCALHOST: Simple players
@@ -145,15 +143,15 @@ LOCALHOST: Song lengths
 
   2. Export 'files_import' to '04_Song_Lengths.sql' file.
 
- 17. Enter the 'files' table and click 'SQL' (empty the box).
- 18. Run the following:
+  3. Enter the 'files' table and click 'SQL' (empty the box).
+  4. Run the following:
 
        UPDATE files
        INNER JOIN files_import on files_import.collection_path = files.collection_path
        SET files.lengths = files_import.lengths
 
- 19. Enter the 'files_import' table and click 'Operations'.
- 20. Truncate the table.
+  5. Enter the 'files_import' table and click 'Operations'.
+  6. Truncate the table.
 
 
 LOCALHOST: SID info
@@ -195,32 +193,19 @@ LOCALHOST: SID info
 
 LOCALHOST: STIL entries
 -----------------------
-@todo MAKE IT AUTOMATICALLY FILL THE 'FILES_IMPORT' TABLE LIKE FOR PLAYERS.
+  1. ADMIN PHP: Run 'Update STIL' script.
 
-  1. Copy the latest STIL.txt file from 'HVSC/DOCUMENTS' to the folder with the 'stil.py' script.
-  2. Edit STIL.txt in Notepad++
-  3. Choose menu 'Encoding' > 'Convert to UTF8'
-  4. Save and exit.
+  2. Export 'files_import' to '06_STIL.sql' file.
 
-  5. Open a command box there and run: python stil.py
-
-  6. Enter a truncated 'files_import' table again and click 'Import'.
-  7. Click 'Browse' and select the CSV file.
-  8. Change 'Format' to 'CSV'.
-  9. Paste in 'Column names' edit box: collection_path,stil
- 10. Click 'Go'.
-
- 11. Export 'files_import' to '06_STIL.sql' file.
-
- 12. Enter the 'files' table and click 'SQL' (empty the box).
- 13. Run the following:
+  3. Enter the 'files' table and click 'SQL' (empty the box).
+  4. Run the following:
 
        UPDATE files
        INNER JOIN files_import on files_import.collection_path = files.collection_path
        SET files.stil = files_import.stil
 
- 14. Enter the 'files_import' table and click 'Operations'.
- 15. Truncate the table.
+  5. Enter the 'files_import' table and click 'Operations'.
+  6. Truncate the table.
 
 
 LOCALHOST: CSDb entries
@@ -306,7 +291,7 @@ ONLINE: Prepare
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
   1. ADMIN SET: Put DeepSID in maintenance mode now.
 
-  2. Update the HVSC_VERSION constant in the 'setup.php' script.
+  2. Update HVSC_VERSION in the 'setup.php' script.
   3. Update HVSC_VERSION in the 'browser.js' script.
 
   4. Update the version number in the 'About' tab ('index.php').

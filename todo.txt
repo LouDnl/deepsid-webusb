@@ -6,8 +6,6 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Script improve 'STIL entries' step in 'How To' HVSC update text file.
-
 - Add a "seconds" edit box for the new delay-next feature.
 
 - Collect all PHP files only containing functions and put them in a 'lib' folder (inside 'php').
