@@ -59,8 +59,8 @@ try {
 			$filename = '/'.str_replace('.\\\\', '', $line[0]);
 			$title = $line[1];
 			$author = $line[2];
-			$copyright = $line[3];
-			echo '<tr><td>'.$filename.'</td><td>'.$title.'</td><td>'.$author.'</td><td>'.$copyright.'</td>';
+			$released = $line[3];
+			echo '<tr><td>'.$filename.'</td><td>'.$title.'</td><td>'.$author.'</td><td>'.$released.'</td>';
 
 			// The 'filename' and 'author' fields should be enough in most cases
 			$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'"');
@@ -77,19 +77,19 @@ try {
 				if ($rows_found == 1)
 					echo '<td style="color:#00a;">Found using name';
 				else if (!$rows_found) {
-					// Entire title could have changed, try 'author' and 'copyright' instead (risky)
-					$select = $db->query('SELECT id FROM files WHERE author = "'.$author.'" AND copyright = "'.$copyright.'"');
+					// Entire title could have changed, try 'author' and 'released' instead (risky)
+					$select = $db->query('SELECT id FROM files WHERE author = "'.$author.'" AND released = "'.$released.'"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$rows_found = $select->rowCount();
 					if ($rows_found == 1)
 						echo '<td style="color:#00a;">Found using author (DOUBLE-CHECK)';
 					else if (!$rows_found) {
-						// Author could have changed, try 'filename' and 'copyright' instead
-						$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND copyright = "'.$copyright.'"');
+						// Author could have changed, try 'filename' and 'released' instead
+						$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND released = "'.$released.'"');
 						$select->setFetchMode(PDO::FETCH_OBJ);
 						$rows_found = $select->rowCount();
 						if ($rows_found == 1)
-							echo '<td style="color:#00a;">Found using copyright';
+							echo '<td style="color:#00a;">Found using released';
 						else if (!$rows_found)
 							echo '<td style="color:#a00;"><b>Found nothing!</b>';
 						else
@@ -100,21 +100,21 @@ try {
 				} else
 					echo '<td style="color:#a00;"><b>Found too many!</b>';
 			} else {
-				// Too many; add 'copyright' as a third option too
-				$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+				// Too many; add 'released' as a third option too
+				$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND author = "'.$author.'" AND released = "'.$released.'"');
 				$select->setFetchMode(PDO::FETCH_OBJ);
 				$rows_found = $select->rowCount();
 				if ($rows_found == 1)
-					echo '<td style="color:#00a;">Added copyright too';
+					echo '<td style="color:#00a;">Added released too';
 				else if (!$rows_found)
 					echo '<td style="color:#a00;"><b>Found nothing!</b>';
 				else {
 					// Still too many; add 'title' too then
-					$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND copyright = "'.$copyright.'"');
+					$select = $db->query('SELECT id FROM files WHERE collection_path LIKE "_High Voltage SID Collection%" AND collection_path LIKE "%'.$filename.'" AND name = "'.$title.'" AND author = "'.$author.'" AND released = "'.$released.'"');
 					$select->setFetchMode(PDO::FETCH_OBJ);
 					$rows_found = $select->rowCount();
 					if ($rows_found == 1)
-						echo '<td style="color:#00a;">Added both copyright and title';
+						echo '<td style="color:#00a;">Added both released and title';
 					else if (!$rows_found)
 						echo '<td style="color:#a00;"><b>Found nothing!</b>';
 					else

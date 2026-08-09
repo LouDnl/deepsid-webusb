@@ -1278,6 +1278,13 @@ small.u2 { margin-left: 2px; }
 		border-color: var(--color-text-dim);
 	}
 
+#topic-settings #delay-duration {
+	position: relative;
+	top: -2px;
+	left: -14px;
+	width: 51px;
+}
+
 #userform button,
 #logout {
 	position: relative;
@@ -2219,7 +2226,7 @@ input[type=range]::-ms-track {
 	color: var(--color-text-minor);
 }
 
-/* ---- Info Box (Name, Author, Copyright) ---------------------------------- */
+/* ---- Info Box (Name, Author, Released) ---------------------------------- */
 
 #info {
 	position: relative;

@@ -99,6 +99,7 @@ var main = {
 	recommended:				null,		// The AJAX object for clicking the 'RECOMMENDED' link in top
 	registering:				false,		// TRUE = The user is registering now
 	showTags:					false,		// TRUE = Tags will be shown
+	delayDuration:				1500,		// Number of milliseconds for delaying auto-play of next tune
 
 	sundryBoxShow:				true,		// TRUE = The sundry box is in its expanded state
 	sundryHeight:				0,			// The current height of the sundry box
@@ -354,7 +355,7 @@ var main = {
 	/**
 	 * Allow numeric input only (0-9 and dots) for edit boxes.
 	 * 
-	 * Add 'onkeypress="NumericInput(event)"' in '<input type="text">' lines.
+	 * Add 'onkeypress="main.numericInput(event)"' in '<input type="text">' lines.
 	 * 
 	 * @link https://stackoverflow.com/a/469419/2242348
 	 * 
@@ -1393,7 +1394,7 @@ main.bindEvents = function() {
 					});
 
 					$.each(data.files, function(i, file) {
-						var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
+						var year = isNaN(file.released.substr(0, 4)) ? "unknown year" : file.released.substr(0, 4);
 						files +=
 							'<tr>'+
 								'<td class="sid temp unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
@@ -1419,7 +1420,7 @@ main.bindEvents = function() {
 							address:		file.loadaddr,
 							init:			file.initaddr,
 							play:			file.playaddr,
-							copyright:		file.copyright,
+							released:		file.released,
 							stil:			file.stil,
 							rating:			file.rating,
 							hvsc:			"",
@@ -2614,7 +2615,7 @@ main.bindDexterCSDbEvents = function() {
 			browser.getCSDb(
 				browser.csdbArgs['type'],
 				browser.csdbArgs['id'],
-				browser.csdbArgs['copyright'],
+				browser.csdbArgs['released'],
 				true,
 				browser.csdbArgs['noprimary']
 			 );
@@ -3054,7 +3055,7 @@ main.bindKeyboardEvents = function() {
 							$("#edit-file-name-input").val(name.split("/").slice(-1)[0]);
 							$("#edit-file-player-input").val(browser.songs[browser.songPos].playerraw);
 							$("#edit-file-author-input").val(playerInfo.songAuthor);
-							$("#edit-file-copyright-input").val(playerInfo.songReleased);
+							$("#edit-file-released-input").val(playerInfo.songReleased);
 
 							// Show dialog box for editing the file (only the year for now)
 							main.customDialog({
@@ -3069,7 +3070,7 @@ main.bindKeyboardEvents = function() {
 									name:		$("#edit-file-name-input").val(),
 									player:		$("#edit-file-player-input").val(),
 									author:		$("#edit-file-author-input").val(),
-									copyright:	$("#edit-file-copyright-input").val(),
+									released:	$("#edit-file-released-input").val(),
 								}, function(data) {
 									browser.validateData(data, function() {
 										main.refreshFolder();
@@ -3581,6 +3582,23 @@ main.bindSettingsEvents = function() {
 	});
 
 	/**
+	 * Leaving or pressing ENTER in the edit box for milliseconds.
+	 */
+	$("#delay-duration")
+		.on("blur", function(event) {
+			main.delayDuration = $("#delay-duration").val();
+			$.post("php/settings.php", { delayduration: main.delayDuration }, function(data) {
+				browser.validateData(data);
+			});
+		})
+		.on("keyup", function(event) {
+			if (event.key === "Enter") {
+				event.stopPropagation();
+				$(this).blur();
+			}
+		});
+
+	/**
 	 * Clicking an ON/OFF toggle button.
 	 * 
 	 * @param {*} event 
@@ -4083,6 +4101,9 @@ $(function() { // DOM ready
 				main.setUserToggle("skip-bad",			data.settings.skipbad);
 				main.setUserToggle("skip-long",			data.settings.skiplong);
 				main.setUserToggle("skip-short",		data.settings.skipshort);
+
+				main.delayDuration = data.settings.delayduration;
+				$("#delay-duration").val(main.delayDuration);
 			});
 		});
 	}.bind(this));

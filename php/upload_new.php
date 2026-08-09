@@ -76,11 +76,11 @@ try {
 
 	$byte = array_values(unpack('C*', $file));
 
-	$name = $author = $copyright = '';
+	$name = $author = $released = '';
 	for($pos = 0x16; $pos <= 0x35; $pos++) {
 		$name .= $file[$pos] != "\u{0000}" ? mb_convert_encoding($file[$pos], 'UTF-8', 'ASCII') : '';
 		$author .= $file[$pos + 0x20] != "\u{0000}" ? mb_convert_encoding($file[$pos + 0x20], 'UTF-8', 'ASCII') : '';
-		$copyright .= $file[$pos + 0x40] != "\u{0000}" ? mb_convert_encoding($file[$pos + 0x40], 'UTF-8', 'ASCII') : '';
+		$released .= $file[$pos + 0x40] != "\u{0000}" ? mb_convert_encoding($file[$pos + 0x40], 'UTF-8', 'ASCII') : '';
 	}
 
 	$subtunes = $byte[0xE] * 256 + $byte[0xF];
@@ -138,7 +138,7 @@ try {
 		'startsubtune'	=> $byte[0x10] * 256 + $byte[0x11],
 		'name'			=> $name,
 		'author'		=> $author,
-		'copyright'		=> $copyright,
+		'released'		=> $released,
 	);
 
 } catch(PDOException $e) {

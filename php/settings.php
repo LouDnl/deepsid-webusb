@@ -2,16 +2,17 @@
 /**
  * DeepSID
  *
- * Read and optionally write toggle settings to the user's account.
+ * Read and optionally write settings to the user's account.
  * 
- * If a toggle setting is not specified, the script just returns the current
- * state of the toggle settings for the logged in user.
+ * If a setting is not specified, the script just returns the current state of
+ * the settings for the logged in user.
  * 
- * Toggle settings that can be specified for saving:
+ * Settings that can be specified for saving:
  * 
  * @uses		$_POST['firstsubtune']		0 or 1
  * @uses		$_POST['primaryrelease']	0 or 1
  * @uses		$_POST['delaynext']			0 or 1
+ * @uses		$_POST['delayduration']		number of milliseconds
  * @uses		$_POST['skiptune']			0 or 1
  * @uses		$_POST['marktune']			0 or 1
  * @uses		$_POST['skipbad']			0 or 1
@@ -30,6 +31,7 @@ $first_time = array(
 	'firstsubtune'		=> 0,
 	'primaryrelease'	=> 0,
 	'delaynext'			=> 0,
+	'delayduration'		=> 1500,
 	'skiptune'			=> 1,
 	'marktune'			=> 0,
 	'skipbad'			=> 0,
@@ -51,12 +53,22 @@ try {
 	$select->setFetchMode(PDO::FETCH_OBJ);
 	$settings = unserialize($select->fetch()->flags);
 
-	if (!$settings) $settings = $first_time;
+	// If not defined yet for the user
+	if (!$settings['firstsubtune'])			$settings['firstsubtune']		= $first_time['firstsubtune'];
+	if (!$settings['primaryrelease'])		$settings['primaryrelease']		= $first_time['primaryrelease'];
+	if (!$settings['delaynext'])			$settings['delaynext']			= $first_time['delaynext'];
+	if (!$settings['delayduration'])		$settings['delayduration']		= $first_time['delayduration'];
+	if (!$settings['skiptune'])				$settings['skiptune']			= $first_time['skiptune'];
+	if (!$settings['marktune'])				$settings['marktune']			= $first_time['marktune'];
+	if (!$settings['skipbad'])				$settings['skipbad']			= $first_time['skipbad'];
+	if (!$settings['skiplong'])				$settings['skiplong']			= $first_time['skiplong'];
+	if (!$settings['skipshort'])			$settings['skipshort']			= $first_time['skipshort'];
 
 	// Adjust settings
 	if (isset($_POST['firstsubtune']))		$settings['firstsubtune']		= (int)$_POST['firstsubtune'];
 	if (isset($_POST['primaryrelease']))	$settings['primaryrelease']		= (int)$_POST['primaryrelease'];
 	if (isset($_POST['delaynext']))			$settings['delaynext']			= (int)$_POST['delaynext'];
+	if (isset($_POST['delayduration']))		$settings['delayduration']		= (int)$_POST['delayduration'];
 	if (isset($_POST['skiptune']))			$settings['skiptune']			= (int)$_POST['skiptune'];
 	if (isset($_POST['marktune']))			$settings['marktune']			= (int)$_POST['marktune'];
 	if (isset($_POST['skipbad']))			$settings['skipbad']			= (int)$_POST['skipbad'];

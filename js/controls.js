@@ -591,7 +591,7 @@ Controls.prototype = {
 	 * Update the contents of the top info box, including the blue memory bar. This also
 	 * includes the toggle flags in the top left corner.
 	 * 
-	 * HVSC: Name, author and copyright lines.
+	 * HVSC: Name, author and released lines.
 	 * CGSC: A colorful PETSCII box using a C64 font.
 	 */
 	updateInfo: function() {

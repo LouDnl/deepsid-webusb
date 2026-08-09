@@ -38,7 +38,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 	$info['startsubtune']	= 1;
 	$info['name']			= 'N/A'; // Replaced by a JS function
 	$info['author']			= '';
-	$info['copyright']		= '';
+	$info['released']		= '';
 	$info['stil']			= $stil;
 
 } else {
@@ -75,7 +75,7 @@ if (substr($_GET['fullname'], -4) == '.mus') {
 			$info['startsubtune']	= $row->start_subtune;	// 1
 			$info['name']			= $row->name;			// Alloyrun
 			$info['author']			= $row->author;			// Jeroen Tel
-			$info['copyright']		= $row->copyright;		// 1988 Starlight
+			$info['released']		= $row->released;		// 1988 Starlight
 			$info['hash']			= $row->hash;			// 02df65150cbc4fa8fabf563b26c8cac4
 			$info['stil']			= $row->stil;			// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
 		}

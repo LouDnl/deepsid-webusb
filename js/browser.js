@@ -172,7 +172,7 @@ Browser.prototype = {
 		$("#topic-profile").on("click", "#ct-years .ct-horizontal", function(event) {
 			var year = event.currentTarget.innerHTML;
 			year = year.substr(0, 1) == "8" || year.substr(0, 1) == "9" ? "19"+year : "20"+year;
-			$("#dropdown-search").val("copyright");
+			$("#dropdown-search").val("released");
 			$("#search-box").val(year).trigger("keyup");
 			$("#search-here").prop("checked", true);
 			$("#search-button").trigger("click");
@@ -867,7 +867,6 @@ Browser.prototype = {
 				if ($("#loop").hasClass("button-off")) {
 					if (delayNextTune)
 						$("#stop").trigger("mouseup").trigger("click");
-
 					setTimeout(() => {
 						// Play the next subtune, or if no more subtunes, the next tune in the list
 						$("#faster").trigger("mouseup"); // Easy there cowboy
@@ -881,7 +880,7 @@ Browser.prototype = {
 							// At the end of everything
 							$("#stop").trigger("mouseup").trigger("click");
 						}
-					}, delayNextTune ? 1500 : 0);
+					}, delayNextTune ? main.delayDuration : 0);
 				}
 			}.bind(this));
 		}
@@ -1295,9 +1294,9 @@ Browser.prototype = {
 						return obj1.uploaded > obj2.uploaded ? 1 : -1;
 					});
 				} else {
-					// Sort songs according to the 'copyright' string (the year in start is used)
+					// Sort songs according to the 'released' string (the year in start is used)
 					this.songs.sort(function(obj1, obj2) {
-						return obj1.copyright > obj2.copyright ? 1 : -1;
+						return obj1.released > obj2.released ? 1 : -1;
 					});
 					localStorage.setItem("sort", "oldest");
 				}
@@ -1315,9 +1314,9 @@ Browser.prototype = {
 						return obj1.uploaded < obj2.uploaded ? 1 : -1;
 					});
 				} else {
-					// Sort songs according to the 'copyright' string (the year in start is used)
+					// Sort songs according to the 'released' string (the year in start is used)
 					this.songs.sort(function(obj1, obj2) {
-						return obj1.copyright < obj2.copyright ? 1 : -1;
+						return obj1.released < obj2.released ? 1 : -1;
 					});
 					localStorage.setItem("sort", "newest");
 				}
@@ -1384,7 +1383,7 @@ Browser.prototype = {
 
 			var files = "";
 			$.each(this.songs, function(i, file) {
-				var year = isNaN(file.copyright.substr(0, 4)) ? "unknown year" : file.copyright.substr(0, 4);
+				var year = isNaN(file.released.substr(0, 4)) ? "unknown year" : file.released.substr(0, 4);
 				files += '<tr>'+
 						'<td class="sid temp unselectable"><div class="block-wrap"><div class="block">'+(file.subtunes > 1 ? '<div class="subtunes">'+file.subtunes+'</div>' : '')+
 						'<div class="entry name file" data-name="'+encodeURIComponent(file.filename)+'" data-type="'+file.type+'">'+browser.adaptBrowserName(file.filename.replace(/^\_/, ''))+'</div></div></div><br />'+
@@ -1443,7 +1442,7 @@ Browser.prototype = {
 							'</div><br />'+
 							// Second line (player, tags, etc.)
 							'<span class="info">'+
-								file.copyright.substr(0, 4)+file.infosec+file.sidtags+
+								file.released.substr(0, 4)+file.infosec+file.sidtags+
 							'</span>'+
 							// Bottom line factoid (tags is one of them)
 							file.factoidbottom+
@@ -1900,15 +1899,15 @@ Browser.prototype = {
 								});
 								break;
 							case "oldest":
-								// Sort songs according to the 'copyright' string (the year in start is used)
+								// Sort songs according to the 'released' string (the year in start is used)
 								data.files.sort(function(obj1, obj2) {
-									return obj1.copyright > obj2.copyright ? 1 : -1;
+									return obj1.released > obj2.released ? 1 : -1;
 								});
 								break;
 							case "newest":
-								// Sort songs according to the 'copyright' string (the year in start is used)
+								// Sort songs according to the 'released' string (the year in start is used)
 								data.files.sort(function(obj1, obj2) {
-									return obj1.copyright < obj2.copyright ? 1 : -1;
+									return obj1.released < obj2.released ? 1 : -1;
 								});
 								break;
 							case "factoidtop":
@@ -2096,7 +2095,7 @@ Browser.prototype = {
 									'</div><br />'+
 									// Second line (player, tags, etc.)
 									'<span class="info">'+
-										file.copyright.substr(0, 4)+infoSecondary+sidTags+
+										file.released.substr(0, 4)+infoSecondary+sidTags+
 									'</span>'+
 									// Bottom line factoid (tags is one of them)
 									factoidBottom+
@@ -2133,7 +2132,7 @@ Browser.prototype = {
 							address:		file.loadaddr,
 							init:			file.initaddr,
 							play:			file.playaddr,
-							copyright:		file.copyright,
+							released:		file.released,
 							stil:			stil,
 							rating:			file.rating,
 							hvsc:			file.hvsc,
@@ -3236,8 +3235,8 @@ Browser.prototype = {
 			$("a.emphasize").removeClass("emphasize").addClass("csdb-replace");
 
 			// Get the name and/or handle of the composer
-			var currentText, songAuthor = infoArray.songAuthor, songCopyright = infoArray.songReleased;
-			var releaseName = songCopyright.substring(songCopyright.indexOf(" ") + 1).toLowerCase();
+			var currentText, songAuthor = infoArray.songAuthor, songReleased = infoArray.songReleased;
+			var releaseName = songReleased.substring(songReleased.indexOf(" ") + 1).toLowerCase();
 			var nameMatch = songAuthor.match(/^([^(]+?)(?: \(([^)]+)\))?$/);
 			var realName = nameMatch ? nameMatch[1].trim().toLowerCase() : "";
 			var handle = nameMatch && nameMatch[2] ? nameMatch[2].trim().toLowerCase() : "";
@@ -3247,7 +3246,7 @@ Browser.prototype = {
 				.find(".csdb-replace, .csdb-scener, .csdb-group")
 				.removeClass("csdb-replace csdb-scener csdb-group");
 
-			// Emphasize group names that match the copyright line
+			// Emphasize group names that match the released line
 			$("a.csdb-replace,a.csdb-scener,a.csdb-group").each(function(i, element) {
 				if (releaseName === $(element).text().trim().toLowerCase())
 					$(element).removeClass("csdb-replace csdb-scener csdb-group").addClass("emphasize");
@@ -3892,7 +3891,7 @@ Browser.prototype = {
 						$("#upload-file-name-input").val(data.info.fullname.split("/").slice(-1)[0]);
 						$("#upload-file-player-input").val(data.info.player);
 						$("#upload-file-author-input").val(data.info.author);
-						$("#upload-file-copyright-input").val(data.info.copyright);
+						$("#upload-file-released-input").val(data.info.released);
 						$("#upload-csdb-id").val(data.info.csdbid);
 						$("#upload-lengths-list").css("background", "").val(data.info.lengths);
 						$("#upload-stil-text").val(data.info.stil);
@@ -5128,7 +5127,7 @@ Browser.prototype = {
 							'<tr><td>SID Model</td><td>'+data.info.sidmodel+'</td></tr>'+
 							'<tr><td>Name</td><td>'+data.info.name+'</td></tr>'+
 							'<tr><td>Author</td><td>'+data.info.author+'</td></tr>'+
-							'<tr><td>Copyright</td><td>'+data.info.copyright+'</td></tr>'+
+							'<tr><td>Released</td><td>'+data.info.released+'</td></tr>'+
 							'<tr><td>Subtune</td><td>'+data.info.startsubtune+' / '+data.info.subtunes+'</td></tr>'+
 						'</table>'+
 						'<p>If you wish to edit the SID file itself, cancel and use a SID tool to do so, then upload again.</p>',
@@ -5147,20 +5146,20 @@ Browser.prototype = {
 						$("#upload-file-name-input").val(data.info.filename);
 						$("#upload-file-player-input").val(data.info.player);
 						// Try to move appended year to the beginning instead
-						var copyright = data.info.copyright;
-						var parts = copyright.split(" ");
+						var released = data.info.released;
+						var parts = released.split(" ");
 						var endWord = parts[parts.length - 1];
 						if (!isNaN(endWord) && endWord.length == 4 && (endWord.substr(0, 2) == "19" || endWord.substr(0, 2) == "20"))
 							// Year is in the end; move it to the beginning
-							copyright = endWord+" "+parts.slice(0, -1).join(" ");
+							released = endWord+" "+parts.slice(0, -1).join(" ");
 						else if ((parts[0].match(/-/g) || []).length == 2) {
 							var numbers = parts[0].split("-");
 							endWord = numbers[numbers.length - 1];
 							if (!isNaN(endWord) && endWord.length == 4 && (endWord.substr(0, 2) == "19" || endWord.substr(0, 2) == "20"))
 								// It starts with the MM-DD-YYYY format (Eric Dobek); move the year to the beginning
-								copyright = endWord+"-"+numbers[0]+"-"+numbers[1]+" "+parts.slice(1).join(" ");
+								released = endWord+"-"+numbers[0]+"-"+numbers[1]+" "+parts.slice(1).join(" ");
 						}
-						$("#upload-file-copyright-input").val(copyright);
+						$("#upload-file-released-input").val(released);
 					}
 					browser.uploadWizard(2, data);
 				}.bind(this), function() {
@@ -5225,7 +5224,7 @@ Browser.prototype = {
 				});
 				break;
 			case 3:
-				// Edit filename, player, author and copyright in database
+				// Edit filename, player, author and released in database
 				var author = $("#dropdown-upload-profile").find("option:selected").attr("data-author");
 				if (author == "" || typeof author == "undefined") author = data.info.author;
 				$("#upload-file-author-input").val(author);
@@ -5254,7 +5253,7 @@ Browser.prototype = {
 					data.info.newname	= $("#upload-file-name-input").val();
 					data.info.player	= $("#upload-file-player-input").val();
 					data.info.author	= $("#upload-file-author-input").val();
-					data.info.copyright	= $("#upload-file-copyright-input").val();
+					data.info.released	= $("#upload-file-released-input").val();
 					data.info.profile	= $("#dropdown-upload-profile").val();
 					data.info.csdbid	= parseInt($("#upload-csdb-id").val());
 					data.info.lengths	= $("#upload-lengths-list").val();

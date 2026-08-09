@@ -78,24 +78,24 @@ function getCollectionPath(string $filename): string {
 function parseSidInfo(string $output): ?array {
 
 	$map = [
-		'Filename'             => 'collection_path',
-		'Type'                 => 'type',
-		'Version'              => 'version',
-		'Player type'          => 'player_type',
-		'Player compatibility' => 'player_compat',
-		'Video clock speed'    => 'clock_speed',
-		'SID model'            => 'sid_model',
-		'Data offset'          => 'data_offset',
-		'Data size'            => 'data_size',
-		'Load address'         => 'load_addr',
-		'Init address'         => 'init_addr',
-		'Play address'         => 'play_addr',
-		'Songs'                => 'subtunes',
-		'Start song'           => 'start_subtune',
-		'Name'                 => 'name',
-		'Author'               => 'author',
-		'Copyright'            => 'copyright',
-		'Hash'                 => 'hash'
+		'Filename'				=> 'collection_path',
+		'Type'					=> 'type',
+		'Version'				=> 'version',
+		'Player type'			=> 'player_type',
+		'Player compatibility'	=> 'player_compat',
+		'Video clock speed'		=> 'clock_speed',
+		'SID model'				=> 'sid_model',
+		'Data offset'			=> 'data_offset',
+		'Data size'				=> 'data_size',
+		'Load address'			=> 'load_addr',
+		'Init address'			=> 'init_addr',
+		'Play address'			=> 'play_addr',
+		'Songs'					=> 'subtunes',
+		'Start song'			=> 'start_subtune',
+		'Name'					=> 'name',
+		'Author'				=> 'author',
+		'Copyright'				=> 'released',
+		'Hash'					=> 'hash'
 	];
 
 	$data = [];
@@ -132,7 +132,7 @@ function parseSidInfo(string $output): ?array {
 		$data['start_subtune'],
 		$data['name'],
 		$data['author'],
-		$data['copyright'],
+		$data['released'],
 		$data['hash']
 	];
 }
@@ -216,7 +216,7 @@ $sql = '
 		start_subtune,
 		name,
 		author,
-		copyright,
+		released,
 		hash
 	) VALUES (
 		?,

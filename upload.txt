@@ -13,7 +13,7 @@ THE FILE MUST BE GENUINELY NEW. IF IT ALREADY EXISTS IN ANY OF THE COLLECTIONS I
 - To upload a new file, just click the wide 'UPLOAD NEW SID FILE' button to select a file.
 - To edit an existing file, right-click a SID row and choose the 'Edit Uploaded File' option.
 
-In both cases, a wizard allows you to attach a composer profile, a CSDb page, define the song lengths, and tweak the filename, player, author and copyright. You can also edit a custom text for the STIL tabs.
+In both cases, a wizard allows you to attach a composer profile, a CSDb page, define the song lengths, and tweak filename, player, author and released. You can also edit a custom text for the STIL tabs.
 
 Note that everyone can edit files, there is no ownership.
 

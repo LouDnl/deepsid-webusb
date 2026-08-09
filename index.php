@@ -536,8 +536,8 @@
 				<input type="text" name="edit-file-player" id="edit-file-player-input" maxlength="48" style="margin-bottom:11px;" /><br />
 				<label id="label-edit-file-author" for="edit-file-author">Author</label>
 				<input type="text" name="edit-file-author" id="edit-file-author-input" maxlength="128" /><br />
-				<label id="label-edit-file-copyright" for="edit-file-copyright">Copyright</label>
-				<input type="text" name="edit-file-copyright" id="edit-file-copyright-input" maxlength="128" />
+				<label id="label-edit-file-released" for="edit-file-released">Released</label>
+				<input type="text" name="edit-file-released" id="edit-file-released-input" maxlength="128" />
 			</form>
 			<div class="dialog-buttons"><a href="#" class="dialog-cancel">Cancel</a><button class="dialog-button-yes dialog-auto">OK</button></div>
 		</div>
@@ -595,8 +595,8 @@
 					<input type="text" name="upload-file-author" id="upload-file-author-input" maxlength="128" /><br />
 				</div>
 				<div style="margin-top:6px;">
-					<label id="label-upload-file-copyright" for="upload-file-copyright">Copyright</label>
-					<input type="text" name="upload-file-copyright" id="upload-file-copyright-input" maxlength="128" />
+					<label id="label-upload-file-released" for="upload-file-released">Released</label>
+					<input type="text" name="upload-file-released" id="upload-file-released-input" maxlength="128" />
 				</div>
 			</form>
 			<p>This only affects the lines you see in the folder list as the top left box reflects the SID file itself.</p>
@@ -1003,7 +1003,7 @@
 							<option value="#all#" title="Searches in (almost) everything. Filenames, STIL, author, etc.">All</option>
 							<option value="fullname" title="Searches in filenames only.">Filename</option>
 							<option value="author" title="Typically searches names, handles, or both. No year or affiliation.">Author</option>
-							<option value="copyright" title="Also known as the released field. Contains year and affiliation.">Copyright</option>
+							<option value="released" title="Contains year and affiliation.">Released</option>
 							<option value="player" title="Searches in the prettified player names.">Player</option>
 							<option value="location" title="Searches for a start location, e.g. 16384, 0x4000, or $4000.">Location</option>
 							<option value="maximum" title="Searches for a maximum size, e.g. 4095, 0x0FFF, or $0FFF.">Maximum</option>
@@ -1542,7 +1542,9 @@
 								<p>Determine what will happen when a tune has finished playing.</p>
 
 								<button id="setting-delay-next" class="button-edit button-toggle button-off">Off</button>
-								<label for="setting-delay-next" class="unselectable">Auto-progress should <b>stop and delay</b> playing the next song or subtune for one-and-a-half-second</label>
+								<label for="setting-delay-next" class="unselectable">Auto-progress should <b>stop and delay</b> playing the next song or subtune for</label>
+								<input type="text" name="delay-duration" id="delay-duration" maxlength="5" onkeypress="main.numericInput(event)" />
+								<label for="delay-duration" style="margin-left:-13px;">milliseconds</label>
 
 								<div class="space"></div>
 
@@ -1995,6 +1997,12 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 9, 2026</h3>
+						<ul>
+							<li>Added a new user setting for specifying the pause between songs in milliseconds when using auto-progress.</li>
+							<li>The 'Copyright' field has been renamed to 'Released' instead.</li>
+						</ul>
 
 						<h3>August 2, 2026</h3>
 						<ul>
@@ -2653,7 +2661,7 @@
 						<h3>July 20, 2025</h3>
 						<ul>
 							<li>You can now use Shift+Backspace to go back from any tab page with a 'BACK' button.</li>
-							<li>Added a toggle button to CSDb lists to show only highlighted entries, prioritizing those where the copyright line contains the group name, or where the composer's group, previous groups, real name, or handle matches.</li>
+							<li>Added a toggle button to CSDb lists to show only highlighted entries, prioritizing those where the released line contains the group name, or where the composer's group, previous groups, real name, or handle matches.</li>
 							<li><del>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/N/Nordischsound/Nordischsound_Medley.sid">Nordischsound_Medley.sid</a> by Nordischsound.</del></li>
 							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/Compute%27s%20Gazette%20SID%20Collection/BJ_Pools/Heaven_Knows_A.mus">Heaven_Knows_A.mus</a> by BJ Pools.</li>
 						</ul>
@@ -2741,7 +2749,7 @@
 						<h3>June 27, 2025</h3>
 						<ul>
 							<li>In the CSDb tab, in addition to the usual rule where group names are highlighted in yellow or blue when they
-								match the group in the tune's copyright line, group names may now also be highlighted in green if they match
+								match the group in the tune's released line, group names may now also be highlighted in green if they match
 								any other group the user has been a member of. This can sometimes make it easier to find the right entries.</li>
 						</ul>
 

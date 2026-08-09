@@ -5,7 +5,7 @@
  * Finds the latest year each composer was active and stores it in the 'active'
  * column in the 'composers' table. This is only relevant for HVSC.
  * 
- * The year is determined by checking the beginning of the 'copyright' column
+ * The year is determined by checking the beginning of the 'released' column
  * for each file belonging to each composer in the 'files' table.
  * 
  * This table is used for displaying the lists of active and snoozing composers
@@ -37,14 +37,14 @@ try {
 	foreach($folders as $folder) {
 		echo '<b>'.$folder->collection_path.'</b><div>';
 
-		// Get the copyright for all of the files belonging to this composer
-		$files = $db->query('SELECT copyright FROM files WHERE collection_path LIKE "'.$folder->collection_path.'/%"');
+		// Get the released text for all of the files belonging to this composer
+		$files = $db->query('SELECT released FROM files WHERE collection_path LIKE "'.$folder->collection_path.'/%"');
 		$files->setFetchMode(PDO::FETCH_OBJ);
 
-		// Add the year from each copyright to an array
+		// Add the year from each released text to an array
 		$years = array();
 		foreach($files as $file) {
-			$year = substr($file->copyright, 0, 4);
+			$year = substr($file->released, 0, 4);
 			if (is_numeric($year)) {
 				$years[] = $year;
 				echo $year.' ';

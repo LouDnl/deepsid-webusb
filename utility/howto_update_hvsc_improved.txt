@@ -184,7 +184,7 @@ LOCALHOST: SID info
            files.start_subtune = files_import.start_subtune,
            files.name = files_import.name,
            files.author = files_import.author,
-           files.copyright = files_import.copyright,
+           files.released = files_import.released,
            files.hash = files_import.hash
 
   9. Enter the 'files_import' table and click 'Operations'.
@@ -398,7 +398,7 @@ ONLINE: SID info
            files.start_subtune = files_import.start_subtune,
            files.name = files_import.name,
            files.author = files_import.author,
-           files.copyright = files_import.copyright,
+           files.released = files_import.released,
            files.hash = files_import.hash
 
   4. Enter the 'files_import' table and click 'Operations'.

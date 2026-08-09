@@ -1448,7 +1448,7 @@ SIDPlayer.prototype = {
 							result.maxSubsong		= data.info.subtunes - 1;
 							result.songAuthor		= data.info.author;
 							result.songName			= data.info.name;
-							result.songReleased		= data.info.copyright;
+							result.songReleased		= data.info.released;
 						}
 					}
 				});

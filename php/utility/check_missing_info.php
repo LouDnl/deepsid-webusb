@@ -54,7 +54,7 @@ $required_fields = [
     'start_subtune'		=> 'number',
     //'name'       		=> 'text',
     //'author'     		=> 'text',
-    //'copyright'  		=> 'text',
+    //'released'  		=> 'text',
     'new'          		=> 'number',
     'updated'      		=> 'number'
 ];

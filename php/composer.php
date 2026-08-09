@@ -260,14 +260,14 @@ if (isset($collection_path)) {
 			}
 
 			// Get data about active years
-			$select = $db->prepare('SELECT copyright FROM files WHERE collection_path LIKE :collection_path');
+			$select = $db->prepare('SELECT released FROM files WHERE collection_path LIKE :collection_path');
 			$select->execute(array(':collection_path' => $escaped_collection_path.'/%'));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
 			$years = Array();
 			if ($select->rowCount()) {
 				foreach($select as $player_row) {
-					$year = substr($player_row->copyright, 0, 4);
+					$year = substr($player_row->released, 0, 4);
 					if (is_numeric($year)) $years[] = $year;
 				}
 			}
@@ -580,7 +580,7 @@ if (isset($row)) {
 		$x2 = 86;
 
 	if (empty($first_year) && empty($last_year)) {
-		$first_year = substr($player_row->copyright, 0, 4); // The last one obtained is fine
+		$first_year = substr($player_row->released, 0, 4); // The last one obtained is fine
 		if ($first_year === '198?') {
 			$first_year = $last_year = '198?';
 			$x1 = 6;

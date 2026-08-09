@@ -12,7 +12,7 @@
  *		name
  *		player
  *		author
- *		copyright
+ *		released
  * 
  * Please be aware that an HVSC update may later overwrite fields in the file
  * row too. It makes more sense to use the script for other collections such
@@ -22,7 +22,7 @@
  * @uses		$_POST['name']
  * @uses		$_POST['player']
  * @uses		$_POST['author']
- * @uses		$_POST['copyright']
+ * @uses		$_POST['released']
  * 
  * @used-by		main.js
  */
@@ -51,12 +51,12 @@ try {
 	$new_name = substr($_POST['fullname'], 0, strrpos($_POST['fullname'], '/') + 1).$_POST['name'];
 
 	// Update the fields
-	$update = $db->prepare('UPDATE files SET collection_path = :newername, player = :player, author = :author, copyright = :copyright WHERE id = '.$id.' LIMIT 1');
+	$update = $db->prepare('UPDATE files SET collection_path = :newername, player = :player, author = :author, released = :released WHERE id = '.$id.' LIMIT 1');
 	$update->execute(array(
 		':newername'	=> $new_name,
 		':player'		=> $_POST['player'],
 		':author'		=> $_POST['author'],
-		':copyright'	=> $_POST['copyright'],
+		':released'		=> $_POST['released'],
 	));
 	if ($update->rowCount() == 0)
 		die(json_encode(array('status' => 'error', 'message' => 'Could not update the file row for '.$_POST['fullname'])));

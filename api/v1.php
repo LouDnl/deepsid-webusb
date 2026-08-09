@@ -88,7 +88,7 @@ try {
 				$response['start_subtune']		= $row->start_subtune;
 				$response['name'] 				= $row->name;
 				$response['author'] 			= $row->author;
-				$response['copyright'] 			= $row->copyright;
+				$response['released'] 			= $row->released;
 				$response['hash'] 				= $row->hash;
 				$response['stil'] 				= $row->stil;
 				$response['new'] 				= $row->new;
@@ -174,7 +174,7 @@ try {
 						$response[$i]['start_subtune']		= $row->start_subtune;
 						$response[$i]['name'] 				= $row->name;
 						$response[$i]['author'] 			= $row->author;
-						$response[$i]['copyright'] 			= $row->copyright;
+						$response[$i]['released'] 			= $row->released;
 						$response[$i]['hash'] 				= $row->hash;
 						$response[$i]['stil'] 				= $row->stil;
 						$response[$i]['new'] 				= $row->new;

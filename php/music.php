@@ -324,16 +324,16 @@ try {
 				// Return a list of the newest songs in the SH folder belong to composer ID
 				$year = date('Y');
 
-				// Copyright year is used if a true year number, otherwise the uploaded year
+				// Released year is used if a true year number, otherwise the uploaded year
 				$select = $db->prepare('
 					SELECT f.collection_path
 					FROM uploads u
 					INNER JOIN files f ON f.id = u.files_id
 					WHERE u.composers_id = :id
 					AND (
-							LEFT(f.copyright, 4) = :year
+							LEFT(f.released, 4) = :year
 							OR (
-								LEFT(f.copyright, 4) NOT REGEXP "^[0-9]{4}$"
+								LEFT(f.released, 4) NOT REGEXP "^[0-9]{4}$"
 								AND u.uploaded >= :start
 								AND u.uploaded < :end
 							)
@@ -520,7 +520,7 @@ try {
 						$columns = implode(', " ", ', [
 							'files.collection_path',
 							'files.author',
-							'files.copyright',
+							'files.released',
 							'files.player',
 							'COALESCE(pp.pretty_name, "")',
 							'files.stil'
@@ -846,7 +846,7 @@ try {
 						if ($_GET['searchType'] == '#all#') {
 							// Searching ALL should of course include a range of columns
 							$columns = $comma = '';
-							foreach(array('collection_path', 'author', 'copyright', 'player', 'stil') as $column) {
+							foreach(array('collection_path', 'author', 'released', 'player', 'stil') as $column) {
 								$columns .= $comma.$column.', " "';
 								$comma = ', ';
 							}
@@ -1289,7 +1289,7 @@ try {
 			$select->execute(array(':collection_path' => ($is_searching || $is_public_symlist || $is_personal_symlist || $is_csdb_compo ? '' : $folder).$file));
 			$select->setFetchMode(PDO::FETCH_OBJ);
 
-			$player = $lengths = $type = $version = $player_type = $player_compat = $clock_speed = $sid_model = $name = $author = $copyright = $hash = $stil = '';
+			$player = $lengths = $type = $version = $player_type = $player_compat = $clock_speed = $sid_model = $name = $author = $released = $hash = $stil = '';
 			$id = $rating = $data_offset = $data_size = $load_addr = $init_addr = $play_addr = $subtunes = $start_subtune = $hvsc = $videos = 0;
 
 			if ($select->rowCount()) {
@@ -1314,7 +1314,7 @@ try {
 				$start_subtune		= $row->start_subtune;		// 1
 				$name				= $row->name;				// Alloyrun
 				$author				= $row->author;				// Jeroen Tel
-				$copyright			= $row->copyright;			// 1988 Starlight
+				$released			= $row->released;			// 1988 Starlight
 				$hash				= $row->hash;				// 02df65150cbc4fa8fabf563b26c8cac4
 				$stil				= $row->stil;				// (#1)<br />NAME: Title tune<br />(#2)<br />NAME: High-score<br />(#3)<br />NAME: Get-ready
 				$hvsc				= $row->new;				// 0 (= 49)						50 and up
@@ -1617,7 +1617,7 @@ try {
 				'startsubtune'		=> $start_subtune,
 				//'name'			=> $name,				// @link https://github.com/Chordian/deepsid/issues/21
 				'author'			=> $author,
-				'copyright'			=> $copyright,
+				'released'			=> $released,
 				//'hash'			=> $hash,
 				'stil'				=> $stil,
 				'rating'			=> $rating,

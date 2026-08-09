@@ -30,11 +30,11 @@ foreach($_FILES as $sid) {
 
 	$byte = array_values(unpack('C*', $file));
 
-	$name = $author = $copyright = '';
+	$name = $author = $released = '';
 	for($pos = 0x16; $pos <= 0x35; $pos++) {
 		$name .= $file[$pos] != "\u{0000}" ? utf8_decode($file[$pos]) : '';
 		$author .= $file[$pos + 0x20] != "\u{0000}" ? utf8_decode($file[$pos + 0x20]) : '';
-		$copyright .= $file[$pos + 0x40] != "\u{0000}" ? utf8_decode($file[$pos + 0x40]) : '';
+		$released .= $file[$pos + 0x40] != "\u{0000}" ? utf8_decode($file[$pos + 0x40]) : '';
 	}
 
 	$subtunes = $byte[0xE] * 256 + $byte[0xF];
@@ -56,7 +56,7 @@ foreach($_FILES as $sid) {
 		'startsubtune'	=> $byte[0x10] * 256 + $byte[0x11],
 		'name'			=> $name,
 		'author'		=> $author,
-		'copyright'		=> $copyright,
+		'released'		=> $released,
 		'stil'			=> '<i>This is a temporary SID file for emulator testing.</i>',
 	));
 }

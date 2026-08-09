@@ -37,14 +37,6 @@ $random = array(
 		'
 	),
 
-	array(
-		'type'		=> 'tips',
-		'lemon'		=> false,
-		'message'	=> '
-			<p style="margin:0 0 4px 0;">A small star icon in front of a folder means that everything
-			inside has been rated.</p><b style="font-size:20px;">Handy for completionists.</b>
-		'
-	),
 
 	array(
 		'type'		=> 'tips',

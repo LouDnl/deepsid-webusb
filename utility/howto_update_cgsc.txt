@@ -180,7 +180,7 @@ Refer to the changes in the two CGSC update text files and try clicking the same
 not get errors for changed files/folders and you should not be able to search for deleted files.
 
 While clicking each new tune, keep an eye on the info in the top box as well as in the tab. If there's a
-composing year to be seen, hit the "*" hotkey on the NUMPAD and enter the year in COPYRIGHT edit box.
+composing year to be seen, hit the "*" hotkey on the NUMPAD and enter the year in RELEASED edit box.
 
 You have to search again each time you enter a year, so it's usually a good idea to remember the spot.
 

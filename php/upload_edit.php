@@ -77,7 +77,7 @@ try {
 		'startsubtune'	=> $general->start_subtune,
 		'name'			=> $general->name,
 		'author'		=> $general->author,
-		'copyright'		=> $general->copyright,
+		'released'		=> $general->released,
 		'stil'			=> $general->stil,
 		'csdbtype'		=> $general->csdb_type,
 		'csdbid'		=> $general->csdb_id,

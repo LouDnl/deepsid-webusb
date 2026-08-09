@@ -212,8 +212,8 @@ $help = array(
 		<h4>Author</h4>
 		Typically contain names, handles, or both. No year or affiliation.
 
-		<h4>Copyright</h4>
-		Also known as the <i>released</i> field. Contains year and affiliation.
+		<h4>Released</h4>
+		Contains year and affiliation.
 
 		<h4>Player</h4>
 		Searches in the prettified player names.
@@ -339,7 +339,7 @@ $help = array(
 					<ul>
 						<li><b>fullname</b>&nbsp;&nbsp;(title)</li>
 						<li><b>author</b></li>
-						<li><b>copyright</b></li>
+						<li><b>released</b></li>
 						<li><b>player</b></li>
 						<li><b>location</b>&nbsp;&nbsp;(start)</li>
 						<li><b>maximum</b>&nbsp;&nbsp;(size)</li>

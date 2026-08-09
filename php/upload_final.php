@@ -8,8 +8,8 @@
  * 
  * The existing two rows in the database are updated with the new information
  * about the profile, CSDb ID, song lengths and custom STIL text. An additional
- * wizard step was later added to also update the player, author and copyright
- * as well as rename the file itself both physically and in the database.
+ * wizard step was later added to also update the player, author and released
+ * text as well as rename the file itself both physically and in the database.
  * 
  * UPLOAD:
  * 
@@ -75,7 +75,7 @@ try {
 				lengths 		= :lengths,
 				stil 			= :stil,
 				author 			= :author,
-				copyright		= :copyright,
+				released		= :released,
 				csdb_type 		= :csdb_type,
 				csdb_id			= :csdb_id
 			WHERE id = '.$files_id.' LIMIT 1');
@@ -85,7 +85,7 @@ try {
 				':lengths'		=> $info['lengths'],
 				':stil'			=> $info['stil'],
 				':author'		=> $info['author'],
-				':copyright'	=> $info['copyright'],
+				':released'		=> $info['released'],
 				':csdb_type'	=> $info['csdbid'] ? 'release' : '',
 				':csdb_id'		=> $info['csdbid'],
 			));
@@ -135,7 +135,7 @@ try {
 				start_subtune,
 				name,
 				author,
-				copyright,
+				released,
 				stil,
 				csdb_type,
 				csdb_id
@@ -158,7 +158,7 @@ try {
 				:start_subtune,
 				:name,
 				:author,
-				:copyright,
+				:released,
 				:stil,
 				'.($info['csdbid'] ? '"release"' : '""').',
 				:csdb_id
@@ -182,7 +182,7 @@ try {
 				':start_subtune'	=> $info['startsubtune'],
 				':name'				=> $info['name'],
 				':author'			=> $info['author'],					// Modified by upload wizard
-				':copyright'		=> $info['copyright'],				// Modified by upload wizard
+				':released'			=> $info['released'],				// Modified by upload wizard
 				':stil'				=> $info['stil'],					// Created by upload wizard
 				':csdb_id'			=> $info['csdbid']					// Created by upload wizard
 			));

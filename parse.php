@@ -156,6 +156,8 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 
 		if (
 			$parser->type == 'bot' ||
+			str_starts_with($ip, '43.172.') ||
+			str_starts_with($ip, '43.173.') ||
 			stripos('x'.$user_agent, 'python-') ||
 			stripos('x'.$user_agent, 'bingbot') ||
 			stripos('x'.$user_agent, 'googlebot') ||
