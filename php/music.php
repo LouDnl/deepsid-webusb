@@ -19,7 +19,7 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("tags_read.php");
+require_once("shared/functions_tags.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -1433,8 +1433,8 @@ try {
 
 						if (!$is_cgsc) {
 							// Get the user's settings
-							$frow = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
-							$settings = unserialize($frow->flags);
+							$frow = $db->query('SELECT settings FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
+							$settings = unserialize($frow->settings);
 
 							$sub_lengths = explode(' ', $lengths);
 

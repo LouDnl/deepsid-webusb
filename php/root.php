@@ -16,7 +16,7 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("root_generate.php");
+require_once("shared/functions_root.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

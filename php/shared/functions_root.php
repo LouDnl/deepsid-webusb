@@ -1,15 +1,19 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
  *
- * Procedures for returning the inside contents of a top list.
+ * Shared functions for returning the inside contents of a top list.
  * 
- * @used-by		root.php
  * @used-by		root_get.php
+ * @used-by		root.php
  */
 
-require_once("class.account.php"); // Includes setup
-require_once("countries.php"); // Used by the 'countries' list type
+require_once(__DIR__."/../class.account.php"); // Includes setup
+require_once(__DIR__."/array_countries.php");
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * Abbreviate certain texts in the 'collection_path' value and wrap them in

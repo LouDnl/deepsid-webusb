@@ -1,24 +1,32 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
  *
- * Builds the comments for a CSDb page. Included by other CSDb PHP scripts.
+ * Shared functions for building a CSDb page.
  * 
- * Required arrays outside function:
+ *   - Helps building the comments
+ *   - Helps building the competition page
+ * 
+ * Required arrays outside 'commentsTable()' function:
  * 
  * $scener_handle = array();
  * $scener_id = array();
  * 
- * @used-by		csdb.php
- * @used-by		csdb_compo_table.php
  * @used-by		composer.php
+ * @used-by		csdb_compo_table.php
+ * @used-by		csdb.php
  */
 
-require_once("class.account.php"); // Includes setup
-require_once("jbbcode/Parser.php");
+require_once(__DIR__."/../class.account.php"); // Includes setup
+require_once(__DIR__."/../jbbcode/Parser.php");
+require_once(__DIR__."/array_countries.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * Return the HTML for a table with several comments.
@@ -218,5 +226,134 @@ function commentsTable($title, $comments, &$scener_handle, &$scener_id, $backwar
 	);	
 
 	return $final_comments;
+}
+
+/**
+ * Get the XML from the CSDb web service.
+ * 
+ * @param	int			event id
+ *
+ * @return	object		pointer to XML data
+ */
+function compoGetXML($event_id) {
+	$xml = curl('https://csdb.dk/webservice/?type=event&id='.$event_id);
+	if (!strpos($xml, '<CSDbData>'))
+		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;"><i>CSDb is currently unreachable.</i></p>'.
+			'<b>ID:</b> <a href="https://csdb.dk/event/?id='.$event_id.'" target="_blank">'.$event_id.'</a>')));
+	$csdb = simplexml_load_string($xml);
+	return $csdb;		
+}
+
+/**
+ * Get the compo section with entries.
+ * 
+ * @param	object		pointer to XML data
+ * 
+ * @return	object		an array of entries
+ */
+function compoGetEntries($csdb) {
+	$compos = $csdb->Event->Compo;
+	if (!isset($compos))
+		die(json_encode(array('status' => 'warning', 'html' => '<p style="margin-top:0;">The XML data from the CSDb page had no competition entries.</p>')));
+	return $compos;
+}
+
+/**
+ * Get a string with event type, dates and country (including an appended flag
+ * icon). Each of these are separated by a dot character. Great for ONE line.
+ * 
+ * @param	object		pointer to XML data
+ * 
+ * @return	string		HTML string with type, date and country
+ */
+function compoGetTypeDateCountry($csdb) {
+
+	global $country_codes;
+
+	// Event type
+	$type_date_country = '';
+	if (isset($csdb->Event->EventType))
+		$type_date_country = $csdb->Event->EventType.' &#9642 ';
+
+	// The dates this event took place
+	$months = array(
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July ',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December',
+	);
+	$start_year		= isset($csdb->Event->StartYear) ? (int)$csdb->Event->StartYear : '?';
+	$start_month	= isset($csdb->Event->StartMonth) ? $months[(int)$csdb->Event->StartMonth - 1] : '?';
+	$start_day		= isset($csdb->Event->StartDay) ? (int)$csdb->Event->StartDay : '?';
+	$end_year		= isset($csdb->Event->EndYear) ? (int)$csdb->Event->EndYear : '?';
+	$end_month		= isset($csdb->Event->EndMonth) ? $months[(int)$csdb->Event->EndMonth - 1] : '?';
+	$end_day		= isset($csdb->Event->EndDay) ? (int)$csdb->Event->EndDay : '?';
+
+	$year			= $start_year == $end_year ? $start_year : '';
+	$month			= $start_month == $end_month ? $start_month : '';
+	$day			= $start_day == $end_day ? $start_day : '';
+
+	if (!empty($year) && !empty($month) && !empty($day))
+		$type_date_country .= $day.' '.$month.' '.$year;
+	else if (!empty($year) && !empty($month))
+		$type_date_country .= $start_day.' &ndash; '.$end_day.' '.$month.' '.$year;
+	else if (!empty($year))
+		$type_date_country .= $start_day.' '.$start_month.' &ndash; '.$end_day.' '.$end_month.' '.$year;
+	else
+		$type_date_country .= $start_day.' '.$start_month.' '.$start_year.' &ndash; '.$end_day.' '.$end_month.' '.$end_year;
+
+	// Country
+	if (isset($csdb->Event->Country)) {
+		$country = $csdb->Event->Country;
+		if (array_key_exists(strtolower($country), $country_codes)) {
+			// Append a flag image to country
+			$code = $country_codes[strtolower($csdb->Event->Country)];
+			$country .= ' <img class="flag" src="images/countries/'.$code.'.png" alt="'.$code.'" />';
+		}
+		$type_date_country .= ' &#9642; '.$country;
+	}
+	return $type_date_country;
+}
+
+/**
+ * Get the event image, if present.
+ * 
+ * @param	int			event id
+ *
+ * @return	string		HTML string with the image element
+ */
+function compoGetImage($event_id) {
+	// NOTE: CSDb follows this standard for event images:
+	// https://csdb.dk/gfx/events/(x)000/(id).jpg
+	// (x) is the first digit of the ID and (id) is the event ID itself.
+	// Example: https://csdb.dk/gfx/events/2000/2043.jpg
+	$image = 'https://csdb.dk/gfx/events/'.substr($event_id, 0, 1).'000/'.$event_id.'.jpg';
+	return @getimagesize($image) ? '<img class="event" src="'.$image.'" style="max-width:50%;max-height:50%;" />' : '';
+}
+
+/**
+ * Get the comment table and its comment button.
+ * 
+ * @param	object		pointer to XML data
+ * @param	int			event id
+ * 
+ * @return	string		HTML string with the comment table and button
+ */
+function compoGetComments($csdb, $event_id) {
+	$scener_handle = array();
+	$scener_id = array();
+	$comments = isset($csdb->Event->UserComment)
+		? commentsTable('User comments', $csdb->Event->UserComment, $scener_handle, $scener_id)
+		: '';
+	$comments .= '<button id="csdb-comment" data-type="event" data-id="'.$event_id.'">Comment</button><br />';
+	return $comments;
 }
 ?>

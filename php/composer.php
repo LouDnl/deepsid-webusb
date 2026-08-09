@@ -15,10 +15,9 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("csdb_compo.php");
-require_once("csdb_comments.php");
-require_once("composer_exotic.php");
-require_once("countries.php");
+require_once("shared/array_countries.php");
+require_once("shared/functions_csdb.php");
+require_once("shared/functions_exotic.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

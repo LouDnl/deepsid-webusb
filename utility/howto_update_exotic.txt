@@ -51,7 +51,7 @@ Now to create the new database entries for the exotic versions.
      If you do create a new folder then remember to also do this:
 
        o  Create a row for it in the "folders" table (just copy and change the original folder).
-       o  Add an entry in the "composer_exotic.php" file and upload it.
+       o  Add an entry in the 'functions_exotic.php' file and upload it.
 
   4. Change the "version" field to read "v4E" and "data_offset" to "126". Clear the "hash" field. Go.
 

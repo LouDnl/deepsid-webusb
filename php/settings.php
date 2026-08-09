@@ -49,9 +49,9 @@ try {
 	$db = $account->getDB();
 
 	// First get all the user's settings
-	$select = $db->query('SELECT flags FROM users WHERE id = '.$user_id);
+	$select = $db->query('SELECT settings FROM users WHERE id = '.$user_id);
 	$select->setFetchMode(PDO::FETCH_OBJ);
-	$settings = unserialize($select->fetch()->flags);
+	$settings = unserialize($select->fetch()->settings);
 
 	// If not defined yet for the user
 	if (!$settings['firstsubtune'])			$settings['firstsubtune']		= $first_time['firstsubtune'];
@@ -78,8 +78,8 @@ try {
 	if ($_POST) {
 		// Store the settings
 		$serialized = serialize($settings);
-		$update = $db->prepare('UPDATE users SET flags = :flags WHERE id = '.$user_id);
-		$update->execute(array(':flags' => $serialized));
+		$update = $db->prepare('UPDATE users SET settings = :settings WHERE id = '.$user_id);
+		$update->execute(array(':settings' => $serialized));
 		$account->logActivity('User "'.$_SESSION['user_name'].'" updated personal settings: '.$serialized);
 		if ($update->rowCount() == 0)
 			die(json_encode(array('status' => 'error', 'message' => 'Could not update your settings.')));

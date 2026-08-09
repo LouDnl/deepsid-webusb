@@ -2226,7 +2226,7 @@ input[type=range]::-ms-track {
 	color: var(--color-text-minor);
 }
 
-/* ---- Info Box (Name, Author, Released) ---------------------------------- */
+/* ---- Info Box (Name, Author, Released) ----------------------------------- */
 
 #info {
 	position: relative;

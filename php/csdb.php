@@ -25,8 +25,8 @@
  */
 
 require_once("class.account.php"); // Includes setup
-require_once("csdb_comments.php");
-require_once("gb64_functions.php");
+require_once("shared/functions_csdb.php");
+require_once("shared/functions_gb64.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");
@@ -338,8 +338,8 @@ if (!$_GET['noprimary']) {
 		$primary_id = $label['id'];
 
 	// Get the user's settings
-	$users = $db->query('SELECT flags FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
-	$settings = unserialize($users->flags);
+	$users = $db->query('SELECT settings FROM users WHERE id = '.$user_id)->fetch(PDO::FETCH_OBJ);
+	$settings = unserialize($users->settings);
 
 	// Does the user want to see the primary release?
 	if ($primary_id && $settings['primaryrelease']) {

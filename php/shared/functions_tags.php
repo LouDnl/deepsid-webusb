@@ -1,12 +1,18 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
+ * 
+ * Shared functions for handling tags.
  * 
  * @used-by		music.php
- * @used-by		tags_write.php
- * @used-by		tags_write_single.php
  * @used-by		tags_remove_game.php
+ * @used-by		tags_write_single.php
+ * @used-by		tags_write.php
  */
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
  /**
  * Update the current lists of tags and types for a file.

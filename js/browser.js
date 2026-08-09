@@ -2539,7 +2539,7 @@ Browser.prototype = {
 				// The 'LABEL' type: Moved to other database tables.
 			} else {
 				// NOTE: Don't change the order of tags or the collector for a folder will break!
-				// If you want to change the order of tags, see getTagsAndTypes() in 'tags_read.php'
+				// If you want to change the order of tags, see getTagsAndTypes() in 'functions_tags.php'
 				list_of_tags += '<div class="tag tag-'+types[i]+'"'+id+'>'+tag+'</div>';
 			}
 		});

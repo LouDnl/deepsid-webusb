@@ -1,10 +1,16 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
+ * 
+ * Shared functions for exotic SID tunes.
  * 
  * @used-by		composer.php
  * @used-by		groups.php
  */
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * If a specific end path is inside the exotic folders, replace it with the

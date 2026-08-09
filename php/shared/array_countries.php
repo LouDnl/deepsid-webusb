@@ -1,13 +1,13 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Array
  *
  * Countries and their codes.
  * 
+ * @used-by		shared/functions_csdb.php
+ * @used-by		shared/functions_root.php
  * @used-by		composers.php
- * @used-by		csdb_compo.php
  * @used-by		csdb_compo_table.php
- * @used-by		root_generate.php
  */
 
 $country_codes = array(

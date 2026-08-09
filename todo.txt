@@ -1,3 +1,5 @@
+DeepSID
+¯¯¯¯¯¯¯
 ToDo
 ¯¯¯¯
 - Look into the console logging alternatives, like warn, error, table, etc.
@@ -6,9 +8,7 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Collect all PHP files only containing functions and put them in a 'lib' folder (inside 'php').
-
-- Rename column 'flags' to 'settings' in 'Users' table since it's no longer just toggle states anymore.
+- Collect all class PHP files in a 'classes' sub folder. (Remember this involves a LOT of PHP files!)
 
 - BUG: Hotkeys for factoids doesn't work for users not logged in. Either make them work or remove the
   options in the top left menu.
@@ -66,6 +66,8 @@ MAYBE CONSIDER THIS
 - Replace ".." with a back arrow SVG instead? (The ".." symbol might still be confusing to some.)
 - Keyboard: If 'ArrowRight' is pressed while on a folder, enter the folder.
 - Mobile: Try to make a "long press" on a SID row, to show the context menu.
+
+- Andy Zeidler: A number on a profile page indicating how many playlists the artist has tunes in.
 
 - Consider also caching the group table. (If doing this, is it possible to cache Rob Hubbard's
   group data? It's so massive that it always times out, but I only need to get it once...)

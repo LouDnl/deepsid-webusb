@@ -1,9 +1,10 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
  *
- * Functions for the 'GB64' tab.
+ * Shared functions for the 'GB64' tab.
  * 
+ * @used-by		csdb.php
  * @used-by		gb64.php
  */
 

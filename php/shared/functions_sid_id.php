@@ -1,8 +1,8 @@
 <?php
 /**
- * DeepSID
+ * DeepSID / Functions
  *
- * Detect the type of player in a SID file.
+ * Detects the type of player in a SID file.
  * 
  * This was inspired by the SIDId script by Cadaver that HVSC uses. This also
  * requires the external 'sidid.cfg' file with identification bytes.
@@ -17,6 +17,10 @@ const T_END		= -1;
 const T_ANY		= -2;
 const T_AND		= -3;
 const T_NAME	= -4;
+
+// --------------------------------------------------------------------------
+// FUNCTIONS
+// --------------------------------------------------------------------------
 
 /**
  * Try to identify the player used by this SID file.
