@@ -8,7 +8,7 @@
  * @used-by N/A
  */
 
-require_once dirname(__DIR__).'/class.account.php'; // php/class.account.php
+require_once dirname(__DIR__).'/lib/class.account.php';
 
 const TEST_MODE = true; // Remember to set this to FALSE for real HVSC updates
 

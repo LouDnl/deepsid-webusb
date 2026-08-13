@@ -10,7 +10,7 @@
  * @used-by		browser.js
  */
 
-require_once("shared/functions_root.php");
+require_once("lib/functions.root.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

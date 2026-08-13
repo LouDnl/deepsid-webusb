@@ -11,7 +11,7 @@
 
 const REMIX64_EP_GET_REMIXES = 'remix/get_remixes_by_hvsc_path';
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

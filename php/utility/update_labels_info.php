@@ -10,7 +10,7 @@
  * - Updates ONLY if exactly one release matches
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 $dryRun = true;		// Set to TRUE to test without updating DB
 

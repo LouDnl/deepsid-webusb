@@ -13,7 +13,7 @@
  */
 
 require_once("php/setup.php");
-require_once("php/class.useragent.php");
+require_once("php/lib/class.useragent.php");
 
 const TRACKFILE	= 'visitors.txt';
 const CHORDIAN	= '87.60.173.201'; // Probably doesn't work anymore
@@ -86,6 +86,7 @@ $count = array(
 	'mobile'	=> 0,
 	'jch'		=> 0,
 	'user'		=> 0,
+	'pending'	=> 0,
 );
 
 function getBotName(string $user_agent, string $parser_name): string {
@@ -171,14 +172,26 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 		) {
 			$type = ' bot';
 
-		} elseif ($parser->type == 'mobile') {
-			$type = ' mobile';
-
 		} elseif ($ip == CHORDIAN) {
 			$type = ' jch';
 
 		} elseif ($user_name !== '') {
+			// Logged-in visitors can be trusted immediately
 			$type = ' user';
+
+		} elseif ($updated <= $created) {
+			/*
+			* Anonymous visitor has only contacted tracking.php once.
+			*
+			* Don't count or display it until the same visitor ID returns.
+			* This eliminates one-shot crawlers that generate a new UUID
+			* for every request.
+			*/
+			$count['pending']++;
+			continue;
+
+		} elseif ($parser->type == 'mobile') {
+			$type = ' mobile';
 		}
 
 		$count[trim($type)]++;
@@ -281,6 +294,7 @@ $counts = '
 		<span><b>Mobile:</b> '.$count['mobile'].'</span>
 		<span><b>Other:</b> '.$count['other'].'</span>
 		<span><b>Bots:</b> '.$count['bot'].'</span>
+		<span><b>Pending:</b> '.$count['pending'].'</span>
 		<span style="color:#000;"><b>Visitors:</b> '.
 			($count['other'] + $count['mobile'] + $count['user']).
 		'</span>

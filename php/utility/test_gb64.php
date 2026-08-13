@@ -1,5 +1,5 @@
 <?php
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 	try {
 		$gb = new PDO(
 			'mysql:host='.$config['db_gb64_host'].';dbname='.$config['db_gb64_name'],

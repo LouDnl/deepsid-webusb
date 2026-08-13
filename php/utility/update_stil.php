@@ -8,7 +8,7 @@
  * Line breaks inside each STIL entry are converted to <br />.
  */
 
-require_once dirname(__DIR__).'/class.account.php'; // php/class.account.php
+require_once dirname(__DIR__).'/lib/class.account.php';
 
 const HVSC_FULL_PATH	= __DIR__.'/../../music/_High Voltage SID Collection';
 const COLLECTION_NAME	= '_High Voltage SID Collection';

@@ -37,17 +37,17 @@ BOTH: Download
   1. Download the full HVSC update.
   2. Rename the old HVSC folder to '*_OLD' instead.
   3. Extract and move in the new folder.
+  4. Compress the new folder to a 'C64Music.zip' archive.
 
-  4. Copy the 'GROUPS' sub folder from '*_OLD' to the new folder.
-  5. Compress the new folder (including 'GROUPS') to a 'C64Music.zip' archive.
-
+  5. Copy the 'GROUPS' sub folder from '*_OLD' to the new folder. (Don't include this in the
+     compressed archive in step 4 as it's not adapted for One.com's folder system.)
   6. Delete the '*_OLD' folder.
 
  ONLINE right now:
 
-  1. Delete any previous '*_OLD' folders if you forgot to delete them last time.
+  1. Run the FTP client.
+  2. Delete any previous '*_OLD' folders if you forgot to delete them last time.
 
-  2. Run the FTP client.
   3. Upload 'C64Music.zip' archive to the 'php/_update/' folder.
   4. File Explorer: Delete the local 'C64Music.zip' file.
 
@@ -305,7 +305,9 @@ ONLINE: Handling folders
   2. Move the old HVSC folder in 'music' to the root, renamed as '*_OLD' instead.
   3. Move the new HVSC folder from 'php/_update' to 'music' folder.
 
-  4. Later delete the '*_OLD' folder in root. THIS TAKES QUITE A WHILE AND CAN BE POSTPONED.
+  4. Copy the 'GROUPS' sub folder from '*_OLD' to the new folder.
+
+  5. Later delete the '*_OLD' folder in root. THIS TAKES QUITE A WHILE AND CAN BE POSTPONED.
 
 
 ONLINE: Update database

@@ -17,9 +17,9 @@
  * @used-by		csdb.php
  */
 
-require_once(__DIR__."/../class.account.php"); // Includes setup
+require_once(__DIR__."/class.account.php"); // Includes setup
+require_once(__DIR__."/array.countries.php");
 require_once(__DIR__."/../jbbcode/Parser.php");
-require_once(__DIR__."/array_countries.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

@@ -4,8 +4,8 @@
  *
  * Countries and their codes.
  * 
- * @used-by		shared/functions_csdb.php
- * @used-by		shared/functions_root.php
+ * @used-by		lib/functions.csdb.php
+ * @used-by		lib/functions.root.php
  * @used-by		composers.php
  * @used-by		csdb_compo_table.php
  */

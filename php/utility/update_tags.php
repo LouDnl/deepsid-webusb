@@ -8,7 +8,7 @@
  * @used-by		N/A
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 const MODE_COOP 	= 'Coop';
 const MODE_UNF 		= 'Unfinished';

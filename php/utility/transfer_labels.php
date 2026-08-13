@@ -8,7 +8,7 @@
  * cleans up in the tags database tables.
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 die("This script has served its purpose. It doesn't need to be run again.");
 

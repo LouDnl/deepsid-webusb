@@ -8,10 +8,13 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Collect all class PHP files in a 'classes' sub folder. (Remember this involves a LOT of PHP files!)
+- In 'parse.php' make 43.173.##.## IP addresses output "Tencent" (?) in front in their red boxes.
+
+- Don't remove music credits in "Music" CSDb releases. I think this is actually a collection:
+  https://deepsid.chordian.net/?file=/MUSICIANS/E/Ed/Sadpano.sid
 
 - BUG: Hotkeys for factoids doesn't work for users not logged in. Either make them work or remove the
-  options in the top left menu.
+  options in the top left menu when not logged in.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.

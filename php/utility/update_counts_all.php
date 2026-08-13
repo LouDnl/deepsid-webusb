@@ -10,7 +10,7 @@
  * The folders themselves are not counted.
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 $ROOT = realpath(__DIR__ . '/../../music');
 if (!$ROOT)

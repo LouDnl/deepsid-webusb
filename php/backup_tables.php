@@ -9,7 +9,7 @@
  * @used-by		index.php
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 $backup_dir     = __DIR__ . '/../backups/';
 $timestamp_file = $backup_dir . 'last_backup.txt';

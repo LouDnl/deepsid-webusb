@@ -1,6 +1,6 @@
 <?php
 
-require_once 'class.account.php';  // Includes setup
+require_once 'lib/class.account.php';  // Includes setup
 
 const FAVICON_CACHE_DIR = __DIR__ . '/../cache/favicons/';
 const FAVICON_CACHE_URL = '../cache/favicons/';

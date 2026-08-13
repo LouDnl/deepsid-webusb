@@ -9,7 +9,7 @@
  * @used-by		LOCALHOST only
  */
 
-require_once dirname(__DIR__).'/class.account.php'; // php/class.account.php
+require_once dirname(__DIR__).'/lib/class.account.php';
 
 set_time_limit(0);
 ignore_user_abort(true);

@@ -7,7 +7,7 @@
  * @used-by		N/A
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 try {
 	$db = $account->getDB();

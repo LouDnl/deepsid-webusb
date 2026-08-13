@@ -12,7 +12,7 @@
  * @used-by		N/A
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 const HVSC_NEW_VERSION	= '85';
 const HVSC_PATH			= '_High Voltage SID Collection/';

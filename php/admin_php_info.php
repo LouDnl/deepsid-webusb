@@ -1,5 +1,5 @@
 <?php
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 if (!$account->isAdmin())
 	die("This is for administrators only.");

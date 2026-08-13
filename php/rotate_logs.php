@@ -6,7 +6,7 @@
  *
  * This is called by the LogActivity() function.
  * 
- * @used-by		class.account.php
+ * @used-by		lib/class.account.php
  */
 
 declare(strict_types=1);

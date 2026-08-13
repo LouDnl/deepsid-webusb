@@ -9,7 +9,7 @@ if (PHP_SAPI === 'cli' && !isset($_SERVER['HTTP_HOST'])) {
 	$_SERVER['HTTP_HOST'] = 'localhost';
 }
 
-require_once __DIR__ . '/../../../php/class.account.php'; // Includes setup
+require_once __DIR__ . '/../../../php/lib/class.account.php'; // Includes setup
 
 /*
  * The BAT file passes the CSV filename as the first command-line argument.

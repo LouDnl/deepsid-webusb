@@ -4,7 +4,7 @@
 	 * DeepSID / Index
 	 */
 
-	require_once("php/class.account.php"); // Includes setup
+	require_once("php/lib/class.account.php"); // Includes setup
 	$user_id = $account->checkLogin() ? $account->userID() : 0;
 	$is_admin = $user_id && $account->isAdmin();
 	

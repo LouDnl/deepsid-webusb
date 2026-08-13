@@ -13,8 +13,8 @@
  */
 
 require_once("setup.php");
-require_once("shared/array_countries.php");
-require_once("shared/functions_csdb.php");
+require_once("lib/array.countries.php");
+require_once("lib/functions.csdb.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

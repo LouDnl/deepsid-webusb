@@ -7,7 +7,7 @@
  * For administrators only.
  */
 
-require_once("class.account.php");
+require_once("lib/class.account.php");
 
 if (!$account->isAdmin())
 	die("This is for administrators only.");

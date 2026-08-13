@@ -7,7 +7,7 @@
  * Detect missing database rows and missing/invalid fields.
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 ini_set('memory_limit', '1024M'); // Should be safe
 set_time_limit(0);

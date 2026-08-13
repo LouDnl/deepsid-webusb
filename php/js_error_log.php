@@ -7,7 +7,7 @@
  * @used-by		main.js
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	exit;

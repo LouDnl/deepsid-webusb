@@ -9,7 +9,7 @@
  * @used-by		main.js
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 const NOTESFILE = __DIR__ . '/../notes.txt';
 

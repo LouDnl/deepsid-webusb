@@ -8,7 +8,7 @@ if (PHP_SAPI === 'cli' && !isset($_SERVER['HTTP_HOST'])) {
 	$_SERVER['HTTP_HOST'] = 'localhost';
 }
 
-require_once __DIR__ . '/../../../php/class.account.php'; // Includes setup
+require_once __DIR__ . '/../../../php/lib/class.account.php'; // Includes setup
 
 if (PHP_SAPI !== 'cli') {
 	fwrite(STDERR, "ERROR: This script must be run from the command line." . PHP_EOL);

@@ -13,7 +13,7 @@
  * @used-by		N/A
  */
 
-require_once("class.account.php"); // Includes setup
+require_once("lib/class.account.php"); // Includes setup
 
 const CGSC_VERSION	= '147'; // Remember to update this
 const CGSC_PATH		= "_Compute's Gazette SID Collection/";

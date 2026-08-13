@@ -17,8 +17,8 @@
  * @used-by		browser.js
  */
 
-require_once("class.account.php"); // Includes setup
-require_once("shared/functions_sid_id.php");
+require_once("lib/class.account.php"); // Includes setup
+require_once("lib/functions.sid_id.php");
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest')
 	die("Direct access not permitted.");

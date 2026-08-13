@@ -7,7 +7,7 @@
  * @used-by		main.js
  */
 
-require_once("php/class.account.php"); // Includes setup
+require_once("php/lib/class.account.php"); // Includes setup
 
 // --------------------------------------------------------------------------
 // FUNCTIONS

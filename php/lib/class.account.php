@@ -25,7 +25,7 @@
  * @copyright 2013-2026 Jens-Christian Huus
  */
 
-require_once("setup.php");
+require_once(__DIR__ . "/../setup.php");
 
 // Database columns allowed for read/write of user settings
 const USER_COLS_ALLOWED = ['sid_handler'];
@@ -305,7 +305,7 @@ class Account {
 
 		// Run rotation opportunistically on the 1st of each month
 		if (!$rotated_this_request && (int)date('j') === 1) {
-			@require_once __DIR__ . '/rotate_logs.php';
+			@require_once __DIR__ . '/../rotate_logs.php';
 			$rotated_this_request = true;
 		}
 

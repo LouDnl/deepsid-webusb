@@ -13,7 +13,7 @@ if (PHP_SAPI === 'cli') {
 	$_SERVER['HTTP_HOST'] = 'localhost';
 }
 
-require_once dirname(__DIR__).'/class.account.php'; // php/class.account.php
+require_once dirname(__DIR__).'/lib/class.account.php';
 
 const HVSC_FULL_PATH = __DIR__.'/../../music/_High Voltage SID Collection';
 const SONGLENGTHS_FILE = HVSC_FULL_PATH.'/DOCUMENTS/Songlengths.md5';
