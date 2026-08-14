@@ -1998,6 +1998,12 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 14, 2026</h3>
+						<ul>
+							<li>SID files used are no longer hidden for 'C64 Music' releases on (cache refreshed) CSDb release pages.</li>
+							<li>Toggling factoids or tags using hotkeys or menu items now also works for users who are not logged in.</li>
+						</ul>
+
 						<h3>August 9, 2026</h3>
 						<ul>
 							<li>Added a new user setting for specifying the pause between songs in milliseconds when using auto-progress.</li>

@@ -798,7 +798,7 @@ if ($csdb_type == 'sid') {
 	// NOTE: Handles for ID may already have been added to the '$sceners' array by 'Released by' above.
 	$credits = '';
 	$roles = array();
-	if ($csdb->Release->Credits /*&& strtolower($csdb->Release->Type) != 'c64 music'*/) {
+	if ($csdb->Release->Credits) {
 		$credits = $csdb->Release->Credits->Credit;
 		// First gather an associative array of credit roles where each may contain a list of members
 		foreach($credits as $credit) {
@@ -860,7 +860,7 @@ if ($csdb_type == 'sid') {
 	// SID files used in this release
 	$sid_files_used = '';
 	$amount_sid = 0;
-	if (isset($csdb->Release->UsedSIDs) && strtolower($csdb->Release->Type) != 'c64 music') {
+	if (isset($csdb->Release->UsedSIDs)) {
 		$sids = $csdb->Release->UsedSIDs->SID;
 		foreach($sids as $sid) {
 			$sid_files_used .= 

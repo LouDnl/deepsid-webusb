@@ -89,7 +89,14 @@ $count = array(
 	'pending'	=> 0,
 );
 
-function getBotName(string $user_agent, string $parser_name): string {
+function getBotName(string $user_agent, string $parser_name, string $ip): string {
+
+	if (
+		str_starts_with($ip, '43.172.') ||
+		str_starts_with($ip, '43.173.')
+	) {
+		return 'Tencent';
+	}
 
 	$bots = array(
 		'meta-externalagent'	=> 'Meta External Agent',
@@ -247,7 +254,7 @@ if (($handle = fopen(TRACKFILE, 'r')) !== false) {
 
 		if (trim($type) === 'bot') {
 			$bot_name = htmlspecialchars(
-				getBotName($user_agent, $parser->fullname),
+				getBotName($user_agent, $parser->fullname, $ip),
 				ENT_QUOTES | ENT_SUBSTITUTE,
 				'UTF-8'
 			);

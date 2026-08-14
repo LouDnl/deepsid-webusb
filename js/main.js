@@ -459,7 +459,8 @@ var main = {
 		if (main.factoidTypeTop == 1 || main.factoidTypeTop == 10) main.factoidTypeTop++; // Skip #1 and #10
 		if (main.factoidTypeTop > 12) main.factoidTypeTop = 0;
 
-		$("#dropdown-settings-factoid-top").val(main.factoidTypeTop).trigger("change");
+		$("#dropdown-settings-factoid-top").val(main.factoidTypeTop);
+		main.selectFactoid(FACTOID_TOP, main.factoidTypeTop);
 	},
 
 	/**
@@ -470,7 +471,8 @@ var main = {
 		if (main.factoidTypeBottom == 10) main.factoidTypeBottom++; // Skip #10
 		if (main.factoidTypeBottom > 12) main.factoidTypeBottom = 0;
 
-		$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");
+		$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom);
+		main.selectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 	},
 
 	/**
@@ -494,7 +496,9 @@ var main = {
 	toggleTags: function() {
 		if (main.factoidTypeBottom !== 1) {
 			// Select it as the bottom factoid and then show it
-			$("#dropdown-settings-factoid-bottom").val(1).trigger("change");
+			main.factoidTypeBottom = 1;
+			$("#dropdown-settings-factoid-bottom").val(main.factoidTypeBottom).trigger("change");
+			main.selectFactoid(FACTOID_BOTTOM, main.factoidTypeBottom);
 			main.showTags = true;
 		} else {
 			// It's the bottom factoid so just toggle it now
@@ -3114,7 +3118,6 @@ main.bindKeyboardEvents = function() {
 						break;
 
 					case 73:	// Keyup 'i' - cycle through factoid types (top)
-
 						main.cycleFactoidTypeTop();
 						break;
 
