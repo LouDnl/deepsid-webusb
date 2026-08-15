@@ -4,6 +4,8 @@ These are the source codes for [DeepSID](https://deepsid.chordian.net), a modern
 
 ## Setting up for offline use
 
+Last updated: 2026-08-15
+
 You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://wampserver.aviatechno.net/?lang=en) but there are a ton of options on the internet.
 
 ### Folders and files
