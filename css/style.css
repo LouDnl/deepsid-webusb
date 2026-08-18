@@ -332,6 +332,7 @@
 	--color-timebar-websid:			var(--color-memory-border-top);
 	--color-timebar-hermit:			rgb(38, 99, 41);
 	--color-timebar-asid:			#666;
+	--color-timebar-usplayer:		#1a7f8c;
 	--color-timebar-youtube:		#a44;				/* This and above are time bar colors for various SID handlers */
 
 	--color-slider-track:			#7e8260;			/* Color of the rail track of the volume slider */
@@ -730,6 +731,7 @@
 	--color-timebar-websid:			linear-gradient(to bottom, #616fbb 20%,#44529d 100%); 	/* #44529d */
 	--color-timebar-hermit:			linear-gradient(to bottom, #368e39 20%,#266329 100%); 	/* #266329 */
 	--color-timebar-asid:			linear-gradient(to bottom, #777 20%,#555 100%);			/* #666 */
+	--color-timebar-usplayer:		linear-gradient(to bottom, #2ba6b6 20%,#1a7f8c 100%);	/* #1a7f8c */
 	--color-timebar-youtube:		linear-gradient(to bottom, #bd5b5b 20%,#9d3f3f 100%); 	/* #a44; */
 	--color-slider-track:			#4a4a4a;
 
@@ -1237,6 +1239,39 @@ small.u2 { margin-left: 2px; }
 			position: relative;
 			left: 50px;
 			/*top: -2px;*/
+		}
+
+	/* The USBSID-Player row in top: its mode selector, the button that asks for
+	   a board or a port, and its own status line. */
+	#usplayer-box {
+		margin-bottom: 10px;
+		margin-right: 50px;
+		float: right;
+		text-align: right;
+	}
+
+		#usplayer-box select {
+			width: 207px;
+		}
+
+		#usplayer-box label {
+			font: normal 13px "Montserrat", sans-serif;
+			margin-right: 6px;
+		}
+
+		#usplayer-status {
+			display: block;
+			font: normal 11px "Montserrat", sans-serif;
+			color: var(--color-text-fine);
+			margin-top: 4px;
+		}
+
+		/* A board that cannot do what this mode asks of it, or no board at all.
+		   The same line as the running commentary, because it is under the
+		   Connect button either way and that is where the answer belongs. */
+		#usplayer-status.usplayer-warn {
+			color: var(--color-sid-row-error-entry);
+			font-weight: bold;
 		}
 
 #userform {
@@ -2214,6 +2249,7 @@ input[type=range]::-ms-track {
 		#time .legacy div		{ background: var(--color-timebar-websid); }
 		#time .hermit div		{ background: var(--color-timebar-hermit); }
 		#time .asid div			{ background: var(--color-timebar-asid); }
+		#time .usplayer div		{ background: var(--color-timebar-usplayer); }
 		#time .youtube div		{ background: var(--color-timebar-youtube); }
 
 /* Small dot that indicates this time length has millseconds too */
