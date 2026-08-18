@@ -193,6 +193,8 @@
 
 		<!--<script type="text/javascript" src="js/handlers/jsidplay2.js"></script>-->
 		<script type="text/javascript" src="js/handlers/jsSID-modified.js?v=<?php echo filemtime('js/handlers/jsSID-modified.js') ?>"></script>
+		<?php // USBSID-Player. Its wasm and ES modules are in 'js/handlers/usplayer/' and are imported on demand ?>
+		<script type="text/javascript" src="js/handlers/backend_usplayer.js?v=<?php echo filemtime('js/handlers/backend_usplayer.js') ?>"></script>
 		<script type="text/javascript" src="js/chartist.min.js?v=<?php echo filemtime('js/chartist.min.js') ?>"></script>
 		<?php // @link https://github.com/madmurphy/cookies.js ?>
 		<script type="text/javascript" src="js/cookies.min.js?v=<?php echo filemtime('js/cookies.min.js') ?>"></script>
@@ -626,6 +628,7 @@
 					<option value="hermit">Hermit's (+FM)</option>
 					<option value="webusb">WebUSB (Hermit)</option>
 					<option value="asid">ASID (MIDI)</option>
+					<option value="usplayer">USBSID-Player</option>
 					<option value="youtube">YouTube videos</option>
 					<option value="download">Download SID file</option>
 					<option value="silence">No SID handler</option>
@@ -674,6 +677,25 @@
 				<label for="select-midi-outputs">MIDI port for ASID</label>
 				<!--<select id="asid-midi-outputs" name="select-midi-outputs" style="visibility:hidden;"></select>-->
 				<select id="asid-midi-outputs" name="select-midi-outputs"></select>
+			</div>
+			<div id="usplayer-box" style="display:none;">
+				<label for="select-usplayer-mode">USBSID-Player mode</label>
+				<select id="select-usplayer-mode" name="select-usplayer-mode">
+					<option value="audio">reSIDfp (no hardware)</option>
+					<option value="webusb">WebUSB (USBSID-Pico)</option>
+					<option value="serial">Web Serial (USBSID-Pico)</option>
+					<option value="asid">ASID (MIDI)</option>
+					<option value="sendsid">SendSID (onboard player)</option>
+				</select>
+				<span id="usplayer-connect" style="display:none;">
+					<button id="usplayer-device-connect">Connect</button>
+					<label id="usplayer-connect-text" for="usplayer-device-connect">to a USBSID-Pico</label>
+				</span>
+				<span id="usplayer-midi" style="display:none;">
+					<label for="select-usplayer-midi">MIDI port</label>
+					<select id="select-usplayer-midi" name="select-usplayer-midi"></select>
+				</span>
+				<label id="usplayer-status"></label>
 			</div>
 
 			<div id="youtube-tabs">
@@ -1134,6 +1156,7 @@
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
 								<button class="button-edit button-radio button-off viz-emu viz-hermit" data-group="viz-emu" data-emu="hermit">Hermit</button>
+								<button class="button-edit button-radio button-off viz-emu viz-usplayer" data-group="viz-emu" data-emu="usplayer">USBSID</button>
 								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
 								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
@@ -1222,6 +1245,7 @@
 								<button class="button-edit button-radio button-off viz-emu viz-websid" data-group="viz-emu" data-emu="websid">WebSid</button>
 								<button class="button-edit button-radio button-off viz-emu viz-legacy" data-group="viz-emu" data-emu="legacy">Legacy</button>
 								<button class="button-edit button-radio button-off viz-emu viz-hermit" data-group="viz-emu" data-emu="hermit">Hermit</button>
+								<button class="button-edit button-radio button-off viz-emu viz-usplayer" data-group="viz-emu" data-emu="usplayer">USBSID</button>
 								<span class="viz-warning viz-msg-emu" style="position:relative;top:-1px;"> <img src="images/composer_arrowleft.svg" style="position:relative;top:5px;height:18px;" alt="" /> You need one of these</span>
 								<span class="viz-warning viz-msg-buffer" style="position:relative;top:-1px;">Decrease if too slow <img src="images/composer_arrowright.svg" style="position:relative;top:4px;height:18px;" alt="" /></span>
 								<div class="viz-buffer">
@@ -1633,6 +1657,7 @@
 										<option value="hermit">Hermit's (+FM)</option>
 										<option value="webusb">WebUSB (Hermit)</option>
 										<option value="asid">ASID (MIDI)</option>
+										<option value="usplayer">USBSID-Player</option>
 										<option value="youtube">YouTube videos</option>
 										<option value="download">Download SID file</option>
 										<option value="silence">No SID handler</option>
@@ -1662,6 +1687,28 @@
 								<p>This section will change if you select a different SID handler.</p>
 								<div class="settings-advanced-resid settings-advanced-websid settings-advanced-legacy settings-advanced-hermit settings-advanced-asid settings-advanced-youtube settings-advanced-download settings-advanced-silence settings-advanced">
 									<label class="dropdown-unstyled-label unselectable">There are no advanced settings for this SID handler.</label>
+								</div>
+								<div class="settings-advanced-usplayer settings-advanced">
+									<select id="dropdown-adv-usplayer-mode" class="dropdown-unstyled">
+										<option value="audio" selected="selected">reSIDfp (no hardware)</option>
+										<option value="webusb">WebUSB (USBSID-Pico)</option>
+										<option value="serial">Web Serial (USBSID-Pico)</option>
+										<option value="asid">ASID (MIDI)</option>
+										<option value="sendsid">SendSID (onboard player)</option>
+									</select>
+									<label for="dropdown-adv-usplayer-mode" class="dropdown-unstyled-label unselectable">Mode</label>
+
+									<div class="space"></div>
+
+									<p><b>reSIDfp</b> synthesises the sound in this page and needs no hardware at all.
+										The other three play the tune on real or cloned SID chips: <b>WebUSB</b> and
+										<b>Web Serial</b> talk to a
+										<a href="https://github.com/LouDnl/USBSID-Pico" target="_blank">USBSID-Pico</a>
+										board, and <b>ASID</b> sends the register writes over MIDI to any ASID capable
+										device. Web Serial is the one to use in a browser without WebUSB, such as
+										Firefox.</p>
+									<p>The mode can also be chosen in top. Changing it reloads the page, as changing
+										the SID handler itself does.</p>
 								</div>
 								<div class="settings-advanced-jsidplay2 settings-advanced">
 									<select id="dropdown-adv-jsidplay2-defemu" class="dropdown-unstyled">
@@ -1807,6 +1854,16 @@
 							WebUSB implementation by LouD<br/>
 							<a href="https://github.com/LouDnl" target="_top">https://github.com/LouDnl</a><br />
 							<a href="https://www.youtube.com/@LouDnl" target="_top">https://www.youtube.com/@LouDnl</a><br />
+						</p>
+						<p>
+							USBSID-Player and the USBSID-Pico board by LouD<br />
+							A cycle exact C64 with four outputs: reSIDfp in the page, WebUSB, Web Serial and ASID<br />
+							<a href="https://github.com/LouDnl/USBSID-Player" target="_top">https://github.com/LouDnl/USBSID-Player</a><br />
+							<a href="https://github.com/LouDnl/USBSID-Pico" target="_top">https://github.com/LouDnl/USBSID-Pico</a><br />
+						</p>
+						<p>
+							reSIDfp engine (used by USBSID-Player) by Dag Lem, Antti Lankila and Leandro Nini<br />
+							<a href="https://github.com/libsidplayfp/libsidplayfp" target="_top">https://github.com/libsidplayfp/libsidplayfp</a><br />
 						</p>
 
 						<p>
