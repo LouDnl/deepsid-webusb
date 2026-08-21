@@ -4,6 +4,8 @@ These are the source codes for [DeepSID](https://deepsid.chordian.net), a modern
 
 ## Setting up for offline use
 
+Last updated: 2026-08-15
+
 You can use this in a local version on your own computer, if you want to. First, setup an environment that makes it possible to run PHP and MySQL. I personally use [WampServer](http://wampserver.aviatechno.net/?lang=en) but there are a ton of options on the internet.
 
 ### Folders and files
@@ -27,7 +29,8 @@ Download the GitHub tree above as well as the following files:
 6. Create the `/deepsid/images/composers/` sub folder and unpack **DeepSID_Images_Composers.zip** into it.
 7. Create the `/deepsid/images/countries/` sub folder and unpack **DeepSID_Images_Countries.zip** into it.
 8. Create the `/deepsid/images/csdb/` sub folder and unpack **DeepSID_Images_CSDb.zip** into it.
-9. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
+9. Create the `/deepsid/images/gb64/` sub folder and unpack **DeepSID_Images_GB64.zip** into it.
+10. Create the `/deepsid/images/players/` sub folder and unpack **DeepSID_Images_Players.zip** into it.
 
 Download the following SID collections that will work with the database supplied below:
 
