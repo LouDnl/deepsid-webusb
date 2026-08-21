@@ -165,42 +165,47 @@ Controls.prototype = {
 			this.state("subtunes", "disabled");
 			this.state("prev/next", "disabled");
 
-			// The DO blocks below makes sure disabled rows are skipped until
-			// a playable row is found (unless a list boundary is hit first)
 			var songRating = songLength = 0, moreSubtunes = false;
 			if (id == "skip-next") {
-				do {
-					browser.songPos++;
-					songRating = browser.songs[browser.songPos].rating;
-					songLength = browser.getLength(browser.songs[browser.songPos].startsubtune);
-					moreSubtunes = browser.songs[browser.songPos].startsubtune < browser.songs[browser.songPos].subtunes - 1;
+				if (main.playingInfinityRadio) {
+					// Infinity Radio: Play the next random tune in a random folder
+					main.infinityPlayNext();
+				} else {
+					// Skip disabled rows until a playable row is found (unless a list boundary is hit first)
+					do {
+						browser.songPos++;
+						songRating = browser.songs[browser.songPos].rating;
+						songLength = browser.getLength(browser.songs[browser.songPos].startsubtune);
+						moreSubtunes = browser.songs[browser.songPos].startsubtune < browser.songs[browser.songPos].subtunes - 1;
 
-					if (browser.songPos == browser.songs.length - 1) {
-						// At the end of the list
-						$("#skip-next").addClass("disabled");
-						// Don't play the song in the bottom if a setting is supposed to skip it
-						if (isAutoProgress) {
-							if ((main.getUserToggle("skip-bad") && (songRating == 1 || songRating == 2)) ||
-								(main.getUserToggle("skip-short") && songLength < 10 && !moreSubtunes)) {
-								$("#stop").trigger("mouseup");
-								SID.stop();
-								return false;
-							} else if (main.getUserToggle("skip-short") && songLength < 10) {
-								// The default is too short, but what about the subsequent sub tunes in it?
-								$("#subtune-plus").trigger("mouseup", false);
-								return false;
+						if (browser.songPos == browser.songs.length - 1) {
+							// At the end of the list
+							$("#skip-next").addClass("disabled");
+							// Don't play the song in the bottom if a setting is supposed to skip it
+							if (isAutoProgress) {
+								if ((main.getUserToggle("skip-bad") && (songRating == 1 || songRating == 2)) ||
+									(main.getUserToggle("skip-short") && songLength < 10 && !moreSubtunes)) {
+									$("#stop").trigger("mouseup");
+									SID.stop();
+									return false;
+								} else if (main.getUserToggle("skip-short") && songLength < 10) {
+									// The default is too short, but what about the subsequent sub tunes in it?
+									$("#subtune-plus").trigger("mouseup", false);
+									return false;
+								}
+							}	
+							if (SID.emulator == "youtube") {
+								SID.setSeek(0);
+								$("#time-length").empty().append("0:00");
 							}
-						}	
-						if (SID.emulator == "youtube") {
-							SID.setSeek(0);
-							$("#time-length").empty().append("0:00");
+							break;
 						}
-						break;
-					}
-				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
-					(isAutoProgress && main.getUserToggle("skip-bad") && (songRating == 1 || songRating == 2)) ||
-					(isAutoProgress && main.getUserToggle("skip-short") && songLength < 10 && !moreSubtunes));
+					} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled") || 
+						(isAutoProgress && main.getUserToggle("skip-bad") && (songRating == 1 || songRating == 2)) ||
+						(isAutoProgress && main.getUserToggle("skip-short") && songLength < 10 && !moreSubtunes));
+				}
 			} else {
+				// Skip disabled rows until a playable row is found (unless a list boundary is hit first)
 				do {
 					browser.songPos--;
 					if (browser.songPos == 0) {
@@ -358,6 +363,7 @@ Controls.prototype = {
 	onClick: function(event) {
 		switch(event.target.id) {
 			case "stop":
+
 				// STOP button
 				$("#time-bar").empty().append('<div></div>');
 				SID.stop();
@@ -368,8 +374,22 @@ Controls.prototype = {
 					$sound.pause();
 					$sound.currentTime = 0;
 				});
+
+				if (main.playingInfinityRadio) {
+					// Stop the 'Infinity Radio' session too?
+					main.customDialog({
+						id: '#dialog-stop-infinity-radio',
+						text: '<p>Stop the <b>Infinity Radio</b> too?</p>',
+						width: 241,
+						height: 126,
+					}, function() {
+						main.infinityStop();
+					});
+				}
 				break;
+
 			case "sid-model":
+
 				// Toggle between SID model 6581 or 8580
 				$("#sid-model").remove();
 				browser.showSpinner($("#folders tr").eq(browser.subFolders + browser.songPos).find("td.sid"));
@@ -382,7 +402,9 @@ Controls.prototype = {
 				}
 				main.showSundryFilterContents();
 				break;
+
 			case "clockspeed":
+
 				// Toggle between PAL or NTSC
 				$("#clockspeed").remove();
 				if ($(event.target).hasClass("PAL")) {
@@ -393,10 +415,14 @@ Controls.prototype = {
 					SID.setEncoding("PAL");
 				}
 				break;
+
 			case "loop":
+
 				// LOOP toggle button
 				break;
+
 			case "time-bar":
+
 				if (typeof browser.songPos !== "undefined" && SID.emulatorFlags.supportSeeking) {
 					// Clicking the time bar for a different seek position (if supported by the handler)
 					var maxSeconds = browser.getLength(this.subtuneCurrent, true),
@@ -411,10 +437,12 @@ Controls.prototype = {
 					}, 250);
 				}
 				break;
+
 			case "scope1":
 			case "scope2":
 			case "scope3":
 			case "scope4":
+
 				// Toggle voice 1 to 4 (by clicking on scope canvas boxes)
 				// NOTE: The "keyup" event in 'viz.js' catches this.
 				var e = $.Event("keyup");
@@ -422,28 +450,38 @@ Controls.prototype = {
 				e.shiftKey = event.shiftKey;
 				$(window).trigger(e);
 				break;
+
 			case "set-16k":
+
 				// Button in scope sundry box for forcing a buffer size of 16384
 				// NOTE: This is now only used by the legacy WebSid handler.
 				$("#visuals-piano .dropdown-buffer").val("16384").trigger("change");
 				break;				
+
 			case "sidwiz":
+
 				// Toggle 'SidWiz' mode ON or OFF for the oscilloscope voices
 				// NOTE: Don't add the DOM element check in 'animateScope()' as it needs to be fast.
 				viz.scopeMode = $("#sidwiz").is(":checked");
 				break;
+
 			case "showtags":
+	
 				// Toggle tags shown in SID rows ON or OFF
 				main.showTags = $("#showtags").is(":checked");
 				$("#songs .tags-line").css("visibility", main.showTags ? "" : "hidden");
 				break;
+
 			case "filter-r2":
 			case "filter-r3":
 			case "filter-r4":
+
 				// Set 6581 filter settings to R2, R3, or R4
 				SID.setRevision(event.target.id.split("-")[1]);
 				break;
+	
 			default:
+
 				if (event.target.tagName === "B") {
 					// Clicked a star to set a rating for a file
 					browser.registerStarRating(event, SID.getFullName());

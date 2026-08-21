@@ -31,7 +31,7 @@ Download the GitHub tree above as well as the following files:
 
 Download the following SID collections that will work with the database supplied below:
 
-* [High Voltage SID Collection #84](https://hvsc.brona.dk/HVSC/HVSC_84-all-of-them.7z)
+* [High Voltage SID Collection #85](https://hvsc.brona.dk/HVSC/HVSC_85-all-of-them.7z)
 * [Compute's Gazette SID Collection v1.47](http://www.c64music.co.uk/CGSC_v147.7z)
 
 1. Create the `/deepsid/music/` sub folder.

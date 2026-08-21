@@ -761,6 +761,21 @@
 
 }
 
+/* ---- Custom color variables (Infinity Radio) ------------------------------ */
+
+[data-radio="infinity"] {			/* Wine red */
+
+	--color-button:					#563636;
+	--color-button-border:			var(--color-button);
+	--color-button-border-select:	var(--color-button);
+	--color-button-text-select:		var(--color-button);
+	--color-button-hover:			#725252;
+	--color-button-text-hovsel:		var(--color-button-hover);
+	--color-button-border-hovsel:	var(--color-button-hover);
+
+	--border-button-select:			var(--color-button-border-select);
+}
+
 [data-theme="dark"] input,
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
@@ -1448,6 +1463,12 @@ small.u2 { margin-left: 2px; }
 	box-shadow: var(--shadow-button-select);
 }
 
+	.infbtn-selected {
+		border: 2px solid var(--border-infbtn-select);
+		color: var(--color-infbtn-text-select);
+		background: var(--color-infbtn-bg-select);
+	}
+
 .button-on {
 	box-shadow: none !important;
 }
@@ -1459,6 +1480,12 @@ small.u2 { margin-left: 2px; }
 		background: var(--color-button-bg-hovsel);
 	}
 
+		.infbtn-selected:hover {
+			border-color: var(--color-infbtn-border-hovsel);
+			color: var(--color-infbtn-text-hovsel);
+			background: var(--color-infbtn-bg-hovsel);
+		}
+
 .button-area {
 	display: inline-block;
 	position: relative;
@@ -1469,6 +1496,14 @@ small.u2 { margin-left: 2px; }
 
 	.button-area div.disabled {
 		color: var(--color-button-disabled);
+	}
+
+.button-infinity {
+	background: var(--color-infbtn);
+}
+
+	.button-infinity:hover {
+		background: var(--color-infbtn-hover);
 	}
 
 /* Used in e.g. the piano view */

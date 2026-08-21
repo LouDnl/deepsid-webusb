@@ -861,7 +861,7 @@ Browser.prototype = {
 			}.bind(this));
 
 			SID.setCallbackTrackEnd(function() {
-				// Does the user want a small pause between tunes?
+				// Does the user want a pause between tunes?
 				var delayNextTune = main.getUserToggle("delay-next");
 				
 				if ($("#loop").hasClass("button-off")) {
@@ -870,7 +870,10 @@ Browser.prototype = {
 					setTimeout(() => {
 						// Play the next subtune, or if no more subtunes, the next tune in the list
 						$("#faster").trigger("mouseup"); // Easy there cowboy
-						if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
+						if (main.playingInfinityRadio) {
+							// Infinity Radio: Play the next random tune in a random folder
+							main.infinityPlayNext();
+						} else if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
 							// Next subtune
 							$("#subtune-plus").trigger("mouseup", false);
 						} else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled")) {

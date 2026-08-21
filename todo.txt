@@ -8,6 +8,21 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- LouD has a pull request ready in GitHub. I'm in the middle of Infinity Radio, but try to integrate
+  it not only in GitHub but also with a GitHub command in VSCode.
+
+- Infinity Radio: See 'd' hotkey in 'main.js'...
+
+    @todo
+      Add start 'Infinity Radio' to: Path area + top three lines menu + hotkey
+      Button for browse to previous SID tune should be disabled
+        - or - it could use the set array to browse back in what *has* been played
+      When a random tune is last in a folder, don't disable the 'Next' button
+
+
+      WIP red buttons for bright and dark scheme using a data theme (much easier)
+
+
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
 
@@ -27,12 +42,9 @@ REALLY CONSIDER THIS
 
 - Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
   auto-progress, it will jump to a random tune anywhere else in another folder.
-  - Jump algorithm randomly selects one of two (maybe three) methods at first:
+  - Jump algorithm randomly selects one of two methods at first:
     1. Play any tune inside a MUSICIANS letter folder that the 'Ratings' user have given two stars or more.
-    2. Play any tune in all collections that the 'Ratings' user have specifically given two stars or more.
-    3. How about as 2. but judging from average of all star ratings given by all users? (In
-       that case you better go for three stars or more, not two.)
-    NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
+    2. Play any tune in all collections that has been judged average of all star ratings given by all users.
   - Place the button for it in the white PATH box, which is ~empty anyway in the root.
   - Maybe make certain control buttons wine red (including the starter button) to show that this
     will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.

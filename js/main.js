@@ -1,8 +1,6 @@
 
 /**
  * DeepSID / Main
- * 
- * {@link main.browserMessage}
  */
 
 var $=jQuery.noConflict();
@@ -16,6 +14,9 @@ const trackingTimers = Object.create(null);
 
 // NOCAPS: Firefox scrolls more smoothly than Chrome
 const isFirefox = typeof InstallTrigger !== "undefined";
+
+// NOCAPS: Used to avoid repeats in Infinity Radio
+const infinityPlayed = new Set();
 
 // Tracking acceptance timeouts (ms)
 const TRACK_DELAY = {
@@ -85,6 +86,7 @@ var main = {
 	factoidTypeTop:				0,			// Number of top line factoid (see FACTOID_MESSAGE above)
 
 	fastForwarding:				false,		// @todo This is never set to TRUE - better investigate this
+	playingInfinityRadio:		false,		// TRUE = The Infinity Radio is currently playing
 	forum:						null,		// The AJAX object for showing parts of the CSDb forum
 	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
 	isNotips:					false,		// TRUE = Do not display the annex box in the right side
@@ -631,6 +633,105 @@ var main = {
 	 */
 	selectedDexterTab: function() {
 		return $("#tabs .selected").attr("data-topic");
+	},
+
+	/**
+	 * Infinity Radio: Start a session.
+	 */
+	infinityStart: function() {
+		infinityPlayed.clear();
+		main.playingInfinityRadio = true;
+
+		// Wine red control buttons
+		//$("#play-pause").removeClass("button-infinity").addClass("button-infinity");
+		$("body").attr("data-radio", "infinity");
+
+		main.infinityPlayNext();
+	},
+
+	/**
+	 * Infinity Radio: Play the next random (sub-)tune in a random folder.
+	 */
+	infinityPlayNext: function() {
+		$.get("php/radio_random_file.php", function(data) {
+			browser.validateData(data, function() {
+				data = $.parseJSON(data);
+
+				const radioID = data.path + ":" + data.subtune;
+
+				if (infinityPlayed.has(radioID)) {
+					// It's a repeat so try again
+					infinityPlayNext();
+					return;
+				}
+
+				infinityPlayed.add(radioID);
+
+				var path = "/"+data.path.substr(0, data.path.lastIndexOf("/"));
+
+				ctrls.state("root/back", "enabled");
+				if (path != browser.path) {
+					browser.path = path;
+					// Load the different folder
+					browser.getFolder(0, undefined, undefined, function() {
+						main.clickAndScrollToSID(data.path, false, data.subtune);
+					});
+				} else {
+					// In the same folder
+					main.clickAndScrollToSID(data.path, false, data.subtune);
+				}
+				// Clear caches to force proper refresh of CSDb tab after redirecting 
+				main.cacheBeforeCompo = main.cacheCSDb = main.cacheSticky = main.cacheStickyBeforeCompo = "";
+				main.updateURL();
+			});
+		});
+	},
+
+	/**
+	 * Infinity Radio: Stop the session.
+	 */
+	infinityStop: function() {
+		main.playingInfinityRadio = false;
+
+		// Restore normal color for control buttons
+		//$("#play-pause").removeClass("button-infinity");
+		$("body").removeAttr("data-radio");
+	},
+
+	/**
+	 * Clicking a SID file row and then scrolling to center it in the browser list.
+	 * 
+	 * Used by redirect "plinks" and the Infinity Radio.
+	 * 
+	 * @param {string} fullname		The SID filename including folders
+	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist
+	 * @param {number} subtune		If specified, this subtune to play
+	 * 
+	 * @return {boolean}			TRUE if the SID was found and is now playing
+	 */
+	clickAndScrollToSID: function(fullname, solitary, subtune) {
+		if (typeof solitary == "undefined") solitary = true;
+		// Isolate the SID name, e.g. "music.sid"
+		var sidFile = fullname.split("/").slice(-1)[0];
+		var $tr = $("#folders tr").filter(function() {
+			return $(this).find(".name").text().toLowerCase() == sidFile.toLowerCase();
+		}).closest("tr");
+		// Did we find the SID file?
+		if ($tr.length) {
+			// Yes; this is the <TR> row with the SID file we need to play
+			var $trPlay = $("#folders tr").eq($tr.index());
+			// Don't refresh CSDb + [Stop when done]
+			$trPlay.children("td.sid").trigger("click", [subtune, true, solitary]);
+			// Scroll the row into the middle of the list
+			var rowPos = $trPlay[0].offsetTop,
+				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
+			$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+			return true;
+		} else {
+			// No; just stop playing
+			$("#stop").trigger("mouseup").trigger("click");
+			return false;
+		}
 	},
 
 	// ==============================
@@ -2421,15 +2522,14 @@ main.bindDexterEvents = function() {
 		var fullname = $this.html();
 		var path = "/_High Voltage SID Collection"+fullname.substr(0, fullname.lastIndexOf("/"));
 
-		// @todo If using redirect for custom folders later then copy the 'browser.path' lines from 'fileParam' below.
 		ctrls.state("root/back", "enabled");
 		if (path != browser.path) {
 			browser.path = path;
 			browser.getFolder(0, undefined, undefined, function() {
-				if (!_ClickAndScrollToSID(fullname, solitary))
+				if (!main.clickAndScrollToSID(fullname, solitary))
 					$this.wrap('<del class="redirect"></del>').contents().unwrap();
 			});
-		} else if (!_ClickAndScrollToSID(fullname, solitary)) {
+		} else if (!main.clickAndScrollToSID(fullname, solitary)) {
 			$this.wrap('<del class="redirect"></del>').contents().unwrap();
 		}
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
@@ -2439,41 +2539,6 @@ main.bindDexterEvents = function() {
 		$("#redirect-back").empty().append(prevRedirect);
 		return false;
 	});
-
-	/**
-	 * Clicking a SID file row and then scrolling to center it in the browser list.
-	 * 
-	 * Only used by redirect "plinks" for now.
-	 * 
-	 * @param {string} fullname		The SID filename including folders
-	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist
-	 * 
-	 * @return {boolean}			TRUE if the SID was found and is now playing
-	 */
-	function _ClickAndScrollToSID(fullname, solitary) {
-		if (typeof solitary == "undefined") solitary = true;
-		// Isolate the SID name, e.g. "music.sid"
-		var sidFile = fullname.split("/").slice(-1)[0];
-		var $tr = $("#folders tr").filter(function() {
-			return $(this).find(".name").text().toLowerCase() == sidFile.toLowerCase();
-		}).closest("tr");
-		// Did we find the SID file?
-		if ($tr.length) {
-			// Yes; this is the <TR> row with the SID file we need to play
-			var $trPlay = $("#folders tr").eq($tr.index());
-			// Don't refresh CSDb + [Stop when done]
-			$trPlay.children("td.sid").trigger("click", [undefined, true, solitary]);
-			// Scroll the row into the middle of the list
-			var rowPos = $trPlay[0].offsetTop,
-				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
-			$("#folders").scrollTop(rowPos > halfway ? rowPos - halfway : 0);
-			return true;
-		} else {
-			// No; just stop playing
-			$("#stop").trigger("mouseup").trigger("click");
-			return false;
-		}
-	}
 }
 
 // ==============================
@@ -3118,6 +3183,7 @@ main.bindKeyboardEvents = function() {
 						break;
 
 					case 73:	// Keyup 'i' - cycle through factoid types (top)
+
 						main.cycleFactoidTypeTop();
 						break;
 
@@ -3194,8 +3260,7 @@ main.bindKeyboardEvents = function() {
 
 					case 68:	// Keyup 'd' - test something
 
-						main.browserMessage(SID.subtune);
-						console.log(SID.sidHeader.getSpeedMode());
+						// main.infinityStart(); // Upcoming feature - not ready yet
 						break;
 
 					default:

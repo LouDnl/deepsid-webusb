@@ -392,7 +392,7 @@
 		gtag('config', 'G-8WGW8WKDN4');
 	</script>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo miniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-radio="" data-mini="<?php echo miniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
 		<?php if (!isLemon()): ?>
 			<script type="text/javascript">setTheme();</script>
 		<?php endif ?>
@@ -563,6 +563,11 @@
 			<div class="dialog-text"></div>
 			<div id="clink-name-delete" class="clink-text ellipsis"></div>
 			<div id="clink-url-delete" class="clink-text ellipsis"></div>
+			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
+		</div>
+
+		<div id="dialog-stop-infinity-radio" class="dialog-box">
+			<div class="dialog-text"></div>
 			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
 		</div>
 
@@ -1997,6 +2002,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 20, 2026</h3>
+						<ul>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/F/Flotsam/ZooZoZ6.sid">ZooZoZ6.sid</a> by Flotsam.</li>
+						</ul>
+
+						<h3>August 15, 2026</h3>
+						<ul>
+							<li>Fixed credits not being shown in CSDb lists.</li>
+						</ul>
 
 						<h3>August 14, 2026</h3>
 						<ul>
