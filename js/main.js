@@ -243,9 +243,26 @@ var main = {
 				SID.emulator == "websid" || SID.emulator == "legacy"
 					? $tr.addClass("disabled")
 					: $tr.removeClass("disabled");
+			} else if (isSIDFile && $tr.find(".tag-digi").length &&
+				(SID.emulator == "asid" ||
+				(SID.emulator == "usplayer" && typeof usplayerAsidActive === "function" && usplayerAsidActive()))) {
+				// ASID hands register writes to a receiver that owns its own chips,
+				// and a digi tune is sample data pushed through $d418 far faster
+				// than the protocol can carry, so it arrives as noise or as nothing.
+				// Covers jsSID's own ASID handler and USBSID-Player in ASID mode.
+				//
+				// The row's own markup is the test: the tags line already carries a
+				// 'tag-digi' div when the tune is tagged for digi, so there is no
+				// data to plumb through. 'tag-subdigi' (8bit, PWM, and so on) is a
+				// separate class and is deliberately not matched, so only the plain
+				// Digi badge disables a row.
+				$tr.addClass("disabled");
 			} else if (isSIDFile && ($tr.find(".name").attr("data-type") === "RSID" || $tr.find(".name").attr("data-name").indexOf(".mus") !== -1)) {
-				// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files
-				SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid"
+				// Hermit's emulator and ASID can't do neither any RSID tunes nor any MUS files.
+				// USBSID-Player plays RSID tunes, being a real machine, but not MUS files.
+				var isMUSFile = $tr.find(".name").attr("data-name").indexOf(".mus") !== -1;
+				SID.emulator == "hermit" || SID.emulator == "webusb" || SID.emulator == "asid" ||
+				(SID.emulator == "usplayer" && isMUSFile)
 					? $tr.addClass("disabled")
 					: $tr.removeClass("disabled");
 			} else if (isSIDFile && $tr.find(".name").attr("data-name").indexOf(".mus") !== -1) {
@@ -349,6 +366,30 @@ var main = {
 			$("#asid-midi").show();
 		} else {
 			$("#asid-midi").hide();
+		}
+
+		if (emulator == "usplayer") {
+			// The mode selector is always relevant; what it needs plugged in is
+			// not. 'audio' needs nothing, the two board modes need a board and
+			// ASID needs a MIDI output.
+			//
+			// Read from storage and not from SID.advancedSetting, because this
+			// is called before 'new SIDPlayer()' further down and there is no
+			// SID object to ask yet. Same key 'applyAdvancedSetting()' uses.
+			var mode = localStorage.getItem("advanced_setting_usplayer_mode") || "audio";
+			$("#usplayer-box").show();
+			/* Before the value is set, so a stored mode this browser cannot do
+			 * falls back to one it can. See backend_usplayer.js. */
+			mode = usplayerMarkModeAvailability(mode);
+			$("#select-usplayer-mode").val(mode);
+			$("#usplayer-connect").toggle(mode == "webusb" || mode == "serial"
+				|| mode == "sendsid");
+			$("#usplayer-midi").toggle(mode == "asid");
+			$("#usplayer-connect-text").empty().append(
+				(mode == "serial" || mode == "sendsid")
+					? "to a serial port" : "to a USBSID-Pico");
+		} else {
+			$("#usplayer-box").hide();
 		}
 
 		$(window).trigger("resize"); // Keeps bottom search box in place
@@ -1206,6 +1247,12 @@ var main = {
 
 		// Also make sure the following switches are sticky
 		if (main.getParam("websiddebug")) link += "&websiddebug=1";
+		// '?worker=' picks whether USBSID-Player runs its emulation in a Worker.
+		// Sticky for the same reason as the rest: this rebuilds the query from
+		// scratch, so a switch that is not named here is dropped the moment a
+		// tune is clicked, and it looked as though the setting had been ignored.
+		var uspWorker = main.getParam("worker");
+		if (uspWorker === "0" || uspWorker === "1") link += "&worker="+uspWorker;
 		//if (main.getParam("lemon")) link += "&lemon=1";
 		if (main.getParam("mini")) link += "&mini="+main.miniPlayer;
 		
@@ -1441,6 +1488,54 @@ main.bindEvents = function() {
 	});
 
 	/**
+	 * The USBSID-Player mode selector in top.
+	 *
+	 * The same setting as the one in "Advanced settings", so it is set through
+	 * that one when there is one: 'onChangeAdvancedSetting' in viz.js stores it
+	 * and acts on it, and the two selectors stay in step for free.
+	 *
+	 * There is not always one. The whole Settings pane is inside
+	 * '<?php if (!$user_id)' in index.php, so a visitor who is not logged in has
+	 * no '#dropdown-adv-usplayer-mode' at all, and delegating to it was a
+	 * '.val()' on an empty set: the selector in top looked as though it had
+	 * changed, nothing was stored, the page never reloaded, and the mode stayed
+	 * whatever it had been. That is the whole of "it will not switch from WebUSB
+	 * back to reSIDfp". So do the same two things here when there is nothing to
+	 * delegate to.
+	 */
+	$("#select-usplayer-mode").change(function() {
+		var value = $(this).val(),
+			$advanced = $("#dropdown-adv-usplayer-mode");
+
+		if ($advanced.length) {
+			$advanced.val(value).trigger("change");
+			return;
+		}
+
+		if (SID.advancedSetting && SID.advancedSetting.usplayer)
+			SID.advancedSetting.usplayer.mode = value;
+		localStorage.setItem("advanced_setting_usplayer_mode", value);
+		SID.setUSPlayerMode(value); // reloads the page, see backend_usplayer.js
+	});
+
+	/**
+	 * Ask for the board or the port USBSID-Player needs in this mode.
+	 *
+	 * Its own button and not '#device-connect', which jsSID has bound to its own
+	 * WebUSB support for every handler.
+	 */
+	$("#usplayer-device-connect").click(function() {
+		// A toggle. The button reads as the state and not as the action, the
+		// same way the other transport buttons here do, so "Connected" is what
+		// you press to let the board go again.
+		var done = function(open) {
+			$("#usplayer-device-connect").text(open ? "Connected" : "Connect");
+		};
+		if (SID.isUSPlayerConnected()) SID.disconnectUSPlayer(done);
+		else SID.connectUSPlayer(done);
+	});
+
+	/**
 	 * Uploading the external SID file(s) for temporary emulator testing.
 	 */
 	$("#upload-test").change(function() {
@@ -1476,7 +1571,7 @@ main.bindEvents = function() {
 					ctrls.state("root/back", "enabled");
 
 					$("#dropdown-topleft-emulator,#dropdown-settings-emulator")
-						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid", "enabled")
+						.styledOptionState("resid jsidplay2 websid legacy hermit webusb asid usplayer", "enabled")
 						.styledOptionState("youtube", "disabled");
 					$("#path").css("top", "5px").empty().append(`
 						<span style="position:relative;top:-2px;margin-right:8px;">Temporary emulator testing</span>
@@ -4116,6 +4211,7 @@ $(function() { // DOM ready
 		"hermit",
 		"webusb",
 		"asid",
+		"usplayer",
 		"lemon",
 		"youtube",
 		"download",

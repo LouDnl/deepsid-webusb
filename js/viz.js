@@ -162,6 +162,10 @@ function Viz(emulator) {
 			this.applyAdvancedSetting("jsidplay2", "fil6581residfp", "dropdown", "FilterAlankila6581R4AR_3789");
 			this.applyAdvancedSetting("jsidplay2", "fil8580residfp", "dropdown", "FilterTrurl8580R5_3691");
 			break;
+		case "usplayer":
+			// Apply advanced settings from local storage or a default value
+			this.applyAdvancedSetting("usplayer", "mode", "dropdown", "audio");
+			break;
 		default:
 	}
 
@@ -482,6 +486,15 @@ Viz.prototype = {
 		SID.advancedSetting[emulator][setting] = value;
 		localStorage.setItem("advanced_setting_" + emulator + "_" + setting, value);
 
+		if (emulator == "usplayer" && setting == "mode") {
+			// Each mode owns a transport, an audio graph or a MIDI port, so the
+			// handler reloads the page instead of swapping those under a playing
+			// tune. Keep the selector in top in step for the moment before that.
+			$("#select-usplayer-mode").val(value);
+			SID.setUSPlayerMode(value);
+			return;
+		}
+
 		if (["defemu", "sampmethod", "fil6581resid", "fil8580resid", "fil6581residfp", "fil8580residfp"].includes(setting)) {
 			if (SID.isPlaying()) {
 				// Restart the tune
@@ -633,7 +646,9 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	setEmuButton: function(emulator) {
-		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid"].includes(emulator)) {
+		if (["resid", "jsidplay2", "websid", "legacy", "webusb", "hermit", "asid", "usplayer"].includes(emulator)) {
+			// The three Hermit based handlers share one button, as do the four
+			// USBSID-Player modes: the mode is chosen in top, not here.
 			if (emulator == "asid" || emulator == "webusb") emulator = "hermit";
 			$("#page .viz-" + emulator).addClass("button-on");
 			$("#page .viz-msg-emu").hide();
@@ -689,7 +704,7 @@ Viz.prototype = {
 	 * @param {string} emulator		Emulator, e.g. "resid", "jsidplay2", etc.
 	 */
 	showBufferMessage: function(emulator) {
-		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid"
+		SID.bufferSize[emulator] > 1024 && $("#page .viz-msg-emu").css("display") == "none" && emulator != "jsidplay2" && emulator != "websid" && emulator != "usplayer"
 			? $("#page .viz-msg-buffer").show()
 			: $("#page .viz-msg-buffer").hide();
 	},
@@ -735,6 +750,7 @@ Viz.prototype = {
 			case "webusb":
 			case "hermit":
 			case "asid":
+			case "usplayer":
 				this.stateViewButton("piano", "enabled");
 				this.stateViewButton("graph", "enabled");
 				this.stateViewButton("memory", "enabled");
