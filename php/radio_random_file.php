@@ -2,14 +2,16 @@
 /**
  * DeepSID / Infinity Radio
  *
- * Returns a random SID file from a randomly selected
- * high-quality HVSC composer folder.
+ * Returns a random SID file from a randomly selected high-quality HVSC
+ * composer folder. Also, very small tunes or SFX are skipped.
  */
 
 require_once("lib/class.account.php"); // Includes setup
 
 const RATINGS_USER_ID	= 3;
 const MIN_RATING		= 2;
+
+const MIN_SECONDS		= 15;
 
 try {
     $db = $account->getDB();
@@ -37,15 +39,13 @@ try {
 	if ($folder === false)
 		die(json_encode(array('status' => 'error', 'message' => 'Infinity Radio: Could not retrieve a random folder.')));
 
-	// Get a random SID file directly inside that folder
+	// Get all SID files directly inside that folder
 	$query = $db->prepare("
-		SELECT collection_path, subtunes
+		SELECT collection_path, subtunes, lengths
 		FROM files
 		WHERE collection_path LIKE :folder
 			AND collection_path NOT LIKE :subfolder
 			AND collection_path LIKE '%.sid'
-		ORDER BY RAND()
-		LIMIT 1
 	");
 
 	$query->execute([
@@ -53,21 +53,42 @@ try {
 		'subfolder'	=> $folder . '/%/%',
 	]);
 
-	$file = $query->fetch(PDO::FETCH_ASSOC);
+	$files = $query->fetchAll(PDO::FETCH_ASSOC);
 
-	if (!$file)
-		die(json_encode(array('status' => 'error', 'message' => 'Infinity Radio: Could not retrieve a random file.')));
+	$choices = [];
+	foreach ($files as $db_file) {
+		$db_lengths = preg_split('/\s+/', trim($db_file['lengths']));
+		foreach ($db_lengths as $index => $db_length) {
+			if (!preg_match('/^(\d+):(\d+(?:\.\d+)?)$/', $db_length, $matches))
+				continue;
 
-	$collection_path = $file['collection_path'];
-	$subtunes = (int)$file['subtunes'];
+			$seconds = ((int)$matches[1] * 60) + (float)$matches[2];
 
-	// Pick a random subtune
-	$subtune = $subtunes > 1 ? random_int(1, $subtunes) : 1;
+			// It must be sufficiently long; small tunes or SFX won't work well in radio mode
+			if ($seconds > MIN_SECONDS) {
+				$choices[] = [
+					'path'		=> $db_file['collection_path'],
+					'subtune'	=> $index + 1,
+					'length'	=> $db_length,
+					'seconds'	=> $seconds
+				];
+			}
+		}
+	}
+
+	if (!$choices)
+		die(json_encode(array(
+			'status'	=> 'error',
+			'message'	=> 'Infinity Radio: Could not retrieve a suitable random file.'
+		)));
+
+	// Pick one complete path + subtune + length combination
+	$choice = $choices[array_rand($choices)];
 
 	echo json_encode(array(
 		'status'	=> 'ok',
-		'path'		=> $collection_path,
-		'subtune'	=> $subtune
+		'path'		=> $choice['path'],
+		'subtune'	=> $choice['subtune']
 	));
 
 } catch(PDOException $e) {

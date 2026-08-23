@@ -170,6 +170,7 @@ Controls.prototype = {
 				if (main.playingInfinityRadio) {
 					// Infinity Radio: Play the next random tune in a random folder
 					main.infinityPlayNext();
+					return;
 				} else {
 					// Skip disabled rows until a playable row is found (unless a list boundary is hit first)
 					do {
@@ -205,19 +206,25 @@ Controls.prototype = {
 						(isAutoProgress && main.getUserToggle("skip-short") && songLength < 10 && !moreSubtunes));
 				}
 			} else {
-				// Skip disabled rows until a playable row is found (unless a list boundary is hit first)
-				do {
-					browser.songPos--;
-					if (browser.songPos == 0) {
-						// At the beginning of the list
-						$("#skip-prev").addClass("disabled");
-						if (SID.emulator == "youtube") {
-							SID.setSeek(0);
-							$("#time-length").empty().append("0:00");
+				if (main.playingInfinityRadio) {
+					// Infinity Radio: Play the previous tune in the playing history
+					main.infinityPlayPrevious();
+					return;
+				} else {
+					// Skip disabled rows until a playable row is found (unless a list boundary is hit first)
+					do {
+						browser.songPos--;
+						if (browser.songPos == 0) {
+							// At the beginning of the list
+							$("#skip-prev").addClass("disabled");
+							if (SID.emulator == "youtube") {
+								SID.setSeek(0);
+								$("#time-length").empty().append("0:00");
+							}
+							break;
 						}
-						break;
-					}
-				} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled"));
+					} while ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled"));
+				}
 			}
 
 			if ($("#songs tr").eq(browser.songPos + browser.subFolders).hasClass("disabled")) return false;
@@ -378,7 +385,7 @@ Controls.prototype = {
 				if (main.playingInfinityRadio) {
 					// Stop the 'Infinity Radio' session too?
 					main.customDialog({
-						id: '#dialog-stop-infinity-radio',
+						id: '#dialog-infinity-radio',
 						text: '<p>Stop the <b>Infinity Radio</b> too?</p>',
 						width: 241,
 						height: 126,

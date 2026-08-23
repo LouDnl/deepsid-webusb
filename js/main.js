@@ -15,8 +15,9 @@ const trackingTimers = Object.create(null);
 // NOCAPS: Firefox scrolls more smoothly than Chrome
 const isFirefox = typeof InstallTrigger !== "undefined";
 
-// NOCAPS: Used to avoid repeats in Infinity Radio
+// NOCAPS: Used to avoid repeats and keep a history for Infinity Radio
 const infinityPlayed = new Set();
+const infinityHistory = [];
 
 // Tracking acceptance timeouts (ms)
 const TRACK_DELAY = {
@@ -87,6 +88,7 @@ var main = {
 
 	fastForwarding:				false,		// @todo This is never set to TRUE - better investigate this
 	playingInfinityRadio:		false,		// TRUE = The Infinity Radio is currently playing
+	infinityHistoryPos:			-1,			// Position in the playing history for Infinity Radio
 	forum:						null,		// The AJAX object for showing parts of the CSDb forum
 	isMobile:					false,		// TRUE = Running on a mobile device (or forced with a switch)
 	isNotips:					false,		// TRUE = Do not display the annex box in the right side
@@ -680,20 +682,50 @@ var main = {
 	 * Infinity Radio: Start a session.
 	 */
 	infinityStart: function() {
-		infinityPlayed.clear();
-		main.playingInfinityRadio = true;
+		main.customDialog({
+			id: '#dialog-infinity-radio',
+			text: '<p>Start the <b>Infinity Radio</b> now?</p>'+
+				'<div style="font-size:12px;">'+
+					'<p>The radio will keep playing random SID files from random folders until you stop it. '+
+					'Only folders for MUSICIANS composers of decent quality or better will be selected.</p>'+
+					'You can stop playback at any time and then choose whether to exit radio mode. If you stay, '+
+					'you can select a different song or continue to the next random song.'+
+				'</div>',
+			width: 276,
+			height: 294,
+		}, function() {
+			infinityPlayed.clear();
+			infinityHistory.length = 0;
+			main.infinityHistoryPos = -1;			
+			main.playingInfinityRadio = true;
 
-		// Wine red control buttons
-		//$("#play-pause").removeClass("button-infinity").addClass("button-infinity");
-		$("body").attr("data-radio", "infinity");
+			// Wine red control buttons
+			$("body").attr("data-radio", "infinity");
 
-		main.infinityPlayNext();
+			main.infinityPlayNext();
+		});
+	},
+
+	/**
+	 * Infinity Radio: Play the previous (sub-)tune in the history.
+	 */
+	infinityPlayPrevious: function() {
+		if (main.infinityHistoryPos > 0) {
+			main.infinityHistoryPos--;
+
+			const song = infinityHistory[main.infinityHistoryPos];
+
+			main._infinityPlay(song['path'], song['subtune']);
+		}
 	},
 
 	/**
 	 * Infinity Radio: Play the next random (sub-)tune in a random folder.
 	 */
 	infinityPlayNext: function() {
+		// Discard everything ahead if the user went backwards in history
+		infinityHistory.splice(main.infinityHistoryPos + 1);
+
 		$.get("php/radio_random_file.php", function(data) {
 			browser.validateData(data, function() {
 				data = $.parseJSON(data);
@@ -702,28 +734,20 @@ var main = {
 
 				if (infinityPlayed.has(radioID)) {
 					// It's a repeat so try again
-					infinityPlayNext();
+					main.infinityPlayNext();
 					return;
 				}
 
 				infinityPlayed.add(radioID);
 
-				var path = "/"+data.path.substr(0, data.path.lastIndexOf("/"));
+				infinityHistory.push({
+					path:		data.path,
+					subtune:	data.subtune
+				});
 
-				ctrls.state("root/back", "enabled");
-				if (path != browser.path) {
-					browser.path = path;
-					// Load the different folder
-					browser.getFolder(0, undefined, undefined, function() {
-						main.clickAndScrollToSID(data.path, false, data.subtune);
-					});
-				} else {
-					// In the same folder
-					main.clickAndScrollToSID(data.path, false, data.subtune);
-				}
-				// Clear caches to force proper refresh of CSDb tab after redirecting 
-				main.cacheBeforeCompo = main.cacheCSDb = main.cacheSticky = main.cacheStickyBeforeCompo = "";
-				main.updateURL();
+				main.infinityHistoryPos = infinityHistory.length - 1;
+
+				main._infinityPlay(data.path, data.subtune);
 			});
 		});
 	},
@@ -734,9 +758,38 @@ var main = {
 	infinityStop: function() {
 		main.playingInfinityRadio = false;
 
+		// Adapt the wide root button
+		$("#infinity-radio").empty().append("Start Infinity Radio")
+			.removeClass("inf-stop");
+
 		// Restore normal color for control buttons
-		//$("#play-pause").removeClass("button-infinity");
 		$("body").removeAttr("data-radio");
+	},
+
+	/**
+	 * Infinity Radio: Play the specified song and its subtune.
+	 * 
+	 * @param {string} dataPath 
+	 * @param {number} dataSubtune 
+	 */
+	_infinityPlay: function(dataPath, dataSubtune) {
+		var path = "/"+dataPath.substr(0, dataPath.lastIndexOf("/"));
+
+		ctrls.state("root/back", "enabled");
+		if (path != browser.path) {
+			browser.path = path;
+			// Load the different folder
+			browser.getFolder(0, undefined, undefined, function() {
+				main.clickAndScrollToSID(dataPath, false, dataSubtune);
+			});
+		} else {
+			// In the same folder
+			main.clickAndScrollToSID(dataPath, false, dataSubtune);
+		}
+
+		// Clear caches to force proper refresh of CSDb tab after redirecting 
+		main.cacheBeforeCompo = main.cacheCSDb = main.cacheSticky = main.cacheStickyBeforeCompo = "";
+		main.updateURL();
 	},
 
 	/**
@@ -762,7 +815,7 @@ var main = {
 			// Yes; this is the <TR> row with the SID file we need to play
 			var $trPlay = $("#folders tr").eq($tr.index());
 			// Don't refresh CSDb + [Stop when done]
-			$trPlay.children("td.sid").trigger("click", [subtune, true, solitary]);
+			$trPlay.children("td.sid").trigger("click", [subtune - 1, true, solitary]);
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
@@ -1740,7 +1793,10 @@ main.bindEvents = function() {
 		let contents = "", $panel = $("#panel");
 		$("#contextmenu").remove();
 
+		radioMode = main.playingInfinityRadio ? "Stop" : "Start";
+
 		contents = `
+			<div class="line main-line" data-action="main-infinity-radio">`+radioMode+` Infinity Radio<span>o</span></div>
 			<div class="line main-line" data-action="main-load-sid">Load SID file<span>l</span></div>
 			<div class="line main-line" data-action="main-popup-window">Pop-up window<span>p</span></div>
 			<div class="line main-line" data-action="main-next-inline-factoid">Next inline factoid<span>i</span></div>
@@ -3353,9 +3409,16 @@ main.bindKeyboardEvents = function() {
 						}
 						break;
 
+					case 79:	// Keyup 'o' - Infinity Radio
+
+						main.playingInfinityRadio
+							? main.infinityStop()
+							: main.infinityStart();
+						break;
+
 					case 68:	// Keyup 'd' - test something
 
-						// main.infinityStart(); // Upcoming feature - not ready yet
+						//main.browserMessage("Test");
 						break;
 
 					default:

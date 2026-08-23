@@ -108,6 +108,14 @@
 	--color-button-shadow:			#808270;			/* Button shadow */
 	--color-button-logout:			var(--color-button-inverted);
 
+	--color-button-wine:			#563636;
+	--color-button-wine-hover:		#725252;
+	--color-button-wine-bg-hovsel:	var(--color-button-bg-hovsel);
+	--color-button-wine-bg-sel:		var(--color-button-bg-select);
+	--color-button-wine-text-sel:	var(--color-button-wine);
+	--color-button-wine-text-hsel:	var(--color-button-wine-hover);
+	--color-button-wine-disabled:	#d2caca;
+
 	--border-button-select:			var(--color-button-border-select);
 	--shadow-button-select:			0 0 0 transparent;
 
@@ -242,6 +250,8 @@
 	--svg-filter-tn-disabled:		var(--svg-filter-white);
 	--svg-filter-primary:			invert(42%) sepia(48%) saturate(293%) hue-rotate(201deg) brightness(88%) contrast(93%);
 	--svg-filter-target:			invert(79%) sepia(14%) saturate(256%) hue-rotate(29deg) brightness(93%) contrast(84%);
+
+	--svg-filter-button-wine:		invert(18%) sepia(11%) saturate(2088%) hue-rotate(314deg) brightness(95%) contrast(80%);
 
 	--svg-bg-star-orange:			url(../images/if_star_orange.svg) 0 0 / 18px 18px no-repeat;
 	--svg-bg-star-empty-voted:		url(../images/if_star_empty_voted.svg) 0 0 / 18px 18px no-repeat;
@@ -529,6 +539,14 @@
 	--color-button-disabled-text:	#5a5f56;
 	--color-button-shadow:			none;
 
+	--color-button-wine:			linear-gradient(to bottom, #8a5657 0%,#603c3c 85%); /* #563636; */
+	--color-button-wine-hover:		linear-gradient(to bottom, #a77172 0%,#7d4d4e 85%);
+	--color-button-wine-bg-hovsel:	linear-gradient(to bottom, #f8f4f5 0%,#e0cccd 95%);
+	--color-button-wine-bg-sel:		linear-gradient(to bottom, #f0e6e7 0%,#caaaaa 95%);
+	--color-button-wine-text-sel:	#643e3f;
+	--color-button-wine-text-hsel:	#794b4c;
+	--color-button-wine-disabled:	#402828;
+
 	--border-button-select:			#b4bbad;
 	--shadow-button-select:			none; /*inset 1px 1px 6px #111;*/
 
@@ -763,21 +781,6 @@
 
 }
 
-/* ---- Custom color variables (Infinity Radio) ------------------------------ */
-
-[data-radio="infinity"] {			/* Wine red */
-
-	--color-button:					#563636;
-	--color-button-border:			var(--color-button);
-	--color-button-border-select:	var(--color-button);
-	--color-button-text-select:		var(--color-button);
-	--color-button-hover:			#725252;
-	--color-button-text-hovsel:		var(--color-button-hover);
-	--color-button-border-hovsel:	var(--color-button-hover);
-
-	--border-button-select:			var(--color-button-border-select);
-}
-
 [data-theme="dark"] input,
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
@@ -862,6 +865,37 @@
 [data-theme="dark"] blockquote:before {
 	background: url(../images/blockquote.png) no-repeat;
 	opacity: 0.11;
+}
+
+/* ---- Custom color variables (Infinity Radio) ------------------------------ */
+
+[data-radio="infinity"] {
+
+	--color-button:					var(--color-button-wine);
+	--color-button-border:			var(--color-button-wine);
+	--color-button-border-idle:		transparent;
+	--color-button-border-select:	var(--color-button-wine);
+	--color-button-bg-select:		var(--color-button-wine-bg-sel);
+	--color-button-bg-hovsel:		var(--color-button-wine-bg-hovsel);
+	--color-button-text-select:		var(--color-button-wine-text-sel);
+	--color-button-hover:			var(--color-button-wine-hover);
+	--color-button-text-hovsel:		var(--color-button-wine-text-hsel);
+	--color-button-border-hovsel:	var(--color-button-wine-hover);
+	--color-button-disabled:		var(--color-button-wine-disabled);
+
+	--border-button-select:			var(--color-button-border-select);
+
+	--svg-filter-icon-visuals:		var(--svg-filter-button-wine);
+}
+
+[data-theme="dark"][data-radio="infinity"] {
+
+	--color-button-border:			#6d4344;
+	--color-button-border-idle:		#6d4344;
+	--color-button-border-select:	#ddc7c8; /* #e0cccd */
+	--color-button-border-hovsel:	#e8d8da;
+
+	--border-button-select:			var(--color-button-border-select);
 }
 
 /* ---- Overriding Olivi CSS ------------------------------------------------- */
@@ -1498,12 +1532,6 @@ small.u2 { margin-left: 2px; }
 	box-shadow: var(--shadow-button-select);
 }
 
-	.infbtn-selected {
-		border: 2px solid var(--border-infbtn-select);
-		color: var(--color-infbtn-text-select);
-		background: var(--color-infbtn-bg-select);
-	}
-
 .button-on {
 	box-shadow: none !important;
 }
@@ -1515,12 +1543,6 @@ small.u2 { margin-left: 2px; }
 		background: var(--color-button-bg-hovsel);
 	}
 
-		.infbtn-selected:hover {
-			border-color: var(--color-infbtn-border-hovsel);
-			color: var(--color-infbtn-text-hovsel);
-			background: var(--color-infbtn-bg-hovsel);
-		}
-
 .button-area {
 	display: inline-block;
 	position: relative;
@@ -1531,14 +1553,6 @@ small.u2 { margin-left: 2px; }
 
 	.button-area div.disabled {
 		color: var(--color-button-disabled);
-	}
-
-.button-infinity {
-	background: var(--color-infbtn);
-}
-
-	.button-infinity:hover {
-		background: var(--color-infbtn-hover);
 	}
 
 /* Used in e.g. the piano view */
@@ -3388,6 +3402,32 @@ input[type=range]::-ms-track {
 			padding: 10px;
 			font-size: 11px;
 		}
+
+		#infinity-radio {
+			position: absolute;
+			top: 0;
+			left: 36px;			/* START */
+			height: 20px;
+			line-height: 0;
+			padding: 10px;
+			font-size: 11px;
+			background: var(--color-button-wine);
+			transition: none !important;
+		}
+
+			[data-theme="dark"] {
+				#infinity-radio {
+					transition: all .03s linear !important;
+				}
+			}
+
+			#infinity-radio:hover {
+				background: var(--color-button-wine-hover);
+			}
+
+			.inf-stop {
+				left: 40px !important;		/* STOP */
+			}
 
 		#path .results {
 			display: inline-block;

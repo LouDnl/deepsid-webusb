@@ -568,7 +568,7 @@
 			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
 		</div>
 
-		<div id="dialog-stop-infinity-radio" class="dialog-box">
+		<div id="dialog-infinity-radio" class="dialog-box">
 			<div class="dialog-text"></div>
 			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
 		</div>
@@ -2059,6 +2059,16 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>August 23, 2026</h3>
+						<ul>
+							<li>Introducing <b>Infinity Radio</b>. It keeps playing random tunes from random folders until you stop it. You can start it using the dark red button in the root or select it from the main menu. More details are provided in the dialog box that appears when you start it.</li>
+						</ul>
+
+						<h3>August 21, 2026</h3>
+						<ul>
+							<li>A new <a href="https://github.com/LouDnl/USBSID-Player">USBSID-Player</a> SID handler has been added by LouD. This emulates a cycle-exact C64, with four outputs; reSIDfp in the page, WebUSB, Web Serial, and ASID. WebUSB and Web Serial is used with the <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a> board, and ASID sends the register writes over MIDI to any ASID capable device.</li>
+						</ul>
 
 						<h3>August 20, 2026</h3>
 						<ul>

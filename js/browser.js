@@ -587,6 +587,11 @@ Browser.prototype = {
 				}
 				this.uploadWizard();
 				break;
+			case "infinity-radio":
+				main.playingInfinityRadio
+					? main.infinityStop()
+					: main.infinityStart();
+				break;
 			default:
 				// TR handling has been moved into the 'onClickRow' event handler
 		}
@@ -821,11 +826,16 @@ Browser.prototype = {
 					}
 				}
 
-				// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
-				if (this.songPos == this.songs.length - 1 || paramSolitary)
-					$("#skip-next").addClass("disabled");
-				if (this.songPos == 0 || paramSolitary)
-					$("#skip-prev").addClass("disabled");
+				if (main.playingInfinityRadio) {
+					if (main.infinityHistoryPos == 0)
+						$("#skip-prev").addClass("disabled");
+				} else {
+					// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
+					if (this.songPos == this.songs.length - 1 || paramSolitary)
+						$("#skip-next").addClass("disabled");
+					if (this.songPos == 0 || paramSolitary)
+						$("#skip-prev").addClass("disabled");
+				}
 
 				ctrls.emulatorChanged = false;
 
@@ -1605,12 +1615,17 @@ Browser.prototype = {
 					if (data.incompatible.indexOf("usplayer") !== -1) $("#page .viz-usplayer").addClass("disabled");
 
 					$("#path").css("top", "5px");
-					var pathAppend = "", pathText = this.path == "" ? "/" : this.path
+					var pathAppend = "", pathText = this.path
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
 						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>');
-					if (this.isSearching) {
+					if (this.path == "" && !this.isSearching) {
+						var radio = main.playingInfinityRadio
+							? { action: 'Stop',		class: ' class="inf-stop"' }
+							: { action: 'Start',	class: '' };
+						pathText = '<button id="infinity-radio"'+radio['class']+'>'+radio['action']+' Infinity Radio</button>';
+					} else if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
 							searchHere = $("#search-here").is(":checked") ? "file="+this.path+"&here=1&" : "",
 							searchQuery = encodeURIComponent($("#search-box").val()); // Need it to be untampered here
@@ -3838,6 +3853,11 @@ Browser.prototype = {
 			case 'main-load-sid':
 				// Upload and test one or more external SID tune(s)
 				$("#upload-test").trigger("click");
+				break;
+			case 'main-infinity-radio':
+				main.playingInfinityRadio
+					? main.infinityStop()
+					: main.infinityStart();
 				break;
 			case 'main-popup-window':
 				main.popUpWindow();
