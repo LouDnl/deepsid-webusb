@@ -8,25 +8,8 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- Add hotkey 'o' (for Infinity Radio) to annex help page about hotkeys.
-
-- Gray out settings toggle buttons that doesn't work for 'Infinity Radio'. The only ones that work
-  for now are the primary-release and the stop-and-delay toggles.
-
-- SH: SID+FM label: "You can add USBSID-Player (ResidFp and boards with fmopl) here" (LouD)
-  Actually, JSIDPlay2 also supports it. But how to word that in the tiny label? Maybe I should remove
-  the label and instead add e.g. "+ FM" to the drop-down box SID handler choices that support it.
-
-- BUG: When the URL switch for emulator is present, it's not possible to change back. Make it so a
-  change in the corner drop-down box automatically removes the URL switch too.
-
 - BUG: Redirect and back doesn't work. Song length is 0:00 in both ends. Try:
   http://chordian/deepsid/?file=/DEMOS/A-F/Armageddon_Intro.sid
-
-- Jay Derrett: Remove black background on dark brand logo of CRL.
-
-- Vincent Merken (_V_)'s avatar image: Make the white square border line ~1 pixel thicker, so it's
-  clearer to see when the avatar image is very small.
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.

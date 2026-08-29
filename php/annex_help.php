@@ -280,6 +280,7 @@ $help = array(
 		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
 		<div class="annex-hotkey">Shift+Backspc</div><span class="annex-tiny">Back to parent tab page</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
+		<div class="annex-hotkey">o</div><span class="annex-tiny">Infinity Radio on/off</span>
 		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
 		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
 		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
@@ -325,8 +326,9 @@ $help = array(
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
-						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>webusb</li>
+						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
+						<li><b>usplayer</li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
 						<li><b>silence</b></li>

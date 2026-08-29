@@ -3058,7 +3058,9 @@ input[type=range]::-ms-track {
 			#stopic-stereo td.stereo-header > .disabled,
 			#topic-visuals label.disabled,
 			#page .dropdown-buffer-label.disabled,
-			#csdb-emp-filter-label.disabled {
+			#csdb-emp-filter-label.disabled,
+			#topic-settings label.disabled,
+			#topic-settings label.disabled > b {
 				color: var(--color-text-label-disabled);
 			}
 

@@ -47,8 +47,6 @@ const FACTOID_MESSAGE_ADMIN = [
 	"CSDb SID ID",						// 1001
 ]
 
-const LINKS_DAY_MS = 24*60*60*1000;
-
 const PATH_UPLOADS = "_SID Happens";
 const PATH_SID_FM = PATH_UPLOADS + "/SID+FM";
 
@@ -702,6 +700,10 @@ var main = {
 			// Wine red control buttons
 			$("body").attr("data-radio", "infinity");
 
+			// Disable the toggle buttons and their labels in settings that won't affect the radio
+			$("#setting-first-subtune,#setting-skip-tune,#setting-mark-tune,#setting-skip-bad,#setting-skip-short")
+				.prop("disabled", true).addClass("disabled").next().addClass("disabled");
+
 			main.infinityPlayNext();
 		});
 	},
@@ -764,6 +766,10 @@ var main = {
 
 		// Restore normal color for control buttons
 		$("body").removeAttr("data-radio");
+
+		// Enable the toggle buttons and their labels in settings
+		$("#setting-first-subtune,#setting-skip-tune,#setting-mark-tune,#setting-skip-bad,#setting-skip-short")
+			.prop("disabled", false).removeClass("disabled").next().removeClass("disabled");
 
 		browser.setStateSkipButtons();
 	},
@@ -1536,6 +1542,11 @@ main.bindEvents = function() {
 		// Remember where we parked
 		localStorage.setItem("tab", $("#tabs .selected").attr("data-topic"));
 
+		// If there was a temporary emulator overriding URL switch, remove it now
+		const url = new URL(window.location.href);
+		url.searchParams.delete("emulator");
+		history.replaceState(null, "", url);		
+
 		main.trackingEvent("select:emulator", emulator, function() {
 			// Refresh the page to activate the new emulator
 			window.location.reload();
@@ -1571,7 +1582,7 @@ main.bindEvents = function() {
 		if (SID.advancedSetting && SID.advancedSetting.usplayer)
 			SID.advancedSetting.usplayer.mode = value;
 		localStorage.setItem("advanced_setting_usplayer_mode", value);
-		SID.setUSPlayerMode(value); // reloads the page, see backend_usplayer.js
+		SID.setUSPlayerMode(value); // Reloads the page, see backend_usplayer.js
 	});
 
 	/**
@@ -2386,54 +2397,6 @@ main.bindAnnexEvents = function() {
 			$("#atopic-help").empty().append(help).attr("data-index", topic);
 			$(".annex-topics").show();
 		});
-	}
-
-	/**
-	 * Clicking a thumbnail link in the annex box.
-	 * 
-	 * @link https://api.microlink.io/
-	 */
-	$(".site-link").on("click", function() {
-		var $a   = $(this);
-		var $img = $a.find("img.thumb");
-		var url  = $a.data("url");
-		var k    = _GetSiteKey(url);
-		var last = parseInt(localStorage.getItem(k) || "0", 10);
-		var now  = Date.now();
-
-		// Refresh at most once per 24h per user
-		if ((now - last) > LINKS_DAY_MS) {
-			var forcedSrc = _GetMicrolinkSrc(url, true);
-			var fallback  = _GetMicrolinkSrc(url, false);
-
-			$img.one("load", function() {
-				localStorage.setItem(k, String(now));
-			}).attr("src", forcedSrc).on("error", function() {
-				// If quota exceeded (429) - revert to cached image
-				$(this).attr("src", fallback);
-			});
-		}
-		// Don't preventDefault - link still opens in new tab
-	});
-
-	/**
-	 * Used by the event above.
-	 */
-	function _GetMicrolinkSrc(url, force){
-		var base = "https://api.microlink.io/"
-			+ "?url=" + encodeURIComponent(url)
-			+ "&screenshot=true&meta=false&embed=screenshot.url";
-		if (force) {
-			base += "&force=true&ts=" + Date.now(); // Cache-bust
-		}
-		return base;
-	}
-
-	/**
-	 * Used by the event above.
-	 */
-	function _GetSiteKey(url){ 
-		return "thumb_last_refresh_" + btoa(url); 
 	}
 }
 
