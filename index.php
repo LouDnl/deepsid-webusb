@@ -2060,6 +2060,14 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>August 29, 2026</h3>
+						<ul>
+							<li>Fixed the 'CSDb' tab not updating in Infinity Radio mode.</li>
+							<li>Fixed various issues with the enabled and disabled states of the 'Skip Prev' and 'Skip Next' buttons.</li>
+							<li>Fixed a toggle button in the 'Settings' tab not being restored correctly when returning to the site.</li>
+							<li>The dialog box for stopping Infinity Radio no longer appears when using the "stop and delay" feature.</li>
+						</ul>
+
 						<h3>August 23, 2026</h3>
 						<ul>
 							<li>Introducing <b>Infinity Radio</b>. It keeps playing random tunes from random folders until you stop it. You can start it using the dark red button in the root or select it from the main menu. More details are provided in the dialog box that appears when you start it.</li>

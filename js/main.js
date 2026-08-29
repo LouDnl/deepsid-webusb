@@ -528,7 +528,7 @@ var main = {
 		localStorage.setItem("noplay", main.noPlay); // Boolean is stored as a string
 		if (main.noPlay) {
 			$("#no-play").show(); // Red dot in top
-			$("#stop").trigger("mouseup").trigger("click");
+			$("#stop").trigger("mouseup").trigger("click", true);
 		} else {
 			$("#no-play").hide();
 			$("#play-pause").trigger("mouseup").trigger("click");
@@ -764,6 +764,8 @@ var main = {
 
 		// Restore normal color for control buttons
 		$("body").removeAttr("data-radio");
+
+		browser.setStateSkipButtons();
 	},
 
 	/**
@@ -780,11 +782,11 @@ var main = {
 			browser.path = path;
 			// Load the different folder
 			browser.getFolder(0, undefined, undefined, function() {
-				main.clickAndScrollToSID(dataPath, false, dataSubtune);
+				main.clickAndScrollToSID(dataPath, false, false, dataSubtune);
 			});
 		} else {
 			// In the same folder
-			main.clickAndScrollToSID(dataPath, false, dataSubtune);
+			main.clickAndScrollToSID(dataPath, false, false, dataSubtune);
 		}
 
 		// Clear caches to force proper refresh of CSDb tab after redirecting 
@@ -799,11 +801,12 @@ var main = {
 	 * 
 	 * @param {string} fullname		The SID filename including folders
 	 * @param {boolean} solitary	If specified and FALSE, the tune will continue like in a playlist
+	 * @param {boolean} skipCSDb	If specified and TRUE, the CSDb tab will not be updated
 	 * @param {number} subtune		If specified, this subtune to play
 	 * 
 	 * @return {boolean}			TRUE if the SID was found and is now playing
 	 */
-	clickAndScrollToSID: function(fullname, solitary, subtune) {
+	clickAndScrollToSID: function(fullname, solitary, skipCSDb, subtune) {
 		if (typeof solitary == "undefined") solitary = true;
 		// Isolate the SID name, e.g. "music.sid"
 		var sidFile = fullname.split("/").slice(-1)[0];
@@ -815,7 +818,7 @@ var main = {
 			// Yes; this is the <TR> row with the SID file we need to play
 			var $trPlay = $("#folders tr").eq($tr.index());
 			// Don't refresh CSDb + [Stop when done]
-			$trPlay.children("td.sid").trigger("click", [subtune - 1, true, solitary]);
+			$trPlay.children("td.sid").trigger("click", [subtune - 1, skipCSDb, solitary]);
 			// Scroll the row into the middle of the list
 			var rowPos = $trPlay[0].offsetTop,
 				halfway = $("#folders").height() / 2 - 26; // Last value is half of SID file row height
@@ -2677,10 +2680,10 @@ main.bindDexterEvents = function() {
 		if (path != browser.path) {
 			browser.path = path;
 			browser.getFolder(0, undefined, undefined, function() {
-				if (!main.clickAndScrollToSID(fullname, solitary))
+				if (!main.clickAndScrollToSID(fullname, solitary, true))
 					$this.wrap('<del class="redirect"></del>').contents().unwrap();
 			});
-		} else if (!main.clickAndScrollToSID(fullname, solitary)) {
+		} else if (!main.clickAndScrollToSID(fullname, solitary, true)) {
 			$this.wrap('<del class="redirect"></del>').contents().unwrap();
 		}
 		// Clear caches to force proper refresh of CSDb tab after redirecting 

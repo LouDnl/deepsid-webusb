@@ -565,7 +565,10 @@ Browser.prototype = {
 				break;
 			case "search-cancel":
 				// Cancel the search results and return to the previous normal folder view
-				ctrls.state("prev/next", "disabled");
+				if (main.playingInfinityRadio)
+					this.setStateSkipButtons();
+				else
+					ctrls.state("prev/next", "disabled");
 				ctrls.state("subtunes", "disabled");
 
 				this.getFolder(this.scrollPositions.pop());
@@ -876,7 +879,7 @@ Browser.prototype = {
 				
 				if ($("#loop").hasClass("button-off")) {
 					if (delayNextTune)
-						$("#stop").trigger("mouseup").trigger("click");
+						$("#stop").trigger("mouseup").trigger("click", true);
 					setTimeout(() => {
 						// Play the next subtune, or if no more subtunes, the next tune in the list
 						$("#faster").trigger("mouseup"); // Easy there cowboy
@@ -4688,6 +4691,24 @@ Browser.prototype = {
 				SID.stop();
 				SID.setVolume(1);
 			}, paramWait ?? 100);
+		}
+	},
+
+	/**
+	 * Set the enable/disable state of the 'Skip Next' and 'Skip Prev' buttons
+	 * whether currently in 'Infinity Radio' mode or not.
+	 */
+	setStateSkipButtons: function() {
+		$("#skip-prev,#skip-next").removeClass("disabled");
+		if (main.playingInfinityRadio && main.infinityHistoryPos == 0) {
+			// At the start of playing history
+			$("#skip-prev").addClass("disabled");
+		} else if (this.songPos == this.songs.length - 1) {
+			// In the bottom of the folder
+			$("#skip-next").addClass("disabled");
+		} else if (this.songPos == 0) {
+			// In the top of the folder
+			$("#skip-prev").addClass("disabled");
 		}
 	},
 

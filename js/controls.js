@@ -366,8 +366,9 @@ Controls.prototype = {
 	 * Click the left mouse button somewhere on the controls, the time bar, or in the boxes above.
 	 * 
 	 * @param {*} event 
+	 * @param {boolean} noInfinityStop	If TRUE, the 'Infinity Radio' dialog box is skipped
 	 */
-	onClick: function(event) {
+	onClick: function(event, noInfinityStop = false) {
 		switch(event.target.id) {
 			case "stop":
 
@@ -382,7 +383,7 @@ Controls.prototype = {
 					$sound.currentTime = 0;
 				});
 
-				if (main.playingInfinityRadio) {
+				if (main.playingInfinityRadio && !noInfinityStop) {
 					// Stop the 'Infinity Radio' session too?
 					main.customDialog({
 						id: '#dialog-infinity-radio',
