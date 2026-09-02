@@ -2060,11 +2060,17 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 2, 2026</h3>
+						<ul>
+							<li>The "." (period) hotkey can now be used to center the currently selected SID row in the folder. If no SID row is selected, it centers on the keyboard marker instead.</li>
+						</ul>
+
 						<h3>August 29, 2026</h3>
 						<ul>
-							<li>Fixed the 'CSDb' tab not updating in Infinity Radio mode.</li>
+							<li>Fixed the 'Profile' and 'CSDb' tabs not updating in Infinity Radio mode.</li>
 							<li>Fixed various issues with the enabled and disabled states of the 'Skip Prev' and 'Skip Next' buttons.</li>
 							<li>Fixed a toggle button in the 'Settings' tab not being restored correctly when returning to the site.</li>
+							<li>Fixed "plinks" not acquiring the correct subtune number, causing song lengths to be shown as 0:00.</li>
 							<li>The dialog box for stopping Infinity Radio no longer appears when using the "stop and delay" feature.</li>
 							<li>Infinity Radio now disables the toggle buttons in the 'Settings' tab that has no effect in this mode.</li>
 							<li>Enabled Sound Expander mode in JSIDPlay2, allowing it to play tunes in the <a href="https://deepsid.chordian.net/?file=/SID%20Happens/">SID+FM</a> folder.</li>

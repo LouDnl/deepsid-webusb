@@ -3165,6 +3165,28 @@ main.bindKeyboardEvents = function() {
 			const tag = document.activeElement.tagName.toLowerCase();
 			if (["input", "textarea", "select"].indexOf(tag) === -1) {
 
+				// Key '.'  - center selected SID row or keyboard marker
+				if (event.key === ".") {
+					var $folders = $("#folders"), $selected = $("#folders tr.selected");
+					if ($selected.length) {
+						// Scroll the selected SID row into the middle of the list
+						var rowPos = $selected[0].offsetTop,
+							halfway = $folders.height() / 2 - 26; // Last value is half of SID file row height
+						$folders.scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+						// Set the keyboard marker there too
+						browser.kbSelectedRow = $selected.index();
+						browser.moveKeyboardSelection(browser.kbSelectedRow, false, false);
+					} else {
+						// Scroll the keyboard marked row into the middle of the list
+						var $kbSelected = $("#folders tr").eq(browser.kbSelectedRow);
+						if ($kbSelected.length) {
+							var rowPos = $kbSelected[0].offsetTop,
+								halfway = $folders.height() / 2 - 26;
+							$folders.scrollTop(rowPos > halfway ? rowPos - halfway : 0);
+						}
+					}
+				}
+
 				switch (event.keyCode) {
 
 					case 220:	// Keyup key below 'Escape' - fast forward

@@ -8,8 +8,14 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-- BUG: Redirect and back doesn't work. Song length is 0:00 in both ends. Try:
-  http://chordian/deepsid/?file=/DEMOS/A-F/Armageddon_Intro.sid
+- Infinity Radio: Replace "no suitable file" with a retry for next random song.
+
+- Primary Release ON: When a GB64 has been PR, the next song where GB64 isn't should return to the
+  CSDb tab again, regardless of whether there is a PR there or not (there could be e.g. comments).
+
+- The CSDb data for this tune crashes One.com:
+  https://deepsid.chordian.net/?file=/MUSICIANS/F/Future_Freak/Cooperation_Demo.sid
+  What can be done about it? An exception for not showing the CSDb list?
 
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
@@ -23,6 +29,7 @@ REALLY CONSIDER THIS
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
 - The player text lines by the Chartist bars could be filter links.
 - Consider moving the array in 'countries.php' to a table in the database instead.
+- Convert YouTube links in comments to a real YouTube video.
 
 - Check out this: https://github.com/Chordian/deepsid/issues/43
   Two new SID players that could be added later - reSIDfp and SIDLite.

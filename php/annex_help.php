@@ -263,12 +263,12 @@ $help = array(
 
 	'	<h3>Color strips</h3>
 		<p>Sometimes you can see a vertical color strip in a SID row. These indicate a common player.</p>
-		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="goattracker_v1.x" data-type="player" class="search"><b>v1.x</b></a> or <a href="goattracker_v2.x" data-type="player" class="search"><b>v2.x</b></a></span>
-		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="newplayer_-v18_-v19_-v20_-v21" data-type="player" class="search"><b>v2</b></a> / <a href="newplayer_v20" data-type="player" class="search"><b>v3</b></a>, etc.</span>
-		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="sidwizard_v1.x" data-type="player" class="search"><b>v1.x</b></a></span>
-		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="sidfactory_ii" data-type="player" class="search"><b>BETA</b></a></span>
-		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="dmc_v4.x" data-type="player" class="search"><b>v4.x</b></a>, <a href="dmc_v5.x" data-type="player" class="search"><b>v5.x</b></a>, etc.</span>
-		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="sidtracker64" data-type="player" class="search"><b>iPad</b></a></span>
+		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="goattracker v1.x" data-type="player" class="search"><b>v1.x</b></a> or <a href="goattracker v2.x" data-type="player" class="search"><b>v2.x</b></a></span>
+		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="newplayer -v18 -v19 -v20 -v21" data-type="player" class="search"><b>v2</b></a> / <a href="newplayer v20" data-type="player" class="search"><b>v3</b></a>, etc.</span>
+		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="sid-wizard" data-type="player" class="search"><b>v1.x</b></a></span>
+		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="sid factory ii" data-type="player" class="search"><b>BETA</b></a></span>
+		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="dmc v4.x" data-type="player" class="search"><b>v4.x</b></a>, <a href="dmc v5.x" data-type="player" class="search"><b>v5.x</b></a>, etc.</span>
+		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="sidtracker" data-type="player" class="search"><b>iPad</b></a></span>
 	',
 
 	'	<h3>Hotkeys</h3>
@@ -277,6 +277,7 @@ $help = array(
 		<div class="annex-hotkey">Space</div><span class="annex-tiny">Pause/Play toggle</span>
 		<div class="annex-hotkey">Left arrow</div><span class="annex-tiny">Previous SID row</span>
 		<div class="annex-hotkey">Right arrow</div><span class="annex-tiny">Next SID row</span>
+		<div class="annex-hotkey">Period</div><span class="annex-tiny">Center marked SID row</span>
 		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
 		<div class="annex-hotkey">Shift+Backspc</div><span class="annex-tiny">Back to parent tab page</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>

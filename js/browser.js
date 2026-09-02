@@ -776,8 +776,11 @@ Browser.prototype = {
 			// Override default sub tune to first if demanded by a setting
 			var subtuneStart = main.getUserToggle("first-subtune") ? 0 : this.songs[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
-			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
-				subtuneMax = this.songs[this.songPos].subtunes - 1;
+
+			var subtune = typeof paramSubtune !== "undefined" && !Number.isNaN(paramSubtune)
+				? paramSubtune
+				: subtuneStart;
+			var subtuneMax = this.songs[this.songPos].subtunes - 1;
 			// Make sure the overridden value is within what is available for that SID tune
 			subtune = subtune < 0 ? 0 : subtune;
 			subtune = subtune > subtuneMax ? subtuneMax : subtune;
@@ -844,7 +847,7 @@ Browser.prototype = {
 
 				if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 					this.getCSDb();
-					if (typeof this.songs[this.songPos].profile != "undefined")
+					if (typeof this.songs[this.songPos].profile != "undefined") {
 						if (this.songs[this.songPos].profile != "") {
 							this.getComposer(this.songs[this.songPos].profile, true);
 						} else {
@@ -854,10 +857,12 @@ Browser.prototype = {
 							$("#atopic-links").empty();
 							this.previousOverridePath = "_SID Happens";
 						}
-					else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
+					} else if (main.playingInfinityRadio || this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!") {
 						this.getComposer(this.songs[this.songPos].fullname);
-				} else
+					}
+				} else {
 					this.getComposer();
+				}
 				this.getGB64();
 				this.getRemix();
 				this.getPlayerInfo({player: this.songs[this.songPos].playerraw});
