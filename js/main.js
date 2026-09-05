@@ -734,8 +734,8 @@ var main = {
 
 				const radioID = data.path + ":" + data.subtune;
 
-				if (infinityPlayed.has(radioID)) {
-					// It's a repeat so try again
+				if (infinityPlayed.has(radioID) || data.status == "retry") {
+					// It's either a repeat or a random file could not be retrieved; try again
 					main.infinityPlayNext();
 					return;
 				}

@@ -969,7 +969,7 @@ if (!is_dir($image_cache_dir)) {
     mkdir($image_cache_dir, 0777, true);
 }
 
-// Process main HTML
+// Process main HTML - CAVEAT: This is an expensive process
 $html = cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id);
 
 // Process each entry's HTML

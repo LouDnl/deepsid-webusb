@@ -9,9 +9,9 @@
 require_once("lib/class.account.php"); // Includes setup
 
 const RATINGS_USER_ID	= 3;
-const MIN_RATING		= 2;
+const MIN_RATING		= 2;	// Remember, the 'Ratings' user still use -1 rating system
 
-const MIN_SECONDS		= 15;
+const MIN_SECONDS		= 15;	// Minimum acceptable length of a tune
 
 try {
     $db = $account->getDB();
@@ -78,8 +78,10 @@ try {
 
 	if (!$choices)
 		die(json_encode(array(
-			'status'	=> 'error',
-			'message'	=> 'Infinity Radio: Could not retrieve a suitable random file.'
+			'status'	=> 'retry', // Not 'error' because that shows an alert box
+			'message'	=> 'Infinity Radio: Could not retrieve a suitable random file.',
+			'path'		=> 'N/A',
+			'subtune'	=> 1
 		)));
 
 	// Pick one complete path + subtune + length combination

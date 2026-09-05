@@ -2975,6 +2975,8 @@ Browser.prototype = {
 			// Includes legacy class names
 			$("#topic-csdb .cache-status,#topic-csdb .admin-csdb-info,#topic-csdb .release-csdb-info").remove();
 
+			const cacheIds = [];
+
 			$("#topic-csdb table.releases tr").each(function() {
 
 				const $link = $(this).find("td:eq(1) a.name");
@@ -2986,20 +2988,45 @@ Browser.prototype = {
 				if (main.isAdmin) {
 
 					// The CSDb ID and placeholder for asynchronous 'CACHED' status
-					$link.parent().append(info+'<div class="admin-info">'+cacheId+'<br /><span class="csdb-row-cached"></span></div></div>');
-					
-					if (cacheId) {
-						const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
+					$link.parent().append(
+						info+
+						'<div class="admin-info">'+cacheId+'<br />'+
+						'<span class="csdb-row-cached" data-id="'+cacheId+'"></span>'+
+						'</div></div>'
+					);
 
-						// This CSDb release has a cached file
-						$.get("php/file_exists.php", { file: fullname }, function(exists) {
-							if (exists) $link.parent().find(".csdb-row-cached").empty().append('CACHED');
-						});
-					}
+					if (cacheId)
+						cacheIds.push(cacheId);
+
 				} else {
 					$link.parent().append(info+'</div>');
 				}
 			});
+
+			// Check all CSDb release cache files in one request
+			if (main.isAdmin && cacheIds.length) {
+				$.post("php/cache_files_exist.php", {
+					ids: cacheIds
+				}, function(data) {
+
+					try {
+						data = $.parseJSON(data);
+					} catch(e) {
+						return;
+					}
+
+					if (data.status != "ok")
+						return;
+
+					$.each(data.cached, function(id, exists) {
+						if (exists) {
+							$("#topic-csdb .csdb-row-cached[data-id='"+id+"']")
+								.empty()
+								.append("CACHED");
+						}
+					});
+				});
+			}
 		}, 0);
 	},
 
@@ -3010,7 +3037,6 @@ Browser.prototype = {
 	 * versions, and their rules are often twisted by CSDb commenters.
 	 */
 	resolveCSDbRefs: function() {
-
 		// Ignore if showing a connection error
 		if ($("#topic-csdb").text().toLowerCase().includes("csdb is currently unreachable")) {
 			return;

@@ -2060,6 +2060,11 @@
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
 
+						<h3>September 5, 2026</h3>
+						<ul>
+							<li>Infinity Radio: The alert about not being able to find a suitable random file no longer appears. It now simply tries a different folder instead.</li>
+						</ul>
+
 						<h3>September 2, 2026</h3>
 						<ul>
 							<li>The "." (period) hotkey can now be used to center the currently selected SID row in the folder. If no SID row is selected, it centers on the keyboard marker instead.</li>
