@@ -8,6 +8,9 @@ ToDo
 
 SHOULD BE DONE
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+- Primary Release ON: When a GB64 has been PR, the next song where GB64 isn't should return to the
+  CSDb tab again, regardless of whether there is a PR there or not (there could be e.g. comments).
+
 - A W A I T : Rewrite 'howto_update_gb64.txt' when the next GameBase64 update v20 arrives. See the .txt
   file for a few preliminary things to test.
 
@@ -20,24 +23,11 @@ REALLY CONSIDER THIS
 - CSDb Music Competitions: Add a flag icon after countries in the browser SID list itself.
 - The player text lines by the Chartist bars could be filter links.
 - Consider moving the array in 'countries.php' to a table in the database instead.
+- Convert YouTube links in comments to a real YouTube video.
 
 - Check out this: https://github.com/Chordian/deepsid/issues/43
   Two new SID players that could be added later - reSIDfp and SIDLite.
   https://github.com/chrisgleissner/libsidplayfp-wasm
-
-- Infinity radio. Plays tunes of two stars rating and above forever. Each time it is supposed to
-  auto-progress, it will jump to a random tune anywhere else in another folder.
-  - Jump algorithm randomly selects one of two (maybe three) methods at first:
-    1. Play any tune inside a MUSICIANS letter folder that the 'Ratings' user have given two stars or more.
-    2. Play any tune in all collections that the 'Ratings' user have specifically given two stars or more.
-    3. How about as 2. but judging from average of all star ratings given by all users? (In
-       that case you better go for three stars or more, not two.)
-    NOTE: Maybe not do step 2 at all? For individual tunes, the 'Ratings' user's ratings may be too biased.
-  - Place the button for it in the white PATH box, which is ~empty anyway in the root.
-  - Maybe make certain control buttons wine red (including the starter button) to show that this
-    will affect the infinity radio mode. For example, wine red STOP button = stop and turn off.
-    You will stay in the current folder but everything has now returned to normal. If you want to
-    restart the infinity radio, you have to return to the root and click the starter button again.
 
 
 MAYBE CONSIDER THIS
@@ -61,6 +51,7 @@ MAYBE CONSIDER THIS
 - Replace ".." with a back arrow SVG instead? (The ".." symbol might still be confusing to some.)
 - Keyboard: If 'ArrowRight' is pressed while on a folder, enter the folder.
 - Mobile: Try to make a "long press" on a SID row, to show the context menu.
+- Infinity Radio: Make the user settings toggle for skipping two stars or less work here too.
 
 - Andy Zeidler: A number on a profile page indicating how many playlists the artist has tunes in.
 

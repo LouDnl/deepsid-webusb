@@ -54,15 +54,15 @@ try {
 	$settings = unserialize($select->fetch()->settings);
 
 	// If not defined yet for the user
-	if (!$settings['firstsubtune'])			$settings['firstsubtune']		= $first_time['firstsubtune'];
-	if (!$settings['primaryrelease'])		$settings['primaryrelease']		= $first_time['primaryrelease'];
-	if (!$settings['delaynext'])			$settings['delaynext']			= $first_time['delaynext'];
-	if (!$settings['delayduration'])		$settings['delayduration']		= $first_time['delayduration'];
-	if (!$settings['skiptune'])				$settings['skiptune']			= $first_time['skiptune'];
-	if (!$settings['marktune'])				$settings['marktune']			= $first_time['marktune'];
-	if (!$settings['skipbad'])				$settings['skipbad']			= $first_time['skipbad'];
-	if (!$settings['skiplong'])				$settings['skiplong']			= $first_time['skiplong'];
-	if (!$settings['skipshort'])			$settings['skipshort']			= $first_time['skipshort'];
+	if (!isset($settings['firstsubtune']))		$settings['firstsubtune']		= $first_time['firstsubtune'];
+	if (!isset($settings['primaryrelease']))	$settings['primaryrelease']		= $first_time['primaryrelease'];
+	if (!isset($settings['delaynext']))			$settings['delaynext']			= $first_time['delaynext'];
+	if (!isset($settings['delayduration']))		$settings['delayduration']		= $first_time['delayduration'];
+	if (!isset($settings['skiptune']))			$settings['skiptune']			= $first_time['skiptune'];
+	if (!isset($settings['marktune']))			$settings['marktune']			= $first_time['marktune'];
+	if (!isset($settings['skipbad']))			$settings['skipbad']			= $first_time['skipbad'];
+	if (!isset($settings['skiplong']))			$settings['skiplong']			= $first_time['skiplong'];
+	if (!isset($settings['skipshort']))			$settings['skipshort']			= $first_time['skipshort'];	
 
 	// Adjust settings
 	if (isset($_POST['firstsubtune']))		$settings['firstsubtune']		= (int)$_POST['firstsubtune'];

@@ -394,7 +394,7 @@
 		gtag('config', 'G-8WGW8WKDN4');
 	</script>
 
-	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-mini="<?php echo miniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
+	<body class="entry-content" data-mobile="<?php echo isMobile(); ?>" data-theme="" data-radio="" data-mini="<?php echo miniPlayer(); ?>" data-notips="<?php echo isLemon() ? 1 : 0; ?>" data-admin="<?php echo $is_admin ? 1 : 0; ?>">
 		<?php if (!isLemon()): ?>
 			<script type="text/javascript">setTheme();</script>
 		<?php endif ?>
@@ -565,6 +565,11 @@
 			<div class="dialog-text"></div>
 			<div id="clink-name-delete" class="clink-text ellipsis"></div>
 			<div id="clink-url-delete" class="clink-text ellipsis"></div>
+			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
+		</div>
+
+		<div id="dialog-infinity-radio" class="dialog-box">
+			<div class="dialog-text"></div>
 			<div class="dialog-buttons"><button class="dialog-button-yes">Yes</button><button class="dialog-button-no">No</button></div>
 		</div>
 
@@ -2054,6 +2059,48 @@
 
 					<div id="topic-changes" class="topic" style="display:none;">
 						<h2>Changes</h2>
+
+						<h3>September 5, 2026</h3>
+						<ul>
+							<li>Infinity Radio: The alert about not being able to find a suitable random file no longer appears. It now simply tries a different folder instead.</li>
+						</ul>
+
+						<h3>September 2, 2026</h3>
+						<ul>
+							<li>The "." (period) hotkey can now be used to center the currently selected SID row in the folder. If no SID row is selected, it centers on the keyboard marker instead.</li>
+						</ul>
+
+						<h3>August 29, 2026</h3>
+						<ul>
+							<li>Fixed the 'Profile' and 'CSDb' tabs not updating in Infinity Radio mode.</li>
+							<li>Fixed various issues with the enabled and disabled states of the 'Skip Prev' and 'Skip Next' buttons.</li>
+							<li>Fixed a toggle button in the 'Settings' tab not being restored correctly when returning to the site.</li>
+							<li>Fixed "plinks" not acquiring the correct subtune number, causing song lengths to be shown as 0:00.</li>
+							<li>The dialog box for stopping Infinity Radio no longer appears when using the "stop and delay" feature.</li>
+							<li>Infinity Radio now disables the toggle buttons in the 'Settings' tab that has no effect in this mode.</li>
+							<li>Enabled Sound Expander mode in JSIDPlay2, allowing it to play tunes in the <a href="https://deepsid.chordian.net/?file=/SID%20Happens/">SID+FM</a> folder.</li>
+							<li>A temporary emulator URL switch no longer prevents selecting a different SID handler.</li>
+						</ul>
+
+						<h3>August 23, 2026</h3>
+						<ul>
+							<li>Introducing <b>Infinity Radio</b>. It keeps playing random tunes from random folders until you stop it. You can start it using the dark red button in the root or select it from the main menu. More details are provided in the dialog box that appears when you start it.</li>
+						</ul>
+
+						<h3>August 21, 2026</h3>
+						<ul>
+							<li>A new <a href="https://github.com/LouDnl/USBSID-Player">USBSID-Player</a> SID handler has been added by LouD. This emulates a cycle-exact C64, with four outputs; reSIDfp in the page, WebUSB, Web Serial, and ASID. WebUSB and Web Serial is used with the <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a> board, and ASID sends the register writes over MIDI to any ASID capable device.</li>
+						</ul>
+
+						<h3>August 20, 2026</h3>
+						<ul>
+							<li>Fixed missing database information for <a href="https://deepsid.chordian.net/?file=/MUSICIANS/F/Flotsam/ZooZoZ6.sid">ZooZoZ6.sid</a> by Flotsam.</li>
+						</ul>
+
+						<h3>August 15, 2026</h3>
+						<ul>
+							<li>Fixed credits not being shown in CSDb lists.</li>
+						</ul>
 
 						<h3>August 14, 2026</h3>
 						<ul>

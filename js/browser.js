@@ -565,7 +565,10 @@ Browser.prototype = {
 				break;
 			case "search-cancel":
 				// Cancel the search results and return to the previous normal folder view
-				ctrls.state("prev/next", "disabled");
+				if (main.playingInfinityRadio)
+					this.setStateSkipButtons();
+				else
+					ctrls.state("prev/next", "disabled");
 				ctrls.state("subtunes", "disabled");
 
 				this.getFolder(this.scrollPositions.pop());
@@ -586,6 +589,11 @@ Browser.prototype = {
 					return false;
 				}
 				this.uploadWizard();
+				break;
+			case "infinity-radio":
+				main.playingInfinityRadio
+					? main.infinityStop()
+					: main.infinityStart();
 				break;
 			default:
 				// TR handling has been moved into the 'onClickRow' event handler
@@ -768,8 +776,11 @@ Browser.prototype = {
 			// Override default sub tune to first if demanded by a setting
 			var subtuneStart = main.getUserToggle("first-subtune") ? 0 : this.songs[this.songPos].startsubtune;
 			// Either default start subtune, or an override from a "?subtune=" URL parameter
-			var subtune = typeof paramSubtune !== "undefined" ? paramSubtune : subtuneStart,
-				subtuneMax = this.songs[this.songPos].subtunes - 1;
+
+			var subtune = typeof paramSubtune !== "undefined" && !Number.isNaN(paramSubtune)
+				? paramSubtune
+				: subtuneStart;
+			var subtuneMax = this.songs[this.songPos].subtunes - 1;
 			// Make sure the overridden value is within what is available for that SID tune
 			subtune = subtune < 0 ? 0 : subtune;
 			subtune = subtune > subtuneMax ? subtuneMax : subtune;
@@ -821,17 +832,22 @@ Browser.prototype = {
 					}
 				}
 
-				// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
-				if (this.songPos == this.songs.length - 1 || paramSolitary)
-					$("#skip-next").addClass("disabled");
-				if (this.songPos == 0 || paramSolitary)
-					$("#skip-prev").addClass("disabled");
+				if (main.playingInfinityRadio) {
+					if (main.infinityHistoryPos == 0)
+						$("#skip-prev").addClass("disabled");
+				} else {
+					// Disable PREV or NEXT if at list boundaries, or if it's a solitary playing
+					if (this.songPos == this.songs.length - 1 || paramSolitary)
+						$("#skip-next").addClass("disabled");
+					if (this.songPos == 0 || paramSolitary)
+						$("#skip-prev").addClass("disabled");
+				}
 
 				ctrls.emulatorChanged = false;
 
 				if (typeof paramSkipCSDb === "undefined" || !paramSkipCSDb) {
 					this.getCSDb();
-					if (typeof this.songs[this.songPos].profile != "undefined")
+					if (typeof this.songs[this.songPos].profile != "undefined") {
 						if (this.songs[this.songPos].profile != "") {
 							this.getComposer(this.songs[this.songPos].profile, true);
 						} else {
@@ -841,10 +857,12 @@ Browser.prototype = {
 							$("#atopic-links").empty();
 							this.previousOverridePath = "_SID Happens";
 						}
-					else if (this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!")
+					} else if (main.playingInfinityRadio || this.isSearching || this.path.substr(0, 2) === "/$" || this.path.substr(0, 2) === "/!") {
 						this.getComposer(this.songs[this.songPos].fullname);
-				} else
+					}
+				} else {
 					this.getComposer();
+				}
 				this.getGB64();
 				this.getRemix();
 				this.getPlayerInfo({player: this.songs[this.songPos].playerraw});
@@ -861,16 +879,19 @@ Browser.prototype = {
 			}.bind(this));
 
 			SID.setCallbackTrackEnd(function() {
-				// Does the user want a small pause between tunes?
+				// Does the user want a pause between tunes?
 				var delayNextTune = main.getUserToggle("delay-next");
 				
 				if ($("#loop").hasClass("button-off")) {
 					if (delayNextTune)
-						$("#stop").trigger("mouseup").trigger("click");
+						$("#stop").trigger("mouseup").trigger("click", true);
 					setTimeout(() => {
 						// Play the next subtune, or if no more subtunes, the next tune in the list
 						$("#faster").trigger("mouseup"); // Easy there cowboy
-						if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
+						if (main.playingInfinityRadio) {
+							// Infinity Radio: Play the next random tune in a random folder
+							main.infinityPlayNext();
+						} else if (!paramSolitary && !main.getUserToggle("skip-tune") && (ctrls.subtuneCurrent < ctrls.subtuneMax && !$("#subtune-plus").hasClass("disabled"))) {
 							// Next subtune
 							$("#subtune-plus").trigger("mouseup", false);
 						} else if (this.songPos < (this.songs.length - 1) && !$("#skip-next").hasClass("disabled")) {
@@ -1602,12 +1623,17 @@ Browser.prototype = {
 					if (data.incompatible.indexOf("usplayer") !== -1) $("#page .viz-usplayer").addClass("disabled");
 
 					$("#path").css("top", "5px");
-					var pathAppend = "", pathText = this.path == "" ? "/" : this.path
+					var pathAppend = "", pathText = this.path
 						.replace(/^\/_/, '/')
 						.replace("/Compute's Gazette SID Collection", '<span class="dim">CGSC</span>')
 						.replace("/High Voltage SID Collection", '<span class="dim">HVSC</span>')
 						.replace("/Exotic SID Tunes Collection", '<span class="dim">ESTC</span>');
-					if (this.isSearching) {
+					if (this.path == "" && !this.isSearching) {
+						var radio = main.playingInfinityRadio
+							? { action: 'Stop',		class: ' class="inf-stop"' }
+							: { action: 'Start',	class: '' };
+						pathText = '<button id="infinity-radio"'+radio['class']+'>'+radio['action']+' Infinity Radio</button>';
+					} else if (this.isSearching) {
 						var searchType = $("#dropdown-search").val(),
 							searchHere = $("#search-here").is(":checked") ? "file="+this.path+"&here=1&" : "",
 							searchQuery = encodeURIComponent($("#search-box").val()); // Need it to be untampered here
@@ -1817,7 +1843,7 @@ Browser.prototype = {
 									'<td class="folder'+musicians+' unselectable '+folderIcon+
 										(folder.hvsc == this.HVSC_VERSION || folder.hvsc == this.CGSC_VERSION ? ' new' : '')+
 										'">'+folderFocus+'<div class="block-wrap"><div class="block'+(isRedirectFolder ? " slimfont" : "")+'">'+
-									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use Hermit\'s (+FM) emulator</div>' : '')+
+									(folder.foldername == "SID+FM" ? '<div class="sid_fm">Use JSIDPlay2, Hermit\'s, or USBSID</div>' : '')+
 									(folder.filescount > 0 ? '<div class="filescount">'+folder.filescount+'</div>' : '')+
 									(folder.foldername == "_SID Happens" ? '<div class="new-uploads'+(data.uploads.substr(0, 6) == "NO NEW" ? ' no-new' : '')+'">'+data.uploads+'</div>' : '')+
 									'<span class="name entry'+(this.isSearching ? ' search' : '')+'" data-name="'+encodeURIComponent(folder.foldername)+'" data-incompat="'+folder.incompatible+'"'+search_shortcut_or_redirect_folder+'>'+
@@ -2949,6 +2975,8 @@ Browser.prototype = {
 			// Includes legacy class names
 			$("#topic-csdb .cache-status,#topic-csdb .admin-csdb-info,#topic-csdb .release-csdb-info").remove();
 
+			const cacheIds = [];
+
 			$("#topic-csdb table.releases tr").each(function() {
 
 				const $link = $(this).find("td:eq(1) a.name");
@@ -2960,20 +2988,45 @@ Browser.prototype = {
 				if (main.isAdmin) {
 
 					// The CSDb ID and placeholder for asynchronous 'CACHED' status
-					$link.parent().append(info+'<div class="admin-info">'+cacheId+'<br /><span class="csdb-row-cached"></span></div></div>');
-					
-					if (cacheId) {
-						const fullname = "/cache/csdb/release_" + cacheId + ".cache.gz";
+					$link.parent().append(
+						info+
+						'<div class="admin-info">'+cacheId+'<br />'+
+						'<span class="csdb-row-cached" data-id="'+cacheId+'"></span>'+
+						'</div></div>'
+					);
 
-						// This CSDb release has a cached file
-						$.get("php/file_exists.php", { file: fullname }, function(exists) {
-							if (exists) $link.parent().find(".csdb-row-cached").empty().append('CACHED');
-						});
-					}
+					if (cacheId)
+						cacheIds.push(cacheId);
+
 				} else {
 					$link.parent().append(info+'</div>');
 				}
 			});
+
+			// Check all CSDb release cache files in one request
+			if (main.isAdmin && cacheIds.length) {
+				$.post("php/cache_files_exist.php", {
+					ids: cacheIds
+				}, function(data) {
+
+					try {
+						data = $.parseJSON(data);
+					} catch(e) {
+						return;
+					}
+
+					if (data.status != "ok")
+						return;
+
+					$.each(data.cached, function(id, exists) {
+						if (exists) {
+							$("#topic-csdb .csdb-row-cached[data-id='"+id+"']")
+								.empty()
+								.append("CACHED");
+						}
+					});
+				});
+			}
 		}, 0);
 	},
 
@@ -2984,7 +3037,6 @@ Browser.prototype = {
 	 * versions, and their rules are often twisted by CSDb commenters.
 	 */
 	resolveCSDbRefs: function() {
-
 		// Ignore if showing a connection error
 		if ($("#topic-csdb").text().toLowerCase().includes("csdb is currently unreachable")) {
 			return;
@@ -3836,6 +3888,11 @@ Browser.prototype = {
 				// Upload and test one or more external SID tune(s)
 				$("#upload-test").trigger("click");
 				break;
+			case 'main-infinity-radio':
+				main.playingInfinityRadio
+					? main.infinityStop()
+					: main.infinityStart();
+				break;
 			case 'main-popup-window':
 				main.popUpWindow();
 				break;
@@ -4665,6 +4722,24 @@ Browser.prototype = {
 				SID.stop();
 				SID.setVolume(1);
 			}, paramWait ?? 100);
+		}
+	},
+
+	/**
+	 * Set the enable/disable state of the 'Skip Next' and 'Skip Prev' buttons
+	 * whether currently in 'Infinity Radio' mode or not.
+	 */
+	setStateSkipButtons: function() {
+		$("#skip-prev,#skip-next").removeClass("disabled");
+		if (main.playingInfinityRadio && main.infinityHistoryPos == 0) {
+			// At the start of playing history
+			$("#skip-prev").addClass("disabled");
+		} else if (this.songPos == this.songs.length - 1) {
+			// In the bottom of the folder
+			$("#skip-next").addClass("disabled");
+		} else if (this.songPos == 0) {
+			// In the top of the folder
+			$("#skip-prev").addClass("disabled");
 		}
 	},
 

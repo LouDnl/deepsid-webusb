@@ -102,7 +102,7 @@ $help = array(
 		<h4>Linking to a search query</h4>
 		<ol>
 			<li>Search for something.</li>
-			<li>Right-click the <svg style="enable-background:new 0 0 80 80;position:relative;top:1.5px;width:12px;height:12px;fill:var(--color-text-body);" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg> icon.</li>
+			<li>Click the <svg style="enable-background:new 0 0 80 80;position:relative;top:1.5px;width:12px;height:12px;fill:var(--color-text-body);" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg> icon.</li>
 			<li>Link is now in clipboard.</li>
 		</ol>
 
@@ -110,7 +110,7 @@ $help = array(
 		<ol>
 			<li>Click <b>PLAYERS</b> in top menu.</li>
 			<li>Click an editor thumbnail.</li>
-			<li>Right-click the <svg style="enable-background:new 0 0 80 80;position:relative;top:1.5px;width:12px;height:12px;fill:var(--color-text-body);" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg> icon.</li>
+			<li>Click the <svg style="enable-background:new 0 0 80 80;position:relative;top:1.5px;width:12px;height:12px;fill:var(--color-text-body);" version="1.1" viewBox="0 0 80 80" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M29.298,63.471l-4.048,4.02c-3.509,3.478-9.216,3.481-12.723,0c-1.686-1.673-2.612-3.895-2.612-6.257 s0.927-4.585,2.611-6.258l14.9-14.783c3.088-3.062,8.897-7.571,13.131-3.372c1.943,1.93,5.081,1.917,7.01-0.025 c1.93-1.942,1.918-5.081-0.025-7.009c-7.197-7.142-17.834-5.822-27.098,3.37L5.543,47.941C1.968,51.49,0,56.21,0,61.234 s1.968,9.743,5.544,13.292C9.223,78.176,14.054,80,18.887,80c4.834,0,9.667-1.824,13.348-5.476l4.051-4.021 c1.942-1.928,1.953-5.066,0.023-7.009C34.382,61.553,31.241,61.542,29.298,63.471z M74.454,6.044 c-7.73-7.67-18.538-8.086-25.694-0.986l-5.046,5.009c-1.943,1.929-1.955,5.066-0.025,7.009c1.93,1.943,5.068,1.954,7.011,0.025 l5.044-5.006c3.707-3.681,8.561-2.155,11.727,0.986c1.688,1.673,2.615,3.896,2.615,6.258c0,2.363-0.928,4.586-2.613,6.259 l-15.897,15.77c-7.269,7.212-10.679,3.827-12.134,2.383c-1.943-1.929-5.08-1.917-7.01,0.025c-1.93,1.942-1.918,5.081,0.025,7.009 c3.337,3.312,7.146,4.954,11.139,4.954c4.889,0,10.053-2.462,14.963-7.337l15.897-15.77C78.03,29.083,80,24.362,80,19.338 C80,14.316,78.03,9.595,74.454,6.044z"/></g><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/><g/></svg> icon.</li>
 			<li>Link is now in clipboard.</li>
 		</ol>
 	',
@@ -163,7 +163,6 @@ $help = array(
 
 		<h4><a href="//deepsid.chordian.net?emulator=jsidplay2">JSIDPlay2 (reSID)</a></h4>
 		<p>Also uses the reSID engine and offers the same emulation.</p>
-		Requires a really fast CPU.
 
 		<h4><a href="//deepsid.chordian.net?emulator=websid">WebSid emulator</a></h4>
 		<p>The default for computers.</p>
@@ -177,11 +176,14 @@ $help = array(
 		<p>Even faster, but cannot emulate RSID tunes, nor SID with digi.</p>
 		This can also play SID+FM tunes, i.e. with OPL synthesis added.
 
+		<h4><a href="//deepsid.chordian.net?emulator=webusb">WebUSB (Hermit)</a></h4>
+		<p>Use with USB devices such as e.g. USBSID-Pico.</p>
+
 		<h4><a href="//deepsid.chordian.net?emulator=asid">ASID (MIDI)</a></h4>
 		<p>Use with MIDI devices such as e.g. SidStation, TherapSID, etc.</p>
 
-		<h4><a href="//deepsid.chordian.net?emulator=webusb">WebUSB (Hermit)</a></h4>
-		<p>Use with USB devices such as e.g. <a href="https://github.com/LouDnl/USBSID-Pico">USBSID-Pico</a>.</p>
+		<h4><a href="//deepsid.chordian.net?emulator=usplayer">USBSID-Player</a></h4>
+		<p>A cycle exact C64 with 4 outputs; reSIDfp in the page, WebUSB, Web Serial and ASID.</p>
 
 		<h4><a href="//deepsid.chordian.net?emulator=youtube">YouTube videos</a></h4>
 		<p>Plays a YouTube video where SID rows are enabled for clicking.</p>
@@ -261,12 +263,12 @@ $help = array(
 
 	'	<h3>Color strips</h3>
 		<p>Sometimes you can see a vertical color strip in a SID row. These indicate a common player.</p>
-		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="goattracker_v1.x" data-type="player" class="search"><b>v1.x</b></a> or <a href="goattracker_v2.x" data-type="player" class="search"><b>v2.x</b></a></span>
-		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="newplayer_-v18_-v19_-v20_-v21" data-type="player" class="search"><b>v2</b></a> / <a href="newplayer_v20" data-type="player" class="search"><b>v3</b></a>, etc.</span>
-		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="sidwizard_v1.x" data-type="player" class="search"><b>v1.x</b></a></span>
-		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="sidfactory_ii" data-type="player" class="search"><b>BETA</b></a></span>
-		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="dmc_v4.x" data-type="player" class="search"><b>v4.x</b></a>, <a href="dmc_v5.x" data-type="player" class="search"><b>v5.x</b></a>, etc.</span>
-		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="sidtracker64" data-type="player" class="search"><b>iPad</b></a></span>
+		<div class="annex-strip annex-a"> = <b>GoatTracker</b></div><span class="annex-tiny"><a href="goattracker v1.x" data-type="player" class="search"><b>v1.x</b></a> or <a href="goattracker v2.x" data-type="player" class="search"><b>v2.x</b></a></span>
+		<div class="annex-strip annex-b"> = <b>NewPlayer</b></div><span class="annex-tiny">JCH\'s <a href="newplayer -v18 -v19 -v20 -v21" data-type="player" class="search"><b>v2</b></a> / <a href="newplayer v20" data-type="player" class="search"><b>v3</b></a>, etc.</span>
+		<div class="annex-strip annex-c"> = <b>SID-Wizard</b></div><span class="annex-tiny"><a href="sid-wizard" data-type="player" class="search"><b>v1.x</b></a></span>
+		<div class="annex-strip annex-d"> = <b>SID Factory II</b></div><span class="annex-tiny"><a href="sid factory ii" data-type="player" class="search"><b>BETA</b></a></span>
+		<div class="annex-strip annex-e"> = <b>DMC</b></div><span class="annex-tiny"><a href="dmc v4.x" data-type="player" class="search"><b>v4.x</b></a>, <a href="dmc v5.x" data-type="player" class="search"><b>v5.x</b></a>, etc.</span>
+		<div class="annex-strip annex-f"> = <b>SidTracker 64</b></div><span class="annex-tiny"><a href="sidtracker" data-type="player" class="search"><b>iPad</b></a></span>
 	',
 
 	'	<h3>Hotkeys</h3>
@@ -275,9 +277,11 @@ $help = array(
 		<div class="annex-hotkey">Space</div><span class="annex-tiny">Pause/Play toggle</span>
 		<div class="annex-hotkey">Left arrow</div><span class="annex-tiny">Previous SID row</span>
 		<div class="annex-hotkey">Right arrow</div><span class="annex-tiny">Next SID row</span>
+		<div class="annex-hotkey">Period</div><span class="annex-tiny">Center marked SID row</span>
 		<div class="annex-hotkey">Backspace</div><span class="annex-tiny">Back to parent folder</span>
 		<div class="annex-hotkey">Shift+Backspc</div><span class="annex-tiny">Back to parent tab page</span>
 		<div class="annex-hotkey">[<i>Below</i>&nbsp;]&nbsp;Esc</div><span class="annex-tiny">Fast forward</span>
+		<div class="annex-hotkey">o</div><span class="annex-tiny">Infinity Radio on/off</span>
 		<div class="annex-hotkey">p</div><span class="annex-tiny">Pop-up tiny DeepSID</span>
 		<div class="annex-hotkey">s</div><span class="annex-tiny">Toggle sundry box</span>
 		<div class="annex-hotkey">l</div><span class="annex-tiny">Upload SID for testing</span>
@@ -323,8 +327,9 @@ $help = array(
 						<li><b>websid</b></li>
 						<li><b>legacy</b></li>
 						<li><b>hermit</li>
-						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
 						<li><b>webusb</li>
+						<li><b>asid</b>&nbsp;&nbsp;(MIDI)</li>
+						<li><b>usplayer</li>
 						<li><b>youtube</b></li>
 						<li><b>download</b></li>
 						<li><b>silence</b></li>

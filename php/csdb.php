@@ -546,7 +546,7 @@ if ($csdb_type == 'sid') {
 			// Handles or groups that used this SID file
 			$released_by = '';
 			$handles = $release->ReleasedBy->Handle;
-			//$amount = 4;
+			$amount = 4;
 			if (isset($handles)) {
 				foreach($handles as $handle) {
 					$id = $handle->ID;
@@ -562,11 +562,11 @@ if ($csdb_type == 'sid') {
 						? ', <a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank" class="csdb-scener">'.$scener.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=scener&id='.$id.'" target="_blank">Scener:'.$id.'</a>]'
 					);
-					/*if (!$amount) {
+					if (!$amount) {
 						$released_by .= ' [...]';
 						break;
 					}
-					$amount--;*/
+					$amount--;
 				}
 			}
 			$groups = $release->ReleasedBy->Group;
@@ -585,11 +585,11 @@ if ($csdb_type == 'sid') {
 						? ', <a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank" class="csdb-group">'.$grp.'</a>'
 						: ', [<a href="http://csdb.chordian.net/?type=group&id='.$id.'" target="_blank">Group:'.$id.'</a>]'
 					);
-					/*if (!$amount) {
+					if (!$amount) {
 						$released_by .= ' [...]';
 						break;
 					}
-					$amount--;*/
+					$amount--;
 				}
 			}
 			$type_and_released_by = $type.(empty($released_by) ? '' : ' by '.substr($released_by, 2));
@@ -969,7 +969,7 @@ if (!is_dir($image_cache_dir)) {
     mkdir($image_cache_dir, 0777, true);
 }
 
-// Process main HTML
+// Process main HTML - CAVEAT: This is an expensive process
 $html = cacheImagesInHtml($html, $image_cache_dir, $csdb_type, $csdb_id);
 
 // Process each entry's HTML
